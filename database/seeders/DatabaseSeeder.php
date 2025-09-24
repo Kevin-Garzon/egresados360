@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         //$this->call(OfertaLaboralSeeder::class);
         //$this->call(EmpresaSeeder::class);
-        $this->call(FormacionSeeder::class);
+        //$this->call(FormacionSeeder::class);
 
 
     }
