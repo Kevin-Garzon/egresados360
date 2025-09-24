@@ -1,66 +1,130 @@
+/* ==== Núcleo Tailwind + Flux ==== */
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
+/* Fuentes y plantillas que Tailwind debe escanear */
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 
+/* Variante para modo oscuro */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ==== Tema base de Flux ==== */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f5f5f5;
+  --color-zinc-200: #e5e5e5;
+  --color-zinc-300: #d4d4d4;
+  --color-zinc-400: #a3a3a3;
+  --color-zinc-500: #737373;
+  --color-zinc-600: #525252;
+  --color-zinc-700: #404040;
+  --color-zinc-800: #262626;
+  --color-zinc-900: #171717;
+  --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
+  --color-accent: var(--color-neutral-800);
+  --color-accent-content: var(--color-neutral-800);
+  --color-accent-foreground: var(--color-white);
 }
 
+/* ==== Tema extendido para Egresados 360 ==== */
+@theme {
+  /* Fuentes */
+  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colores institucionales */
+  --color-primary: #09B451;
+  --color-secondary: #383D38;
+  --color-gunmetal: #263238;
+  --color-rblack: #232323;
+  --color-success: #2E7D31;
+  --color-warning: #FBC02D;
+  --color-error: #E53835;
+  --color-ash: #B1B1B1;
+
+  /* Fondos/Neutrales */
+  --color-fondo: #EEEEEE;
+  --color-cultured: #F2F4F7;
+  --color-greyblue: #E6EFF5;
+  --color-silver: #F5F7FA;
+
+  --shadow-soft: 0 4px 12px rgba(171, 190, 209, 0.30);
+  --shadow-card: 0 2px 8px rgba(171, 190, 209, 0.40),
+                 0 6px 16px rgba(171, 190, 209, 0.30);
+}
+
+/* Ajustes modo oscuro */
 @layer theme {
-    .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
-    }
+  .dark {
+    --color-accent: var(--color-white);
+    --color-accent-content: var(--color-white);
+    --color-accent-foreground: var(--color-neutral-800);
+  }
 }
 
+/* ==== Reset base ==== */
 @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 
-    *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
-    }
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-silver text-rblack font-inter;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-poppins text-gunmetal;
+  }
 }
 
+/* ==== Utilidades personalizadas ==== */
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-medium shadow-soft transition hover:scale-[1.01] focus:outline-none focus:ring-4;
+  }
+  .btn-primary {
+    @apply bg-primary text-white focus:ring-primary/30;
+  }
+  .btn-secondary {
+    @apply bg-secondary text-white focus:ring-secondary/30;
+  }
+  .badge {
+    @apply inline-block px-3 py-1 rounded-full text-sm bg-greyblue text-gunmetal;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-card;
+  }
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* ==== Ajustes de Flux (no tocamos) ==== */
 [data-flux-field]:not(ui-radio, ui-checkbox) {
-    @apply grid gap-2;
+  @apply grid gap-2;
 }
 
 [data-flux-label] {
-    @apply  !mb-0 !leading-tight;
+  @apply !mb-0 !leading-tight;
 }
 
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+  @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
-
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
