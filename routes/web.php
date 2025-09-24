@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\LaboralController;
 
 // Ruta de Inicio
 Route::get('/', function () {
@@ -10,9 +11,7 @@ Route::get('/', function () {
 })->name('inicio');
 
 // Ruta Ofertas Laborales
-Route::get('/laboral', function () {
-    return view('laboral.index'); 
-})->name('laboral.index');
+Route::get('/laboral', [LaboralController::class, 'index'])->name('laboral.index');
 
 // Ruta Formación
 Route::get('/formacion', function () {
