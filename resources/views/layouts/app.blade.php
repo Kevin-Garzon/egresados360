@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}"> -->
+
 
     {{-- Tipografías (Poppins + Inter) --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +19,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-silver text-rblack font-inter flex flex-col min-h-dvh">
+<body class="bg-white text-rblack font-inter flex flex-col min-h-dvh">
 
     {{-- 🔹 Topbar institucional --}}
     <div class="w-full bg-gunmetal text-white text-sm">
@@ -41,14 +43,51 @@
                 <span class="font-bold">Egresados <span class="text-white">360</span></span>
             </a>
             <ul class="hidden md:flex items-center gap-6 text-white">
-                <li><a class="hover:text-gunmetal" href="{{ url('/') }}">Inicio</a></li>
-                <li><a class="hover:text-gunmetal" href="{{ url('/laboral') }}">Ofertas Laborales</a></li>
-                <li><a class="hover:text-gunmetal" href="{{ url('/formacion') }}">Formación</a></li>
-                <li><a class="hover:text-gunmetal" href="{{ url('/bienestar') }}">Bienestar</a></li>
+                <li>
+                    <a href="{{ url('/') }}"
+                        class="relative px-1 transition font-medium
+                   @if(request()->is('/')) font-bold text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-white after:rounded-full @else after:w-0 @endif
+                   after:transition-all after:duration-300
+                   hover:font-bold hover:text-white
+                   hover:after:w-full hover:after:absolute hover:after:left-0 hover:after:-bottom-1 hover:after:h-0.5 hover:after:bg-white hover:after:rounded-full">
+                        Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('/laboral') }}"
+                        class="relative px-1 transition font-medium
+                   @if(request()->is('laboral')) font-bold text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-white after:rounded-full @else after:w-0 @endif
+                   after:transition-all after:duration-300
+                   hover:font-bold hover:text-white
+                   hover:after:w-full hover:after:absolute hover:after:left-0 hover:after:-bottom-1 hover:after:h-0.5 hover:after:bg-white hover:after:rounded-full">
+                        Ofertas Laborales
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('/formacion') }}"
+                        class="relative px-1 transition font-medium
+                   @if(request()->is('formacion')) font-bold text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-white after:rounded-full @else after:w-0 @endif
+                   after:transition-all after:duration-300
+                   hover:font-bold hover:text-white
+                   hover:after:w-full hover:after:absolute hover:after:left-0 hover:after:-bottom-1 hover:after:h-0.5 hover:after:bg-white hover:after:rounded-full">
+                        Formación
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('/bienestar') }}"
+                        class="relative px-1 transition font-medium
+                   @if(request()->is('bienestar')) font-bold text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-white after:rounded-full @else after:w-0 @endif
+                   after:transition-all after:duration-300
+                   hover:font-bold hover:text-white
+                   hover:after:w-full hover:after:absolute hover:after:left-0 hover:after:-bottom-1 hover:after:h-0.5 hover:after:bg-white hover:after:rounded-full">
+                        Bienestar
+                    </a>
+                </li>
                 <li>
                     <a class="btn btn-tertiary py-2" href="{{ url('/admin/login') }}">Administrador</a>
                 </li>
             </ul>
+
             {{-- Botón móvil --}}
             <button type="button" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white shadow-soft border border-silver" aria-label="Abrir menú">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -79,7 +118,7 @@
                 <p class="text-sm text-white">Portal de egresados de la FET. Información, formación, empleabilidad y bienestar.</p>
             </div>
             <div>
-                <h3 class="font-poppins font-semibold text-gunmetal mb-3 text-white">Campus FET</h3>
+                <h3 class="font-poppins font-semibold text-gunmetal mb-3 text-white">Comunicaciones</h3>
                 <ul class="space-y-1 text-sm">
                     <li>Dirección: Kilometro 12 <br> Neiva - Rivera</li>
                     <li>Email: <a class="underline" href="mailto:comunicaciones@fet.edu.co">comunicaciones@fet.edu.co</a></li>
@@ -98,17 +137,17 @@
                 <h3 class="font-poppins font-semibold mb-3 text-white">Síguenos</h3>
                 <ul class="space-y-2 text-sm">
                     <li>
-                        <a href="https://twitter.com/tu_usuario" target="_blank" class="flex items-center gap-2 hover:underline text-white">
-                            <i class="fab fa-twitter text-white"></i> Twitter
+                        <a href="https://www.instagram.com/fetneiva/" target="_blank" class="flex items-center gap-2 hover:underline text-white">
+                            <i class="fab fa-instagram text-white"></i> Instagram
                         </a>
                     </li>
                     <li>
-                        <a href="https://facebook.com/tu_usuario" target="_blank" class="flex items-center gap-2 hover:underline text-white">
+                        <a href="https://www.facebook.com/YoSoyFet" target="_blank" class="flex items-center gap-2 hover:underline text-white">
                             <i class="fab fa-facebook-f text-white"></i> Facebook
                         </a>
                     </li>
                     <li>
-                        <a href="https://tiktok.com/@tu_usuario" target="_blank" class="flex items-center gap-2 hover:underline text-white">
+                        <a href="https://www.tiktok.com/@yosoyfetneiva?lang=es" target="_blank" class="flex items-center gap-2 hover:underline text-white">
                             <i class="fab fa-tiktok text-white"></i> TikTok
                         </a>
                     </li>
