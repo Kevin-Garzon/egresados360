@@ -84,7 +84,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="btn btn-tertiary py-2" href="{{ url('/admin/login') }}">Administrador</a>
+                    <a class="btn btn-tertiary py-2" href="{{ url('/login') }}">Administrador</a>
                 </li>
             </ul>
 
