@@ -1,29 +1,44 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-use Livewire\Volt\Volt;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaboralController;
+use Illuminate\Support\Facades\Route;
 
-// Ruta de Inicio
+//provisional
+use Illuminate\Support\Facades\Auth;
+
+
+// Página de inicio
 Route::get('/', function () {
     return view('inicio'); 
 })->name('inicio');
 
-// Ruta Ofertas Laborales
+// Ofertas Laborales
 Route::get('/laboral', [LaboralController::class, 'index'])->name('laboral.index');
 
-// Ruta Formación
-Route::get('/formacion', function () {
-    return view('formacion.index'); 
-})->name('formacion.index');
+// Formación
+Route::view('/formacion', 'formacion.index')->name('formacion.index');
 
-// Ruta Bienestar
-Route::get('/bienestar', function () {
-    return view('bienestar.index'); 
-})->name('bienestar.index');
+// Bienestar
+Route::view('/bienestar', 'bienestar.index')->name('bienestar.index');
 
-// Ruta Panel Administrador 
-Route::get('/admin', function () {
-    return view('admin.dashboard'); 
-})->name('admin.dashboard');
+
+// Dashboard (solo para usuarios autenticados y verificados)
+Route::get('/dashboard', function () {
+    return view('dashboard'); //  vista Breeze por defecto
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+//provisional
+Route::get('/salir', function () {
+    Auth::logout();
+    return redirect('/login');
+});
+
+// Perfil de usuario (ejemplo que Breeze trae por defecto)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
