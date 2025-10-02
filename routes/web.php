@@ -25,7 +25,7 @@ Route::view('/bienestar', 'bienestar.index')->name('bienestar.index');
 
 // Dashboard (solo para usuarios autenticados y verificados)
 Route::get('/dashboard', function () {
-    return view('dashboard'); //  vista Breeze por defecto
+    return view('admin.dashboard'); 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //provisional
