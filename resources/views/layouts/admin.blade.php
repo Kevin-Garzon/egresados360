@@ -94,9 +94,10 @@
                         <div class="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-white font-semibold">
                             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                         </div>
-                        <span class="text-sm font-medium text-gray-700">
-                            {{ Auth::user()->name ?? 'Invitado' }}
-                        </span>
+                        <a href="{{ route('profile.edit') }}" class="text-sm font-medium text-gray-700 hover:text-primary">
+                            {{ Auth::user()->name }}
+                        </a>
+
                     </div>
                 </div>
             </header>
