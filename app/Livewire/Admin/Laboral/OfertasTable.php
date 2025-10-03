@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Livewire\Admin\Laboral;
+
+use Livewire\Component;
+use Livewire\WithPagination;
+use App\Models\OfertaLaboral;
+
+class OfertasTable extends Component
+{
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public function render()
+    {
+        $ofertas = OfertaLaboral::with('empresa')
+            ->latest('created_at')
+            ->paginate(10);
+
+        return view('livewire.admin.laboral.ofertas-table', [
+            'ofertas' => $ofertas
+        ]);
+    }
+}

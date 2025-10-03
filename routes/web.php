@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaboralController;
 use Illuminate\Support\Facades\Route;
 
+use App\Livewire\Admin\Laboral\LaboralPanel;
+
 //provisional
 use Illuminate\Support\Facades\Auth;
 
@@ -42,3 +44,9 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+// Rutas para el panel administrativo de ofertas laborales
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/laboral', LaboralPanel::class)->name('laboral.panel');
+});

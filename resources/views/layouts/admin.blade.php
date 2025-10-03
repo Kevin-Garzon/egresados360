@@ -6,6 +6,7 @@
     <title>@yield('title', 'Panel Admin — Egresados 360')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="bg-gray-100 font-inter text-rblack">
@@ -32,14 +33,13 @@
                 </a>
 
                 {{-- Laboral --}}
-                <a href="{{ route('laboral.index') }}"
+                <a href="{{ route('admin.laboral.panel') }}"
                     class="group flex items-center gap-3 px-3 py-2 rounded-lg transition
-                  {{ request()->routeIs('laboral.*') 
-                        ? 'bg-white text-primary font-semibold shadow-sm' 
-                        : 'text-white/95 hover:bg-white hover:text-primary' }}">
+                {{ request()->routeIs('admin.laboral.*') ? 'bg-white text-primary font-semibold shadow-sm' : 'text-white/95 hover:bg-white hover:text-primary' }}">
                     <i class="fa-solid fa-briefcase w-5 text-inherit"></i>
                     <span>Laboral</span>
                 </a>
+
 
                 {{-- Formación --}}
                 <a href="#"
@@ -109,6 +109,8 @@
             </div>
         </main>
     </div>
+
+    @livewireScripts
 </body>
 
 </html>
