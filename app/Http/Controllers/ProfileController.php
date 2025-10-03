@@ -36,9 +36,12 @@ class ProfileController extends Controller
             $user->password = bcrypt($request->password);
         }
 
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        if ($user->isDirty()) {
+            $user->save();
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        } else {
+            return Redirect::route('profile.edit');
+        }
     }
 
     /**
