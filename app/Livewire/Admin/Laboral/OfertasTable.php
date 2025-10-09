@@ -10,7 +10,12 @@ class OfertasTable extends Component
 {
     use WithPagination;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
+
+    protected $listeners = [
+        'oferta-added' => '$refresh',
+    ];
+
 
     public function render()
     {

@@ -32,7 +32,10 @@
     <section class="space-y-4">
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-[#263238]">Gestión de Oportunidades Laborales</h2>
-            <button class="px-4 py-2 rounded-xl bg-[#09B451] text-white shadow hover:opacity-90 transition">
+            <button
+                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
+                x-data
+                @click="$dispatch('open-create-oferta')">
                 Agregar Empleo
             </button>
         </div>
@@ -40,6 +43,10 @@
         <div class="bg-white rounded-2xl shadow p-4">
             <livewire:admin.laboral.ofertas-table />
         </div>
+
+        <livewire:admin.laboral.oferta-form />
     </section>
 </div>
+
+
 @endsection
