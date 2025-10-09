@@ -17,9 +17,21 @@ class OfertasTable extends Component
     ];
 
 
-    public function render()
+    /*  public function render()
     {
         $ofertas = OfertaLaboral::with('empresa')
+            ->latest('created_at')
+            ->paginate(10);
+
+        return view('livewire.admin.laboral.ofertas-table', [
+            'ofertas' => $ofertas
+        ]);
+    } */
+
+    #[\Livewire\Attributes\On('oferta-added')]
+    public function render()
+    {
+        $ofertas = \App\Models\OfertaLaboral::with('empresa')
             ->latest('created_at')
             ->paginate(10);
 
@@ -34,14 +46,8 @@ class OfertasTable extends Component
     }
 
     // Eliminar oferta
-    public function deleteConfirm($id)
+    public function confirmDelete($id)
     {
-        
-        $oferta = \App\Models\OfertaLaboral::find($id);
-
-        if ($oferta) {
-            $oferta->delete();
-            $this->dispatch('oferta-added'); 
-        }
+        $this->dispatch('open-delete-confirm', id: $id);
     }
 }

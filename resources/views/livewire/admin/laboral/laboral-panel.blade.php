@@ -45,6 +45,7 @@
         </div>
 
         <livewire:admin.laboral.oferta-form />
+        <livewire:admin.laboral.delete-confirm />
     </section>
 </div>
 
