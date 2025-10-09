@@ -27,4 +27,9 @@ class OfertasTable extends Component
             'ofertas' => $ofertas
         ]);
     }
+
+    public function edit($id)
+    {
+        $this->dispatch('open-edit-oferta', id: $id);
+    }
 }

@@ -14,21 +14,27 @@
         </thead>
         <tbody class="divide-y">
             @forelse($ofertas as $oferta)
-                <tr>
-                    <td>{{ $oferta->titulo }}</td>
-                    <td>{{ optional($oferta->empresa)->nombre ?? '—' }}</td>
-                    <td>{{ $oferta->ubicacion ?? '—' }}</td>
-                    <td>{{ optional($oferta->publicada_en)->format('Y-m-d') ?? '—' }}</td>
-                    <td>{{ $oferta->activo ? 'Activa' : 'Inactiva' }}</td>
-                    <td>
-                        <button class="text-green-600">Editar</button>
-                        <button class="text-red-600">Eliminar</button>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ $oferta->titulo }}</td>
+                <td>{{ optional($oferta->empresa)->nombre ?? '—' }}</td>
+                <td>{{ $oferta->ubicacion ?? '—' }}</td>
+                <td>{{ optional($oferta->publicada_en)->format('Y-m-d') ?? '—' }}</td>
+                <td>{{ $oferta->activo ? 'Activa' : 'Inactiva' }}</td>
+                <td>
+                    <button
+                        type="button"
+                        class="text-[#09B451] hover:underline"
+                        wire:click="edit({{ $oferta->id }})">
+                        Editar
+                    </button>
+
+                    <button class="text-red-600">Eliminar</button>
+                </td>
+            </tr>
             @empty
-                <tr>
-                    <td colspan="6">Aún no hay ofertas registradas.</td>
-                </tr>
+            <tr>
+                <td colspan="6">Aún no hay ofertas registradas.</td>
+            </tr>
             @endforelse
         </tbody>
     </table>
