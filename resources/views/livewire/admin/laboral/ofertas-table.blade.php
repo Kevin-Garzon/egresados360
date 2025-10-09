@@ -28,7 +28,12 @@
                         Editar
                     </button>
 
-                    <button class="text-red-600">Eliminar</button>
+                    <button
+                        type="button"
+                        class="text-red-600 hover:underline"
+                        wire:click="deleteConfirm({{ $oferta->id }})">
+                        Eliminar
+                    </button>
                 </td>
             </tr>
             @empty

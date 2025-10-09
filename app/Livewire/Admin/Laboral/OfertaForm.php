@@ -127,7 +127,7 @@ class OfertaForm extends Component
             ]);
         }
 
-        // Refrescar tabla y cerrar modal
+        // Refrescar tabla, pag y cerrar modal
         $this->dispatch('oferta-added');
         $this->close();
         $this->js('window.location.reload()');

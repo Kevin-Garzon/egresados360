@@ -32,4 +32,16 @@ class OfertasTable extends Component
     {
         $this->dispatch('open-edit-oferta', id: $id);
     }
+
+    // Eliminar oferta
+    public function deleteConfirm($id)
+    {
+        
+        $oferta = \App\Models\OfertaLaboral::find($id);
+
+        if ($oferta) {
+            $oferta->delete();
+            $this->dispatch('oferta-added'); 
+        }
+    }
 }
