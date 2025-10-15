@@ -30,7 +30,7 @@ Route::get('/dashboard', function () {
     return view('admin.dashboard'); 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-//provisional
+//Salir provisional
 Route::get('/salir', function () {
     Auth::logout();
     return redirect('/login');
@@ -50,3 +50,6 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/laboral', LaboralPanel::class)->name('laboral.panel');
 });
+
+Route::post('/ofertas/{id}/interaccion', [App\Http\Controllers\InteraccionController::class, 'registrar'])
+    ->name('ofertas.interaccion');

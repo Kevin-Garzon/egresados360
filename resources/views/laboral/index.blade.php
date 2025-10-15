@@ -152,9 +152,14 @@
       </div>
 
       <div class="pt-6 text-right">
-        <a id="modalLink" href="#" target="_blank" class="btn btn-primary">
+        <a id="modalLink"
+          href="#"
+          target="_blank"
+          class="btn btn-primary"
+          onclick="registrarInteraccion(event)">
           Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
         </a>
+
       </div>
     </div>
   </div>
@@ -164,6 +169,8 @@
   const ofertas = <?php echo json_encode($ofertas); ?>;
 
   function openOfertaModal(id) {
+    window.currentOfertaId = id;
+
     const oferta = ofertas.find(o => o.id == id);
     if (!oferta) return;
 
@@ -197,5 +204,34 @@
 
   function closeOfertaModal() {
     document.getElementById('ofertaModal').classList.add('hidden');
+  }
+
+  function registrarInteraccion(event) {
+    event.preventDefault(); // Evita que el link se abra inmediatamente
+
+    const link = event.currentTarget.getAttribute('href');
+    const id = event.currentTarget.getAttribute('data-id') || window.currentOfertaId;
+
+    if (!id) {
+      window.open(link, '_blank'); // por si falla, igual abre el link
+      return;
+    }
+
+    fetch(`/ofertas/${id}/interaccion`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('✅ Interacción registrada', data);
+        window.open(link, '_blank'); // ahora sí abre el enlace
+      })
+      .catch(err => {
+        console.error('⚠️ Error registrando interacción:', err);
+        window.open(link, '_blank'); // fallback
+      });
   }
 </script>
