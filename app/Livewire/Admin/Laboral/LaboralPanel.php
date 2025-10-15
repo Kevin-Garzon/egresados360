@@ -14,7 +14,8 @@ class LaboralPanel extends Component
     {
         $empresasCount = Empresa::count();
         $ofertasActivas = OfertaLaboral::where('activo', true)->count();
+        $ofertasTotales = OfertaLaboral::count();
 
-        return view('livewire.admin.laboral.laboral-panel', compact('empresasCount', 'ofertasActivas'));
+        return view('livewire.admin.laboral.laboral-panel', compact('empresasCount', 'ofertasActivas', 'ofertasTotales'));
     }
 }

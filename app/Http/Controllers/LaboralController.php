@@ -3,15 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\OfertaLaboral;
+use App\Models\Empresa;
 
 class LaboralController extends Controller
 {
     public function index()
     {
-        // Traer todas las ofertas
-        $ofertas = OfertaLaboral::all();
+        // Ofertas activas
+        $ofertas = OfertaLaboral::with('empresa')
+            ->where('activo', true)
+            ->orderBy('publicada_en', 'desc')
+            ->get();
 
-        // Pasarlas a la vista
-        return view('laboral.index', compact('ofertas'));
+        
+        $empresas = Empresa::orderBy('nombre')->get();
+
+        return view('laboral.index', compact('ofertas', 'empresas'));
     }
 }

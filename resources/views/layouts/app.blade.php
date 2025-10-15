@@ -51,6 +51,7 @@
     {{-- Footer institucional --}}
     @include('partials.footer')
 
+    @livewireScripts
 </body>
 
 </html>

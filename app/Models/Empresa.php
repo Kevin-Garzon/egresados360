@@ -15,4 +15,11 @@ class Empresa extends Model
         'logo',
         'url',
     ];
+
+    public function ofertas()
+{
+    return $this->hasMany(\App\Models\OfertaLaboral::class, 'empresa_id');
 }
+}
+
+
