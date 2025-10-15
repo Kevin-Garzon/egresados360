@@ -1,0 +1,119 @@
+<div class="space-y-2">
+    {{-- Fila superior: búsqueda + info --}}
+    <div class="flex items-center justify-between gap-3">
+        <div class="relative w-full max-w-sm">
+            <input
+                type="text"
+                wire:model.debounce.500ms="search"
+                placeholder="Buscar por nombre o sector…"
+                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+            />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+        </div>
+
+        <div class="text-sm text-gray-500 hidden sm:block">
+            @php
+                $from = $empresas->firstItem() ?? 0;
+                $to   = $empresas->lastItem() ?? 0;
+                $tot  = $empresas->total();
+            @endphp
+            Mostrando {{ $from }}–{{ $to }} de {{ $tot }}
+        </div>
+    </div>
+
+    {{-- Tabla --}}
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-gray-700 border border-gray-200 rounded-2xl overflow-hidden">
+            <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+                <tr>
+                    <th class="px-5 py-3 text-left font-semibold">Empresa</th>
+                    <th class="px-5 py-3 text-left font-semibold">Sector</th>
+                    <th class="px-5 py-3 text-left font-semibold">Sitio web</th>
+                    <th class="px-5 py-3 text-center font-semibold">Ofertas</th>
+                    <th class="px-5 py-3 text-right font-semibold">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-100 bg-white">
+                @forelse ($empresas as $empresa)
+                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                        {{-- Empresa (logo + nombre) --}}
+                        <td class="px-5 py-3 whitespace-nowrap font-medium text-gray-800">
+                            <div class="flex items-center gap-3">
+                                @if(!empty($empresa->logo))
+                                    <img
+                                        src="{{ asset('storage/' . $empresa->logo) }}"
+                                        alt="{{ $empresa->nombre }}"
+                                        class="h-8 w-8 rounded object-contain ring-1 ring-gray-200 bg-white"
+                                    >
+                                @else
+                                    <div class="h-8 w-8 flex items-center justify-center rounded bg-gray-100 text-gray-400">
+                                        <i class="fa-solid fa-building"></i>
+                                    </div>
+                                @endif
+                                <span>{{ $empresa->nombre }}</span>
+                            </div>
+                        </td>
+
+                        {{-- Sector --}}
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            {{ $empresa->sector ?? '—' }}
+                        </td>
+
+                        {{-- Sitio web (muestra host si hay URL) --}}
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            @php
+                                $url = $empresa->url ?? ($empresa->sitio_web ?? null);
+                                $host = $url ? parse_url($url, PHP_URL_HOST) : null;
+                            @endphp
+                            @if($url)
+                                <a href="{{ $url }}" target="_blank" class="text-primary hover:underline">
+                                    {{ $host ?: $url }}
+                                </a>
+                            @else
+                                —
+                            @endif
+                        </td>
+
+                        {{-- Ofertas: activas / total --}}
+                        <td class="px-5 py-3 text-center whitespace-nowrap">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                                {{ $empresa->ofertas_activas_count ?? 0 }} activas
+                            </span>
+                            <span class="mx-1 text-gray-400">/</span>
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-full">
+                                {{ $empresa->ofertas_count ?? 0 }} total
+                            </span>
+                        </td>
+
+                        {{-- Acciones (se conectarán a modales en el siguiente paso) --}}
+                        <td class="px-5 py-3 whitespace-nowrap text-right">
+                            <button wire:click="edit({{ $empresa->id }})"
+                                class="text-[#09B451] hover:text-green-700 font-medium transition">
+                                Editar
+                            </button>
+                            <span class="mx-1 text-gray-400">|</span>
+                            <button wire:click="confirmDelete({{ $empresa->id }})"
+                                class="text-red-500 hover:text-red-700 font-medium transition">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="px-5 py-4 text-center text-gray-500">
+                            No hay empresas registradas.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    {{-- Paginación --}}
+    <div class="pt-4">
+        {{ $empresas->links() }}
+    </div>
+</div>
