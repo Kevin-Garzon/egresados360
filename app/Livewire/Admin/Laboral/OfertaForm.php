@@ -7,6 +7,7 @@ use Livewire\Attributes\On;
 use App\Models\Empresa;
 use App\Models\OfertaLaboral;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 
 class OfertaForm extends Component
@@ -14,6 +15,7 @@ class OfertaForm extends Component
     // 
     use WithFileUploads;
     public $flyer;
+    public ?string $flyerNombre = null;
 
 
     public bool $isOpen = false;
@@ -34,7 +36,7 @@ class OfertaForm extends Component
     public bool $activo = true;
 
     public $empresas = [];
-    public $existingFlyer = null; 
+    public $existingFlyer = null;
     public ?string $ofertaFlyer = null;
 
 
@@ -77,7 +79,8 @@ class OfertaForm extends Component
         $this->publicada_en = optional($oferta->publicada_en)->format('Y-m-d');
         $this->fecha_cierre = optional($oferta->fecha_cierre)->format('Y-m-d');
         $this->activo       = (bool) $oferta->activo;
-        $this->existingFlyer = $oferta->flyer; 
+        $this->existingFlyer = $oferta->flyer;
+        $this->flyerNombre = $oferta->flyer ? basename($oferta->flyer) : null;
 
 
         $this->isOpen = true;
@@ -93,9 +96,16 @@ class OfertaForm extends Component
 
     public function save()
     {
-        $path = null;
+        $path = $this->existingFlyer; // mantiene el actual por defecto
+
         if ($this->flyer) {
-            $path = $this->flyer->store('flyers', 'public'); 
+            // si hay nuevo flyer, elimina el anterior y guarda el nuevo
+            if ($this->existingFlyer && Storage::disk('public')->exists($this->existingFlyer)) {
+                Storage::disk('public')->delete($this->existingFlyer);
+            }
+
+            $path = $this->flyer->store('flyers', 'public');
+            $this->flyerNombre = basename($path);
         }
 
 
@@ -130,6 +140,7 @@ class OfertaForm extends Component
                     'publicada_en' => $this->publicada_en ?? now(),
                     'fecha_cierre' => $this->fecha_cierre,
                     'activo'       => $this->activo,
+                    'flyer'        => $path, 
                 ]);
             }
         } else {

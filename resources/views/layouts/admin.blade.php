@@ -10,7 +10,7 @@
 </head>
 
 <body class="bg-gray-100 font-inter text-rblack">
-    <div class="min-h-screen flex">
+    <div class="h-screen flex overflow-hidden">
 
         {{-- Sidebar --}}
         <aside class="w-64 bg-primary text-white flex flex-col">
@@ -72,7 +72,7 @@
 
 
         {{-- Contenido principal --}}
-        <main class="flex-1 flex flex-col">
+        <main class="flex-1 flex flex-col overflow-y-auto">
             {{-- Header --}}
             <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
                 {{-- Título dinámico --}}
