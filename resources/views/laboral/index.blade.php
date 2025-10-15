@@ -60,7 +60,7 @@
           {{ $oferta->ubicacion }}
         </p>
         <button
-          onclick="openOfertaModal(@js($oferta->id))"
+          onclick="openOfertaModal(<?php echo json_encode($oferta->id); ?>)"
           class="btn btn-primary py-2">
           Ver más
         </button>
@@ -161,10 +161,10 @@
 </div>
 
 <script>
-  const ofertas = @json($ofertas);
+  const ofertas = <?php echo json_encode($ofertas); ?>;
 
   function openOfertaModal(id) {
-    const oferta = ofertas.find(o => o.id === id);
+    const oferta = ofertas.find(o => o.id == id);
     if (!oferta) return;
 
     document.getElementById('modalTitulo').innerText = oferta.titulo;
@@ -198,4 +198,4 @@
   function closeOfertaModal() {
     document.getElementById('ofertaModal').classList.add('hidden');
   }
-</script> 
+</script>
