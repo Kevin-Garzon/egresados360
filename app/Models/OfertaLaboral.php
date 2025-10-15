@@ -18,6 +18,8 @@ class OfertaLaboral extends Model
         'publicada_en',
         'fecha_cierre',
         'activo',
+        'interacciones',
+        'flyer',
     ];
 
     protected $casts = [

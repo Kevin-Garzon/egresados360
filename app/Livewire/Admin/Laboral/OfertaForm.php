@@ -6,9 +6,16 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Empresa;
 use App\Models\OfertaLaboral;
+use Livewire\WithFileUploads;
+
 
 class OfertaForm extends Component
 {
+    // 
+    use WithFileUploads;
+    public $flyer;
+
+
     public bool $isOpen = false;
 
     // Estado
@@ -27,6 +34,10 @@ class OfertaForm extends Component
     public bool $activo = true;
 
     public $empresas = [];
+    public $existingFlyer = null; 
+    public ?string $ofertaFlyer = null;
+
+
 
     public function mount()
     {
@@ -66,6 +77,8 @@ class OfertaForm extends Component
         $this->publicada_en = optional($oferta->publicada_en)->format('Y-m-d');
         $this->fecha_cierre = optional($oferta->fecha_cierre)->format('Y-m-d');
         $this->activo       = (bool) $oferta->activo;
+        $this->existingFlyer = $oferta->flyer; 
+
 
         $this->isOpen = true;
     }
@@ -80,6 +93,12 @@ class OfertaForm extends Component
 
     public function save()
     {
+        $path = null;
+        if ($this->flyer) {
+            $path = $this->flyer->store('flyers', 'public'); 
+        }
+
+
         $this->validate([
             'empresa_id'   => 'required|exists:empresas,id',
             'titulo'       => 'required|string|max:150',
@@ -90,6 +109,7 @@ class OfertaForm extends Component
             'publicada_en' => 'nullable|date',
             'fecha_cierre' => 'nullable|date|after_or_equal:publicada_en',
             'activo'       => 'boolean',
+            'flyer'        => 'nullable|image|max:2048',
         ]);
 
         // Convertir etiquetas de texto a array
@@ -124,6 +144,7 @@ class OfertaForm extends Component
                 'publicada_en' => $this->publicada_en ?? now(),
                 'fecha_cierre' => $this->fecha_cierre,
                 'activo'       => $this->activo,
+                'flyer'        => $path,
             ]);
         }
 

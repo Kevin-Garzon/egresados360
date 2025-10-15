@@ -66,6 +66,23 @@
                     @error('url_externa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Flyer --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Flyer (opcional)</label>
+                    <input type="file" wire:model="flyer"
+                        class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
+                    @error('flyer') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                    @if ($flyer)
+                    <div class="mt-2">
+                        <p class="text-xs text-gray-500 mb-1">Vista previa:</p>
+                        <img src="{{ $flyer->temporaryUrl() }}" class="max-h-48 rounded-lg shadow">
+                    </div>
+                    @endif
+                </div>
+
+
+
                 {{-- Fechas --}}
                 <div class="grid grid-cols-2 gap-4">
                     <div>

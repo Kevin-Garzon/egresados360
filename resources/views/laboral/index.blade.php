@@ -142,6 +142,16 @@
         <span id="modalEmpresa"></span>
       </p>
 
+      {{-- Flyer (si existe) --}}
+      <div id="modalFlyerContainer" class="mb-4 hidden">
+        <a id="modalFlyerLink" href="#" target="_blank">
+          <img id="modalFlyer"
+            src=""
+            alt="Flyer de la oferta"
+            class="w-full rounded-xl shadow-sm object-contain max-h-[280px] hover:opacity-90 transition">
+        </a>
+      </div>
+
       <p class="text-gray-700 leading-relaxed mb-4" id="modalDescripcion"></p>
 
       <div id="modalEtiquetas" class="flex flex-wrap gap-2 mb-4"></div>
@@ -180,6 +190,20 @@
     document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
     document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
     document.getElementById('modalLink').href = oferta.url_externa ?? '#';
+
+    const flyerContainer = document.getElementById('modalFlyerContainer');
+    const flyerImg = document.getElementById('modalFlyer');
+    const flyerLink = document.getElementById('modalFlyerLink');
+
+    if (oferta.flyer) {
+      flyerContainer.classList.remove('hidden');
+      flyerImg.src = `/storage/${oferta.flyer}`;
+      flyerLink.href = `/storage/${oferta.flyer}`;
+    } else {
+      flyerContainer.classList.add('hidden');
+      flyerImg.src = '';
+      flyerLink.href = '#';
+    }
 
     // Etiquetas
     const etiquetasContainer = document.getElementById('modalEtiquetas');
