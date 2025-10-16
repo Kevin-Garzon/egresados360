@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaboralController;
+use App\Http\Controllers\FormacionController;
 use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Admin\Laboral\LaboralPanel;
@@ -9,6 +10,8 @@ use App\Livewire\Admin\Laboral\LaboralPanel;
 //provisional
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Formacion;
+use App\Models\OfertaLaboral;
 
 // Página de inicio
 Route::get('/', function () {
@@ -18,8 +21,16 @@ Route::get('/', function () {
 // Ofertas Laborales
 Route::get('/laboral', [LaboralController::class, 'index'])->name('laboral.index');
 
+Route::get('/api/oferta/{id}', function ($id) {
+    return OfertaLaboral::with('empresa')->findOrFail($id);
+});
+
 // Formación
-Route::view('/formacion', 'formacion.index')->name('formacion.index');
+Route::get('/formacion', [FormacionController::class, 'index'])->name('formacion.index');
+
+Route::get('/api/formacion/{id}', function ($id) {
+    return Formacion::findOrFail($id);
+});
 
 // Bienestar
 Route::view('/bienestar', 'bienestar.index')->name('bienestar.index');

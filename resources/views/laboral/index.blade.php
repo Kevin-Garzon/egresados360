@@ -60,14 +60,10 @@
           {{ $oferta->ubicacion }}
         </p>
         <button
-          onclick="openOfertaModal(<?php echo json_encode($oferta->id); ?>)"
+          onclick="openOfertaModal('{{ $oferta->id }}')"
           class="btn btn-primary py-2">
           Ver más
         </button>
-
-
-
-
 
       </div>
     </div>
@@ -127,7 +123,6 @@
             <div class="flex-1">
               <h3 class="font-semibold">{{ $empresa['nombre'] }}</h3>
               <p class="text-primary text-sm mb-2">{{ $empresa['sector'] ?? 'Sector no especificado' }}</p>
-              {{-- El texto ahora se envolverá correctamente --}}
               <p class="text-sm text-rblack/70">
                 {{ Str::limit($empresa['descripcion'] ?? '—', 150, '...') }}
               </p>
@@ -148,10 +143,8 @@
   </div>
 </section>
 
-
-
-
 @endsection
+
 
 {{-- Modal de Detalle de Oferta Laboral --}}
 <div id="ofertaModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -190,64 +183,68 @@
           href="#"
           target="_blank"
           class="btn btn-primary"
-          onclick="registrarInteraccion(event)">
+          onclick="registrarInteraccion(event)"
+          data-id="">
           Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
         </a>
-
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  const ofertas = <?php echo json_encode($ofertas); ?>;
+  // Nueva versión usando fetch() para obtener la información del modal
+  async function openOfertaModal(id) {
+    try {
+      window.currentOfertaId = id; // mantiene la oferta actual para registrar interacción
 
-  function openOfertaModal(id) {
-    window.currentOfertaId = id;
+      const res = await fetch(`/api/oferta/${id}`);
+      if (!res.ok) throw new Error('Error al obtener los datos de la oferta');
+      const oferta = await res.json();
 
-    const oferta = ofertas.find(o => o.id == id);
-    if (!oferta) return;
+      document.getElementById('modalTitulo').innerText = oferta.titulo;
+      document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
+      document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
+      document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
+      document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
+      document.getElementById('modalLink').href = oferta.url_externa ?? '#';
+      document.getElementById('modalLink').setAttribute('data-id', oferta.id);
 
-    document.getElementById('modalTitulo').innerText = oferta.titulo;
-    document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
-    document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
-    document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
-    document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
-    document.getElementById('modalLink').href = oferta.url_externa ?? '#';
+      const flyerContainer = document.getElementById('modalFlyerContainer');
+      const flyerImg = document.getElementById('modalFlyer');
+      const flyerLink = document.getElementById('modalFlyerLink');
 
-    const flyerContainer = document.getElementById('modalFlyerContainer');
-    const flyerImg = document.getElementById('modalFlyer');
-    const flyerLink = document.getElementById('modalFlyerLink');
+      if (oferta.flyer) {
+        flyerContainer.classList.remove('hidden');
+        flyerImg.src = `/storage/${oferta.flyer}`;
+        flyerLink.href = `/storage/${oferta.flyer}`;
+      } else {
+        flyerContainer.classList.add('hidden');
+        flyerImg.src = '';
+        flyerLink.href = '#';
+      }
 
-    if (oferta.flyer) {
-      flyerContainer.classList.remove('hidden');
-      flyerImg.src = `/storage/${oferta.flyer}`;
-      flyerLink.href = `/storage/${oferta.flyer}`;
-    } else {
-      flyerContainer.classList.add('hidden');
-      flyerImg.src = '';
-      flyerLink.href = '#';
+      const etiquetasContainer = document.getElementById('modalEtiquetas');
+      etiquetasContainer.innerHTML = '';
+      let etiquetas = oferta.etiquetas;
+      if (typeof etiquetas === 'string') {
+        try {
+          etiquetas = JSON.parse(etiquetas);
+        } catch {}
+      }
+      if (Array.isArray(etiquetas)) {
+        etiquetas.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
+          span.innerText = tag.trim();
+          etiquetasContainer.appendChild(span);
+        });
+      }
+
+      document.getElementById('ofertaModal').classList.remove('hidden');
+    } catch (error) {
+      console.error('Error mostrando la oferta:', error);
     }
-
-    // Etiquetas
-    const etiquetasContainer = document.getElementById('modalEtiquetas');
-    etiquetasContainer.innerHTML = '';
-    let etiquetas = oferta.etiquetas;
-    if (typeof etiquetas === 'string') {
-      try {
-        etiquetas = JSON.parse(etiquetas);
-      } catch {}
-    }
-    if (Array.isArray(etiquetas)) {
-      etiquetas.forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
-        span.innerText = tag.trim();
-        etiquetasContainer.appendChild(span);
-      });
-    }
-
-    document.getElementById('ofertaModal').classList.remove('hidden');
   }
 
   function closeOfertaModal() {
@@ -255,13 +252,13 @@
   }
 
   function registrarInteraccion(event) {
-    event.preventDefault(); // Evita que el link se abra inmediatamente
+    event.preventDefault();
 
     const link = event.currentTarget.getAttribute('href');
     const id = event.currentTarget.getAttribute('data-id') || window.currentOfertaId;
 
     if (!id) {
-      window.open(link, '_blank'); // por si falla, igual abre el link
+      window.open(link, '_blank');
       return;
     }
 
@@ -275,11 +272,11 @@
       .then(res => res.json())
       .then(data => {
         console.log('Interacción registrada', data);
-        window.open(link, '_blank'); // ahora sí abre el enlace
+        window.open(link, '_blank');
       })
       .catch(err => {
         console.error('Error registrando interacción:', err);
-        window.open(link, '_blank'); // fallback
+        window.open(link, '_blank');
       });
   }
 </script>

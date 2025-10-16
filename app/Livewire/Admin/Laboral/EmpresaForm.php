@@ -38,7 +38,8 @@ class EmpresaForm extends Component
             'sector'      => ['nullable', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string', 'max:1000'],
             'url'         => ['nullable', 'url', 'max:255'],
-            'logo'        => ['nullable', 'image', 'max:2048'],
+            /* 'logo'        => ['nullable', 'image', 'max:2048'], */
+            'logo'        => ['nullable', 'mimes:jpg,jpeg,png,webp,avif', 'max:2048'],
         ];
     }
 
