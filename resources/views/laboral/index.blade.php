@@ -114,7 +114,7 @@
 
         {{-- Botón --}}
         <div class="flex justify-center">
-          <a href="{{ $empresa->sitio_web }}" target="_blank" class="btn btn-primary mt-4">Visitar</a>
+          <a href="{{ $empresa->url }}" target="_blank" class="btn btn-primary mt-4">Visitar</a>
         </div>
       </div>
       @endforeach
@@ -250,11 +250,11 @@
       })
       .then(res => res.json())
       .then(data => {
-        console.log('✅ Interacción registrada', data);
+        console.log('Interacción registrada', data);
         window.open(link, '_blank'); // ahora sí abre el enlace
       })
       .catch(err => {
-        console.error('⚠️ Error registrando interacción:', err);
+        console.error('Error registrando interacción:', err);
         window.open(link, '_blank'); // fallback
       });
   }

@@ -12,26 +12,29 @@ class OfertasTable extends Component
 
     protected $paginationTheme = 'tailwind';
 
+    public $search = ''; // Nuevo: texto de búsqueda
+
     protected $listeners = [
         'oferta-added' => '$refresh',
     ];
 
-
-    /*  public function render()
+    // Reiniciar paginación al cambiar búsqueda
+    public function updatingSearch()
     {
-        $ofertas = OfertaLaboral::with('empresa')
-            ->latest('created_at')
-            ->paginate(10);
-
-        return view('livewire.admin.laboral.ofertas-table', [
-            'ofertas' => $ofertas
-        ]);
-    } */
+        $this->resetPage();
+    }
 
     #[\Livewire\Attributes\On('oferta-added')]
     public function render()
     {
-        $ofertas = \App\Models\OfertaLaboral::with('empresa')
+        $ofertas = OfertaLaboral::with('empresa')
+            ->when($this->search, function ($query) {
+                $query->where('titulo', 'like', "%{$this->search}%")
+                    ->orWhereHas('empresa', fn($q) =>
+                        $q->where('nombre', 'like', "%{$this->search}%")
+                    )
+                    ->orWhere('ubicacion', 'like', "%{$this->search}%");
+            })
             ->latest('created_at')
             ->paginate(10);
 
@@ -45,7 +48,6 @@ class OfertasTable extends Component
         $this->dispatch('open-edit-oferta', id: $id);
     }
 
-    // Eliminar oferta
     public function confirmDelete($id)
     {
         $this->dispatch('open-delete-confirm', id: $id);
