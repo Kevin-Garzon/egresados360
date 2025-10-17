@@ -42,8 +42,9 @@
 
 
                 {{-- Formación --}}
-                <a href="#"
-                    class="group flex items-center gap-3 px-3 py-2 rounded-lg transition text-white/95 hover:bg-white hover:text-primary">
+                <a href="{{ route('admin.formacion.panel') }}"
+                    class="group flex items-center gap-3 px-3 py-2 rounded-lg transition
+                {{ request()->routeIs('admin.formacion.*') ? 'bg-white text-primary font-semibold shadow-sm' : 'text-white/95 hover:bg-white hover:text-primary' }}">
                     <i class="fa-solid fa-graduation-cap w-5 text-inherit"></i>
                     <span>Formación</span>
                 </a>

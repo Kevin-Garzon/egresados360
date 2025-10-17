@@ -6,6 +6,7 @@ use App\Http\Controllers\FormacionController;
 use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Admin\Laboral\LaboralPanel;
+use App\Livewire\Admin\Formacion\FormacionPanel;
 
 //provisional
 use Illuminate\Support\Facades\Auth;
@@ -64,3 +65,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 Route::post('/ofertas/{id}/interaccion', [App\Http\Controllers\InteraccionController::class, 'registrar'])
     ->name('ofertas.interaccion');
+
+
+// Rutas para el panel administrativo de formación
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/formacion', FormacionPanel::class)->name('formacion.panel');
+});
