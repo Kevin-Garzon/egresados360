@@ -42,12 +42,12 @@
     {{-- Gestión de Programas de Formación --}}
     <section class="space-y-4">
         <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-[#263238]">Gestión de Programas de Formación</h2>
+            <h2 class="text-lg font-semibold text-[#263238]">Gestión de Ofertas de Formación</h2>
             <button
                 class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
                 x-data
                 @click="$dispatch('open-create-formacion')">
-                Nuevo Programa
+                Agregar Formación
             </button>
         </div>
 
@@ -56,6 +56,7 @@
         </div>
 
         <livewire:admin.formacion.formacion-form />
+        <livewire:admin.formacion.delete-formacion />
     </section>
 </div>
 @endsection

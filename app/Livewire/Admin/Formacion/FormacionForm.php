@@ -20,6 +20,7 @@ class FormacionForm extends Component
     public ?string $modalidad = null;
     public ?string $tipo = null;
     public ?float $costo = null;
+    public ?string $duracion = null;
     public ?string $fecha_inicio = null;
     public ?string $fecha_fin = null;
     public ?string $url_externa = null;
@@ -41,6 +42,7 @@ class FormacionForm extends Component
             'modalidad'     => ['required', 'string', 'max:50'],
             'tipo'          => ['required', 'string', 'max:50'],
             'costo'         => ['nullable', 'numeric', 'min:0'],
+            'duracion'      => ['nullable', 'string', 'max:50'],
             'fecha_inicio'  => ['nullable', 'date'],
             'fecha_fin'     => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'url_externa'   => ['nullable', 'url'],
@@ -92,6 +94,7 @@ class FormacionForm extends Component
             'modalidad'     => $this->modalidad,
             'tipo'          => $this->tipo,
             'costo'         => $this->costo,
+            'duracion'      => $this->duracion,
             'fecha_inicio'  => $this->fecha_inicio,
             'fecha_fin'     => $this->fecha_fin,
             'url_externa'   => $this->url_externa,

@@ -16,6 +16,7 @@ class Formacion extends Model
         'programa',
         'modalidad',
         'costo',
+        'duracion',
         'fecha_inicio',
         'fecha_fin',
         'url_externa',

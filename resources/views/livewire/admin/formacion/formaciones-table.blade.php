@@ -7,8 +7,7 @@
                 type="text"
                 wire:model.live="search"
                 placeholder="Buscar por título, programa o modalidad..."
-                class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary"
-            />
+                class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary" />
         </div>
     </div>
 
@@ -54,9 +53,9 @@
                     </td>
                     <td class="px-5 py-3 whitespace-nowrap text-gray-700">
                         @if(!is_null($f->costo))
-                            ${{ number_format($f->costo, 0, ',', '.') }}
+                        ${{ number_format($f->costo, 0, ',', '.') }}
                         @else
-                            —
+                        —
                         @endif
                     </td>
                     <td class="px-5 py-3 text-center">
@@ -80,10 +79,11 @@
                             Editar
                         </button>
                         <span class="mx-1 text-gray-400">|</span>
-                        <button wire:click="delete({{ $f->id }})"
+                        <button wire:click="$dispatch('confirm-delete-formacion', { id: {{ $f->id }} })"
                             class="text-red-500 hover:text-red-700 font-medium transition">
                             Eliminar
                         </button>
+
                     </td>
                 </tr>
                 @empty

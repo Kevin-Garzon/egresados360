@@ -82,6 +82,13 @@
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
                     </div>
 
+                    <div>
+                        <label class="text-sm font-medium text-gray-600">Duración (Horas)</label>
+                        <input type="text" wire:model.defer="duracion"
+                            class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                    </div>
+
+
                     <div class="flex gap-3">
                         <div class="flex-1">
                             <label class="text-sm font-medium text-gray-600">Fecha Inicio</label>
