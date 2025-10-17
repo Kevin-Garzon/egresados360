@@ -84,7 +84,7 @@
 <div id="modal-detalle" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
   <div class="bg-white rounded-2xl shadow-lg max-w-2xl w-full mx-4 p-8 relative">
     {{-- Botón cerrar --}}
-    <button onclick="cerrarModal()" 
+    <button onclick="cerrarModal()"
       class="absolute top-4 right-4 text-gray-400 hover:text-primary transition-colors duration-200">
       <i class="fa-solid fa-xmark text-xl"></i>
     </button>
@@ -110,7 +110,7 @@
     });
   }
 
-    function mostrarDetalle(id) {
+  function mostrarDetalle(id) {
     fetch(`/api/formacion/${id}`)
       .then(res => res.json())
       .then(data => {
@@ -118,52 +118,78 @@
         const fechaFin = data.fecha_fin ? new Date(data.fecha_fin).toLocaleDateString('es-CO') : '';
 
         document.getElementById('detalle-contenido').innerHTML = `
-          <h2 class="text-2xl font-poppins font-semibold text-rblack">${data.titulo}</h2>
-          
-          <div class="flex items-center gap-2 text-primary font-medium text-sm">
-            <i class="fa-solid fa-graduation-cap"></i>
-            <span>${data.modalidad ?? ''}</span>
-            <span class="text-gray-400">|</span>
-            <span>${data.tipo ?? ''}</span>
-          </div>
+        <h2 class="text-2xl font-poppins font-semibold text-rblack">${data.titulo}</h2>
+        
+        <div class="flex items-center gap-2 text-primary font-medium text-sm">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>${data.modalidad ?? ''}</span>
+          <span class="text-gray-400">|</span>
+          <span>${data.tipo ?? ''}</span>
+        </div>
 
-          <p class="text-sm text-rblack/70 leading-relaxed border-t border-gray-100 pt-3">
-            ${data.descripcion ?? ''}
-          </p>
+        <p class="text-sm text-rblack/70 leading-relaxed border-t border-gray-100 pt-3">
+          ${data.descripcion ?? ''}
+        </p>
 
-          <div class="grid sm:grid-cols-2 gap-3 mt-4 text-sm text-rblack/70">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-calendar-days text-primary"></i>
-              <span><strong>Inicio:</strong> ${fechaInicio || '—'}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-calendar-check text-primary"></i>
-              <span><strong>Fin:</strong> ${fechaFin || '—'}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-clock text-primary"></i>
-              <span><strong>Duración:</strong> ${data.duracion ?? '—'}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-money-bill-wave text-primary"></i>
-              <span><strong>Costo:</strong> $${parseInt(data.costo).toLocaleString('es-CO')}</span>
-            </div>
+        <div class="grid sm:grid-cols-2 gap-3 mt-4 text-sm text-rblack/70">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-primary"></i>
+            <span><strong>Inicio:</strong> ${fechaInicio || '—'}</span>
           </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-check text-primary"></i>
+            <span><strong>Fin:</strong> ${fechaFin || '—'}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-clock text-primary"></i>
+            <span><strong>Duración:</strong> ${data.duracion ?? '—'}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-money-bill-wave text-primary"></i>
+            <span><strong>Costo:</strong> $${parseInt(data.costo).toLocaleString('es-CO')}</span>
+          </div>
+        </div>
 
-          <div class="pt-6 flex justify-end">
-            <a href="${data.url_externa ?? '#'}" target="_blank" class="btn btn-primary px-6">
-              Inscribirme
-            </a>
-          </div>
-        `;
+        <div class="pt-6 flex justify-end">
+          <a href="${data.url_externa ?? '#'}"
+             target="_blank"
+             onclick="registrarInteraccion(${id}, '${data.url_externa ?? '#'}')"
+             class="btn btn-primary px-6">
+            Inscribirme
+          </a>
+        </div>
+      `;
+
         document.getElementById('modal-detalle').classList.remove('hidden');
         document.getElementById('modal-detalle').classList.add('flex');
       });
   }
 
+
   function cerrarModal() {
     document.getElementById('modal-detalle').classList.remove('flex');
     document.getElementById('modal-detalle').classList.add('hidden');
+  }
+
+  function registrarInteraccion(id, link) {
+    event.preventDefault();
+
+    fetch(`/formaciones/${id}/interaccion`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('Interacción registrada correctamente', data);
+        window.open(link, '_blank'); // Abre el enlace después de registrar
+      })
+      .catch(err => {
+        console.error('Error registrando interacción:', err);
+        window.open(link, '_blank'); // fallback por si falla el fetch
+      });
   }
 </script>
 

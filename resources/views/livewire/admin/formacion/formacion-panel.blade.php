@@ -54,6 +54,8 @@
         <div class="bg-white rounded-2xl shadow p-4">
             <livewire:admin.formacion.formaciones-table />
         </div>
+
+        <livewire:admin.formacion.formacion-form />
     </section>
 </div>
 @endsection

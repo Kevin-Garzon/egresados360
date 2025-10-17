@@ -25,6 +25,8 @@
                     <th class="px-5 py-3 text-left font-semibold">Fin</th>
                     <th class="px-5 py-3 text-left font-semibold">Costo</th>
                     <th class="px-5 py-3 text-center font-semibold">Estado</th>
+                    {{-- NUEVA COLUMNA --}}
+                    <th class="px-5 py-3 text-center font-semibold">Interacciones</th>
                     <th class="px-5 py-3 text-right font-semibold">Acciones</th>
                 </tr>
             </thead>
@@ -68,6 +70,10 @@
                         </span>
                         @endif
                     </td>
+                    {{-- NUEVA CELDA --}}
+                    <td class="px-5 py-3 text-center text-gray-700">
+                        {{ $f->interacciones ?? 0 }}
+                    </td>
                     <td class="px-5 py-3 whitespace-nowrap text-right">
                         <button wire:click="openEdit({{ $f->id }})"
                             class="text-[#09B451] hover:text-green-700 font-medium transition">
@@ -82,7 +88,8 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="px-5 py-4 text-center text-gray-500">
+                    {{-- ajusta el colspan de 9 -> 10 por la nueva columna --}}
+                    <td colspan="10" class="px-5 py-4 text-center text-gray-500">
                         No hay programas registrados.
                     </td>
                 </tr>
