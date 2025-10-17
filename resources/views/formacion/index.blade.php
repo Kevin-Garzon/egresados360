@@ -50,7 +50,9 @@
       @if($formacion->imagen)
       <img src="{{ asset('storage/'.$formacion->imagen) }}" alt="{{ $formacion->titulo }}" class="rounded-xl mb-4 h-44 w-full object-cover">
       @else
-      <img src="https://cdn-icons-png.flaticon.com/512/2942/2942921.png" alt="Imagen no disponible" class="rounded-xl mb-4 h-44 w-full object-contain bg-gray-50">
+      <div class="h-44 flex items-center justify-center bg-gray-50 rounded-xl mb-4">
+        <i class="fa-solid fa-graduation-cap text-primary text-6xl"></i>
+      </div>
       @endif
 
       {{-- Información --}}

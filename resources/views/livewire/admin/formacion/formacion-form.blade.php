@@ -88,6 +88,24 @@
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
                     </div>
 
+                    <div>
+                        <label class="text-sm font-medium text-gray-600">Imagen del Programa</label>
+                        <input type="file" wire:model="imagen"
+                            class="w-full mt-1 text-sm border-gray-300 rounded-lg focus:ring-primary focus:border-primary" accept="image/*">
+
+                        {{-- Previsualización --}}
+                        <div class="mt-2">
+                            @if ($imagen)
+                            <img src="{{ $imagen->temporaryUrl() }}" class="h-32 rounded-lg object-cover border border-gray-200">
+                            @elseif ($existingImage)
+                            <img src="{{ asset('storage/'.$existingImage) }}" class="h-32 rounded-lg object-cover border border-gray-200">
+                            @endif
+                        </div>
+
+                        @error('imagen') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
+
 
                     <div class="flex gap-3">
                         <div class="flex-1">

@@ -3,11 +3,17 @@
 namespace App\Livewire\Admin\Formacion;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Formacion;
 use Illuminate\Support\Carbon;
 
+
 class FormacionForm extends Component
 {
+    use WithFileUploads;
+
+
     public bool $isOpen = false;
     public bool $isEdit = false;
 
@@ -26,6 +32,9 @@ class FormacionForm extends Component
     public ?string $url_externa = null;
     public bool $activo = true;
     public int $interacciones = 0;
+    public $imagen; // Archivo temporal
+    public ?string $existingImage = null; // Imagen existente
+
 
     protected $listeners = [
         'open-create-formacion' => 'openCreate',
@@ -48,6 +57,8 @@ class FormacionForm extends Component
             'url_externa'   => ['nullable', 'url'],
             'activo'        => ['boolean'],
             'interacciones' => ['integer', 'min:0'],
+            'imagen'        => ['nullable', 'image', 'max:2048'],
+
         ];
     }
 
@@ -77,6 +88,8 @@ class FormacionForm extends Component
         $this->url_externa   = $formacion->url_externa;
         $this->activo        = $formacion->activo;
         $this->interacciones = $formacion->interacciones ?? 0;
+        $this->existingImage = $formacion->imagen;
+
 
         $this->isOpen = true;
         $this->isEdit = true;
@@ -101,6 +114,19 @@ class FormacionForm extends Component
             'activo'        => $this->activo,
             'interacciones' => $this->interacciones,
         ];
+
+        // Manejo de imagen
+        if ($this->imagen) {
+            // Si existe imagen previa, la eliminamos
+            if ($this->isEdit && $this->existingImage && Storage::disk('public')->exists($this->existingImage)) {
+                Storage::disk('public')->delete($this->existingImage);
+            }
+
+            // Guardamos nueva imagen
+            $path = $this->imagen->store('formaciones', 'public');
+            $data['imagen'] = $path;
+        }
+
 
         if ($this->isEdit && $this->formacion_id) {
             Formacion::whereKey($this->formacion_id)->update($data);
@@ -136,6 +162,8 @@ class FormacionForm extends Component
             'interacciones',
             'isOpen',
             'isEdit',
+            'imagen',
+            'existingImage',
         ]);
     }
 
