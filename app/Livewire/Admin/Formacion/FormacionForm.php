@@ -18,10 +18,10 @@ class FormacionForm extends Component
     public bool $isEdit = false;
 
     public ?int $formacion_id = null;
+    public ?int $empresa_id = null;
 
     public string $titulo = '';
     public ?string $descripcion = null;
-    public ?string $entidad = null;
     public ?string $programa = null;
     public ?string $modalidad = null;
     public ?string $tipo = null;
@@ -44,9 +44,9 @@ class FormacionForm extends Component
     protected function rules(): array
     {
         return [
+            'empresa_id'    => ['nullable', 'exists:empresas,id'],
             'titulo'        => ['required', 'string', 'max:150'],
             'descripcion'   => ['nullable', 'string'],
-            'entidad'       => ['nullable', 'string', 'max:150'],
             'programa'      => ['required', 'string', 'max:100'],
             'modalidad'     => ['required', 'string', 'max:50'],
             'tipo'          => ['required', 'string', 'max:50'],
@@ -76,9 +76,9 @@ class FormacionForm extends Component
         $formacion = Formacion::findOrFail($id);
 
         $this->formacion_id  = $formacion->id;
+        $this->empresa_id = $formacion->empresa_id;
         $this->titulo        = $formacion->titulo;
         $this->descripcion   = $formacion->descripcion;
-        $this->entidad       = $formacion->entidad;
         $this->programa      = $formacion->programa;
         $this->modalidad     = $formacion->modalidad;
         $this->tipo          = $formacion->tipo;
@@ -100,9 +100,9 @@ class FormacionForm extends Component
         $this->validate();
 
         $data = [
+            'empresa_id'    => $this->empresa_id,
             'titulo'        => $this->titulo,
             'descripcion'   => $this->descripcion,
-            'entidad'       => $this->entidad,
             'programa'      => $this->programa,
             'modalidad'     => $this->modalidad,
             'tipo'          => $this->tipo,
@@ -148,9 +148,9 @@ class FormacionForm extends Component
     {
         $this->reset([
             'formacion_id',
+            'empresa_id',
             'titulo',
             'descripcion',
-            'entidad',
             'programa',
             'modalidad',
             'tipo',

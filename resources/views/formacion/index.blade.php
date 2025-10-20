@@ -122,6 +122,14 @@
         document.getElementById('detalle-contenido').innerHTML = `
         <h2 class="text-2xl font-poppins font-semibold text-rblack">${data.titulo}</h2>
         
+        ${data.empresa ? `
+          <p class="text-sm text-gray-500 flex items-center gap-1">
+            <i class="fa-solid fa-building text-primary"></i>
+            ${data.empresa.nombre}
+          </p>
+        ` : ''}
+
+
         <div class="flex items-center gap-2 text-primary font-medium text-sm">
           <i class="fa-solid fa-graduation-cap"></i>
           <span>${data.modalidad ?? ''}</span>
@@ -144,7 +152,8 @@
           </div>
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-clock text-primary"></i>
-            <span><strong>Duración:</strong> ${data.duracion ?? '—'}</span>
+            <span><strong>Duración:</strong> ${data.duracion ? data.duracion + ' horas' : '—'}</span>
+
           </div>
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-money-bill-wave text-primary"></i>

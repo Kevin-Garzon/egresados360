@@ -17,6 +17,7 @@
             <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                 <tr>
                     <th class="px-5 py-3 text-left font-semibold">Título</th>
+                    <th class="px-5 py-3 text-left font-semibold">Entidad</th>
                     <th class="px-5 py-3 text-left font-semibold">Programa</th>
                     <th class="px-5 py-3 text-left font-semibold">Modalidad</th>
                     <th class="px-5 py-3 text-left font-semibold">Tipo</th>
@@ -35,6 +36,9 @@
                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                     <td class="px-5 py-3 whitespace-nowrap font-medium text-gray-800">
                         {{ $f->titulo }}
+                    </td>
+                    <td class="px-5 py-3 whitespace-nowrap">
+                        {{ $f->empresa ? $f->empresa->nombre : '—' }}
                     </td>
                     <td class="px-5 py-3 whitespace-nowrap">
                         {{ $f->programa ?? '—' }}

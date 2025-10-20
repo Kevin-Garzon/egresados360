@@ -32,10 +32,16 @@
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Entidad</label>
-                        <input type="text" wire:model.defer="entidad"
-                            class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                        <label class="text-sm font-medium text-gray-600">Empresa / Entidad Aliada</label>
+                        <select wire:model.defer="empresa_id"
+                            class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary">
+                            <option value="">Seleccionar</option>
+                            @foreach(\App\Models\Empresa::orderBy('nombre')->get() as $empresa)
+                            <option value="{{ $empresa->id }}">{{ $empresa->nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
 
                     <div>
                         <label class="text-sm font-medium text-gray-600">Programa *</label>

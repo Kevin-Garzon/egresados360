@@ -30,7 +30,7 @@ Route::get('/api/oferta/{id}', function ($id) {
 Route::get('/formacion', [FormacionController::class, 'index'])->name('formacion.index');
 
 Route::get('/api/formacion/{id}', function ($id) {
-    return Formacion::findOrFail($id);
+    return Formacion::with('empresa')->findOrFail($id);
 });
 
 // Bienestar
