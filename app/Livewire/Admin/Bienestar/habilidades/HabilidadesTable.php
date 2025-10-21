@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Bienestar;
+namespace App\Livewire\Admin\Bienestar\habilidades;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -74,7 +74,7 @@ class HabilidadesTable extends Component
 
         $habilidades = $query->paginate($this->perPage);
 
-        return view('livewire.admin.bienestar.habilidades-table', [
+        return view('livewire.admin.bienestar.habilidades.habilidades-table', [
             'habilidades' => $habilidades,
         ]);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Bienestar;
+namespace App\Livewire\Admin\Bienestar\habilidades;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -130,6 +130,6 @@ class HabilidadForm extends Component
 
     public function render()
     {
-        return view('livewire.admin.bienestar.habilidad-form');
+        return view('livewire.admin.bienestar.habilidades.habilidad-form');
     }
 }

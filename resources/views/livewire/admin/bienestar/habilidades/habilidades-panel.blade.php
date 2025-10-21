@@ -52,10 +52,10 @@
         </div>
 
         <div class="bg-white rounded-2xl shadow p-4">
-            <livewire:admin.bienestar.habilidades-table />
+            <livewire:admin.bienestar.habilidades.habilidades-table />
         </div>
 
-        <livewire:admin.bienestar.habilidad-form />
+        <livewire:admin.bienestar.habilidades.habilidad-form />
     </section>
 </div>
 @endsection

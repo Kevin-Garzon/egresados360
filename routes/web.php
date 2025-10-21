@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Admin\Laboral\LaboralPanel;
 use App\Livewire\Admin\Formacion\FormacionPanel;
-use App\Livewire\Admin\Bienestar\HabilidadesPanel;
+use App\Livewire\Admin\Bienestar\Habilidades\HabilidadesPanel;
 
 //provisional
 use Illuminate\Support\Facades\Auth;

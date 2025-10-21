@@ -49,13 +49,32 @@
                     <span>Formación</span>
                 </a>
 
-                {{-- Bienestar --}}
-                <a href="{{ route('admin.bienestar.habilidades.panel') }}"
-                    class="group flex items-center gap-3 px-3 py-2 rounded-lg transition
-                {{ request()->routeIs('admin.bienestar.*') ? 'bg-white text-primary font-semibold shadow-sm' : 'text-white/95 hover:bg-white hover:text-primary' }}">
-                    <i class="fa-solid fa-heart w-5 text-inherit"></i>
-                    <span>Bienestar</span>
-                </a>
+                {{-- Bienestar (con submenú desplegable) --}}
+                <div x-data="{ open: {{ request()->routeIs('admin.bienestar.*') ? 'true' : 'false' }} }" class="relative">
+                    <button @click="open = !open"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg w-full text-left transition
+        {{ request()->routeIs('admin.bienestar.*') 
+            ? 'bg-white text-primary font-semibold shadow-sm' 
+            : 'text-white/95 hover:bg-white hover:text-primary' }}">
+                        <i class="fa-solid fa-heart w-5 text-inherit"></i>
+                        <span>Bienestar</span>
+                        <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-xs ml-auto"></i>
+                    </button>
+
+                    {{-- Submenú --}}
+                    <div x-show="open" x-transition
+                        class="mt-1 ml-8 space-y-1 overflow-hidden">
+                        <a href="{{ route('admin.bienestar.habilidades.panel') }}"
+                            class="block px-3 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.bienestar.habilidades.*') 
+                ? 'bg-white text-primary font-semibold shadow-sm' 
+                : 'text-white/90 hover:bg-white hover:text-primary' }}">
+                            <i class="fa-solid fa-star w-4"></i>
+                            <span>Habilidades</span>
+                        </a>
+                    </div>
+                </div>
+
             </nav>
 
             {{-- Logout --}}
