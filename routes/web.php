@@ -39,6 +39,9 @@ Route::get('/api/formacion/{id}', function ($id) {
 // Bienestar
 Route::get('/bienestar', [BienestarController::class, 'index'])->name('bienestar.index');
 
+Route::get('/bienestar/habilidad/{id}', [App\Http\Controllers\BienestarController::class, 'show'])
+    ->name('bienestar.habilidad.show');
+
 
 // Dashboard (solo para usuarios autenticados y verificados)
 Route::get('/dashboard', function () {

@@ -41,15 +41,21 @@
             <p class="text-sm text-rblack/70 mt-2 mb-5">{{ $h->descripcion }}</p>
 
             <div class="mt-auto flex gap-2">
-                <a href="#" class="btn btn-primary px-4 py-2">
+                <button
+                    type="button"
+                    class="btn btn-primary px-4 py-2"
+                    onclick="verHabilidad('{{ $h->id }}')">
                     <i class="fa-solid fa-eye mr-2"></i> Ver detalles
-                </a>
+                </button>
+
+
                 @if($h->enlace_inscripcion)
                 <a href="{{ $h->enlace_inscripcion }}" target="_blank" class="btn px-4 py-2">
                     <i class="fa-solid fa-clipboard-check mr-2"></i> Inscribirme
                 </a>
                 @endif
             </div>
+
         </article>
         @empty
         <p class="col-span-full text-center text-gray-500">No hay habilidades disponibles actualmente.</p>
@@ -215,5 +221,7 @@
         </div>
     </div>
 </section>
+
+<x-bienestar.modal-habilidad />
 
 @endsection
