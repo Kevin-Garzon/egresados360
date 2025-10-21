@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaboralController;
 use App\Http\Controllers\FormacionController;
+use App\Http\Controllers\BienestarController;
 use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Admin\Laboral\LaboralPanel;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Formacion;
 use App\Models\OfertaLaboral;
+use App\Models\BienestarHabilidad;
 
 // Página de inicio
 Route::get('/', function () {
@@ -35,7 +37,7 @@ Route::get('/api/formacion/{id}', function ($id) {
 });
 
 // Bienestar
-Route::view('/bienestar', 'bienestar.index')->name('bienestar.index');
+Route::get('/bienestar', [BienestarController::class, 'index'])->name('bienestar.index');
 
 
 // Dashboard (solo para usuarios autenticados y verificados)

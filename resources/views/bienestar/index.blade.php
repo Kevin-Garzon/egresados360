@@ -30,31 +30,32 @@
         </p>
     </div>
 
-    @php($habilidades = [
-        ['titulo'=>'Colaboración efectiva','descripcion'=>'Herramientas prácticas para coordinar equipos multidisciplinares.','img'=>'https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop'],
-        ['titulo'=>'Hablar en público sin miedo','descripcion'=>'Estructura, respiración y manejo de nervios en presentaciones.','img'=>'https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1200&auto=format&fit=crop'],
-        ['titulo'=>'Productividad en 60 minutos','descripcion'=>'Matriz de prioridades, bloques y hábitos atómicos.','img'=>'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format&fit=crop'],
-        ['titulo'=>'Feedback y mejora continua','descripcion'=>'Dar y recibir retroalimentación con modelos simples.','img'=>'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=1200&auto=format&fit=crop'],
-        ['titulo'=>'Finanzas personales para egresados','descripcion'=>'Presupuesto 50/30/20, ahorro e inversión básica.','img'=>'https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=1200&auto=format&fit=crop'],
-    ])
-
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        @foreach($habilidades as $h)
+        @forelse($habilidades as $h)
         <article class="card p-6 flex flex-col">
-            <img src="{{ $h['img'] }}" alt="{{ $h['titulo'] }}" class="rounded-xl mb-4 h-44 w-full object-cover">
-            <h3 class="font-poppins font-semibold text-lg">{{ $h['titulo'] }}</h3>
-            <p class="text-sm text-rblack/70 mt-2 mb-5">{{ $h['descripcion'] }}</p>
+            <img src="{{ $h->imagen ? asset('storage/'.$h->imagen) : 'https://via.placeholder.com/400x250?text=Sin+Imagen' }}"
+                alt="{{ $h->titulo }}"
+                class="rounded-xl mb-4 h-44 w-full object-cover">
+
+            <h3 class="font-poppins font-semibold text-lg">{{ $h->titulo }}</h3>
+            <p class="text-sm text-rblack/70 mt-2 mb-5">{{ $h->descripcion }}</p>
+
             <div class="mt-auto flex gap-2">
                 <a href="#" class="btn btn-primary px-4 py-2">
                     <i class="fa-solid fa-eye mr-2"></i> Ver detalles
                 </a>
-                <a href="#" class="btn px-4 py-2">
+                @if($h->enlace_inscripcion)
+                <a href="{{ $h->enlace_inscripcion }}" target="_blank" class="btn px-4 py-2">
                     <i class="fa-solid fa-clipboard-check mr-2"></i> Inscribirme
                 </a>
+                @endif
             </div>
         </article>
-        @endforeach
+        @empty
+        <p class="col-span-full text-center text-gray-500">No hay habilidades disponibles actualmente.</p>
+        @endforelse
     </div>
+
 </section>
 
 {{-- ===================== --}}
@@ -72,12 +73,12 @@
         </div>
 
         @php($beneficios = [
-            ['entidad'=>'Comfamiliar','sector'=>'Caja de compensación','beneficio'=>'Descuentos en recreación y salud','logo'=>'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=900&auto=format&fit=crop'],
-            ['entidad'=>'SENA','sector'=>'Formación','beneficio'=>'Rutas de formación complementaria','logo'=>'https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=900&auto=format&fit=crop'],
-            ['entidad'=>'GymFit Center','sector'=>'Salud','beneficio'=>'30% descuento afiliación mensual','logo'=>'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=900&auto=format&fit=crop'],
-            ['entidad'=>'Optisalud','sector'=>'Salud visual','beneficio'=>'2x1 en lentes oftálmicos','logo'=>'https://images.unsplash.com/photo-1556125572-5835e88f9a4b?q=80&w=900&auto=format&fit=crop'],
-            ['entidad'=>'Edutech','sector'=>'Software','beneficio'=>'Licencias académicas con 40% dcto.','logo'=>'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=900&auto=format&fit=crop'],
-            ['entidad'=>'Banco Amigo','sector'=>'Finanzas','beneficio'=>'Tasa preferencial crédito de egresado','logo'=>'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=900&auto=format&fit=crop'],
+        ['entidad'=>'Comfamiliar','sector'=>'Caja de compensación','beneficio'=>'Descuentos en recreación y salud','logo'=>'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=900&auto=format&fit=crop'],
+        ['entidad'=>'SENA','sector'=>'Formación','beneficio'=>'Rutas de formación complementaria','logo'=>'https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=900&auto=format&fit=crop'],
+        ['entidad'=>'GymFit Center','sector'=>'Salud','beneficio'=>'30% descuento afiliación mensual','logo'=>'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=900&auto=format&fit=crop'],
+        ['entidad'=>'Optisalud','sector'=>'Salud visual','beneficio'=>'2x1 en lentes oftálmicos','logo'=>'https://images.unsplash.com/photo-1556125572-5835e88f9a4b?q=80&w=900&auto=format&fit=crop'],
+        ['entidad'=>'Edutech','sector'=>'Software','beneficio'=>'Licencias académicas con 40% dcto.','logo'=>'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=900&auto=format&fit=crop'],
+        ['entidad'=>'Banco Amigo','sector'=>'Finanzas','beneficio'=>'Tasa preferencial crédito de egresado','logo'=>'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=900&auto=format&fit=crop'],
         ])
 
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -117,9 +118,9 @@
     </div>
 
     @php($eventos = [
-        ['tipo'=>'Encuentro','modalidad'=>'Presencial','titulo'=>'Encuentro de Egresados 2025','fecha'=>'07 Dic 2025','lugar'=>'Campus FET','img'=>'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop','desc'=>'Networking, reconocimientos y actividades culturales.'],
-        ['tipo'=>'Jornada','modalidad'=>'Presencial','titulo'=>'Jornada de Salud Integral','fecha'=>'14 Dic 2025','lugar'=>'Bienestar FET','img'=>'https://images.unsplash.com/photo-1518314916381-77a37c2a49ae?q=80&w=1200&auto=format&fit=crop','desc'=>'Chequeos básicos, pausas activas y asesoría nutricional.'],
-        ['tipo'=>'Torneo','modalidad'=>'Mixta','titulo'=>'Torneo Relámpago de Fútbol 5','fecha'=>'21 Dic 2025','lugar'=>'Cancha sintética FET','img'=>'https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop','desc'=>'Equipos mixtos, premiación y feria de emprendimientos.'],
+    ['tipo'=>'Encuentro','modalidad'=>'Presencial','titulo'=>'Encuentro de Egresados 2025','fecha'=>'07 Dic 2025','lugar'=>'Campus FET','img'=>'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop','desc'=>'Networking, reconocimientos y actividades culturales.'],
+    ['tipo'=>'Jornada','modalidad'=>'Presencial','titulo'=>'Jornada de Salud Integral','fecha'=>'14 Dic 2025','lugar'=>'Bienestar FET','img'=>'https://images.unsplash.com/photo-1518314916381-77a37c2a49ae?q=80&w=1200&auto=format&fit=crop','desc'=>'Chequeos básicos, pausas activas y asesoría nutricional.'],
+    ['tipo'=>'Torneo','modalidad'=>'Mixta','titulo'=>'Torneo Relámpago de Fútbol 5','fecha'=>'21 Dic 2025','lugar'=>'Cancha sintética FET','img'=>'https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop','desc'=>'Equipos mixtos, premiación y feria de emprendimientos.'],
     ])
 
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

@@ -10,39 +10,72 @@ class HabilidadesTable extends Component
 {
     use WithPagination;
 
+    protected $paginationTheme = 'tailwind';
+
+    // Propiedades reactivas
     public string $search = '';
-    public string $estado = 'todas'; // todas | activas | inactivas
-    public string $orden = 'fecha_desc'; // fecha_desc | fecha_asc | titulo_asc
+    public string $sortField = 'fecha'; // Campo por defecto
+    public string $sortDirection = 'desc';
+    public int $perPage = 10;
 
-    protected $queryString = ['search', 'estado', 'orden', 'page'];
+    // Escuchar eventos del formulario para refrescar
+    protected $listeners = [
+        'habilidadSaved' => '$refresh',
+    ];
 
-    public function updatingSearch() { $this->resetPage(); }
-    public function updatingEstado() { $this->resetPage(); }
-    public function updatingOrden()  { $this->resetPage(); }
+    // Cambiar orden
+    public function sortBy(string $field): void
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+        $this->resetPage();
+    }
+
+    // Abrir formulario de creación
+    public function openCreate(): void
+    {
+        $this->dispatch('open-create-habilidad');
+    }
+
+    // Abrir formulario de edición
+    public function openEdit(int $id): void
+    {
+        $this->dispatch('open-edit-habilidad', id: $id);
+    }
+
+    // Eliminar habilidad
+    public function delete(int $id): void
+    {
+        BienestarHabilidad::whereKey($id)->delete();
+        $this->dispatch('habilidadSaved');
+    }
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
-        $q = BienestarHabilidad::query();
+        $query = BienestarHabilidad::query()
+            ->when($this->search, function ($q) {
+                $s = '%' . $this->search . '%';
+                $q->where(function ($sub) use ($s) {
+                    $sub->where('titulo', 'like', $s)
+                        ->orWhere('tema', 'like', $s)
+                        ->orWhere('modalidad', 'like', $s);
+                });
+            })
+            ->orderBy($this->sortField, $this->sortDirection);
 
-        if ($this->search !== '') {
-            $q->where(function ($w) {
-                $w->where('titulo', 'like', "%{$this->search}%")
-                  ->orWhere('descripcion', 'like', "%{$this->search}%")
-                  ->orWhere('tema', 'like', "%{$this->search}%");
-            });
-        }
+        $habilidades = $query->paginate($this->perPage);
 
-        if ($this->estado === 'activas')  $q->where('activo', true);
-        if ($this->estado === 'inactivas') $q->where('activo', false);
-
-        $q = match ($this->orden) {
-            'fecha_asc'  => $q->orderBy('fecha', 'asc'),
-            'titulo_asc' => $q->orderBy('titulo', 'asc'),
-            default      => $q->orderBy('fecha', 'desc'),
-        };
-
-        $habilidades = $q->paginate(10);
-
-        return view('livewire.admin.bienestar.habilidades-table', compact('habilidades'));
+        return view('livewire.admin.bienestar.habilidades-table', [
+            'habilidades' => $habilidades,
+        ]);
     }
 }
