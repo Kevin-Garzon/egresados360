@@ -50,8 +50,9 @@
                 </a>
 
                 {{-- Bienestar --}}
-                <a href="#"
-                    class="group flex items-center gap-3 px-3 py-2 rounded-lg transition text-white/95 hover:bg-white hover:text-primary">
+                <a href="{{ route('admin.bienestar.habilidades.panel') }}"
+                    class="group flex items-center gap-3 px-3 py-2 rounded-lg transition
+                {{ request()->routeIs('admin.bienestar.*') ? 'bg-white text-primary font-semibold shadow-sm' : 'text-white/95 hover:bg-white hover:text-primary' }}">
                     <i class="fa-solid fa-heart w-5 text-inherit"></i>
                     <span>Bienestar</span>
                 </a>

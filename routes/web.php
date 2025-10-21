@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Livewire\Admin\Laboral\LaboralPanel;
 use App\Livewire\Admin\Formacion\FormacionPanel;
+use App\Livewire\Admin\Bienestar\HabilidadesPanel;
 
 //provisional
 use Illuminate\Support\Facades\Auth;
@@ -74,3 +75,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 Route::post('/formaciones/{id}/interaccion', [App\Http\Controllers\InteraccionController::class, 'registrarFormacion'])
     ->name('formaciones.interaccion');
+
+
+// Rutas para el panel administrativo de Bienestar
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/bienestar/habilidades', HabilidadesPanel::class)->name('bienestar.habilidades.panel');
+});

@@ -11,16 +11,22 @@ class BienestarHabilidad extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
+        'tema',
         'modalidad',
-        'fecha_inicio',
-        'fecha_fin',
-        'duracion',
+        'fecha',
+        'enlace_inscripcion',
+        'imagen',
         'activo',
     ];
 
     protected $casts = [
-        'fecha_inicio' => 'date',
-        'fecha_fin' => 'date',
+        'fecha'  => 'date',
         'activo' => 'boolean',
     ];
+
+    public function scopeActivas($query)
+    {
+        return $query->where('activo', true)
+            ->orderByDesc('fecha');
+    }
 }
