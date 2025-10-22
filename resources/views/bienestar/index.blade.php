@@ -143,12 +143,36 @@
         </p>
     </div>
 
+
+    {{-- ================= --}}
+    {{-- FILTROS DE EVENTOS --}}
+    {{-- ================= --}}
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
+        <button onclick="filtrarEvento('todos')"
+            class="filtro-evento-btn activo px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
+            Todos
+        </button>
+        <button onclick="filtrarEvento('proximo')"
+            class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
+            Próximos
+        </button>
+        <button onclick="filtrarEvento('en curso')"
+            class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
+            En curso
+        </button>
+        <button onclick="filtrarEvento('finalizado')"
+            class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
+            Finalizados
+        </button>
+    </div>
+
+
     @if($eventos->isEmpty())
     <p class="text-center text-gray-500">No hay eventos disponibles por el momento.</p>
     @else
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         @foreach($eventos as $e)
-        <article class="card overflow-hidden flex flex-col">
+        <article class="card overflow-hidden flex flex-col evento-item" data-tipo="{{ strtolower($e->tipo) }}">
             <img src="{{ $e->imagen ? asset('storage/' . $e->imagen) : 'https://images.unsplash.com/photo-1503424886302-fdbd8fcbf4e4?q=80&w=1200&auto=format&fit=crop' }}"
                 alt="{{ $e->titulo }}" class="h-44 w-full object-cover">
 
@@ -181,6 +205,7 @@
     </div>
     @endif
 </section>
+
 
 
 
@@ -259,4 +284,21 @@
 <x-bienestar.modal-evento />
 
 
+
+<script>
+    function filtrarEvento(tipo) {
+        document.querySelectorAll('.filtro-evento-btn').forEach(btn =>
+            btn.classList.remove('activo', 'bg-primary', 'text-white')
+        );
+        event.target.classList.add('activo', 'bg-primary', 'text-white');
+
+        document.querySelectorAll('.evento-item').forEach(item => {
+            if (tipo === 'todos' || item.dataset.tipo === tipo) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+    }
+</script>
 @endsection
