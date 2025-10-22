@@ -81,24 +81,46 @@
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             @forelse($servicios as $s)
             <article class="card p-6 flex flex-col">
+                {{-- Header con logo (si existe) --}}
                 <div class="flex items-center gap-4 mb-4">
+                    @if($s->logo)
+                    <img src="{{ asset('storage/' . $s->logo) }}" alt="Logo {{ $s->nombre }}"
+                        class="h-12 w-12 rounded-full object-cover border border-gray-200">
+                    @else
                     <div class="bg-primary/10 text-primary p-3 rounded-full">
                         <i class="fa-solid fa-hand-holding-heart text-xl"></i>
                     </div>
+                    @endif
                     <div>
                         <h3 class="font-semibold">{{ $s->nombre }}</h3>
                         <p class="text-xs text-rblack/60">{{ $s->tipo ?? '—' }}</p>
                     </div>
                 </div>
-                <p class="text-sm text-rblack/80 mb-5 flex-1">{{ $s->descripcion ?? 'Sin descripción disponible' }}</p>
 
+                {{-- Descripción --}}
+                <p class="text-sm text-rblack/80 mb-5 flex-1">
+                    {{ $s->descripcion ?? 'Sin descripción disponible' }}
+                </p>
+
+                {{-- Botones --}}
                 <div class="flex justify-end gap-2 mt-auto">
+                    {{-- Ver detalles --}}
                     <button
                         type="button"
                         class="btn btn-primary px-4 py-2"
                         onclick="verServicio('{{ $s->id }}')">
                         <i class="fa-solid fa-circle-info mr-2"></i> Ver detalles
                     </button>
+
+                    {{-- PDF opcional --}}
+                    @if($s->pdf)
+                    <a href="{{ asset('storage/' . $s->pdf) }}"
+                        target="_blank"
+                        class="btn px-4 py-2"
+                        title="Ver documento PDF">
+                        <i class="fa-solid fa-file-pdf mr-2 text-red-600"></i> PDF
+                    </a>
+                    @endif
                 </div>
             </article>
             @empty

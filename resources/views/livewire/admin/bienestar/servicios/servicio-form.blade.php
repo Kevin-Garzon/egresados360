@@ -71,6 +71,43 @@
                     @error('url') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
 
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Logo o Imagen del Servicio</label>
+                    <input type="file" wire:model="logo"
+                        class="w-full mt-1 text-sm border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                        accept="image/*">
+
+                    {{-- Previsualización --}}
+                    <div class="mt-2">
+                        @if ($logo)
+                        <img src="{{ $logo->temporaryUrl() }}" class="h-24 rounded-lg object-cover border border-gray-200">
+                        @elseif ($existingLogo)
+                        <img src="{{ asset('storage/'.$existingLogo) }}" class="h-24 rounded-lg object-cover border border-gray-200">
+                        @endif
+                    </div>
+
+                    @error('logo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Archivo PDF (opcional)</label>
+                    <input type="file" wire:model="pdf"
+                        class="w-full mt-1 text-sm border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                        accept="application/pdf">
+
+                    {{-- Mostrar enlace si ya hay un PDF cargado --}}
+                    @if ($existingPdf)
+                    <p class="mt-2 text-sm">
+                        <a href="{{ asset('storage/'.$existingPdf) }}" target="_blank" class="text-primary hover:underline">
+                            <i class="fa-solid fa-file-pdf mr-1"></i> Ver PDF actual
+                        </a>
+                    </p>
+                    @endif
+
+                    @error('pdf') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
+
                 <div class="flex items-center mt-2">
                     <label class="flex items-center space-x-2">
                         <input type="checkbox" wire:model.defer="activo"

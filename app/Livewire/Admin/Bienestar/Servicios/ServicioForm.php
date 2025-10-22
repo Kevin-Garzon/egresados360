@@ -3,10 +3,14 @@
 namespace App\Livewire\Admin\Bienestar\Servicios;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Models\BienestarServicio;
+use Illuminate\Support\Facades\Storage;
 
 class ServicioForm extends Component
 {
+    use WithFileUploads;
+
     public bool $isOpen = false;
     public bool $isEdit = false;
 
@@ -18,6 +22,11 @@ class ServicioForm extends Component
     public ?string $ubicacion = null;
     public ?string $url = null;
     public bool $activo = true;
+
+    public $logo;
+    public $pdf;
+    public ?string $existingLogo = null;
+    public ?string $existingPdf = null;
 
     protected $listeners = [
         'open-create-servicio' => 'openCreate',
@@ -34,6 +43,9 @@ class ServicioForm extends Component
             'ubicacion' => ['nullable', 'string', 'max:150'],
             'url' => ['nullable', 'url'],
             'activo' => ['boolean'],
+
+            'logo' => ['nullable', 'image', 'max:2048'],
+            'pdf' => ['nullable', 'mimes:pdf', 'max:5120'],
         ];
     }
 
@@ -57,6 +69,9 @@ class ServicioForm extends Component
         $this->ubicacion = $servicio->ubicacion;
         $this->url = $servicio->url;
         $this->activo = $servicio->activo;
+        $this->existingLogo = $servicio->logo;
+        $this->existingPdf = $servicio->pdf;
+
 
         $this->isOpen = true;
         $this->isEdit = true;
@@ -75,6 +90,26 @@ class ServicioForm extends Component
             'url' => $this->url,
             'activo' => $this->activo,
         ];
+
+        // Manejo del logo
+        if ($this->logo) {
+            if ($this->isEdit && $this->existingLogo && Storage::disk('public')->exists($this->existingLogo)) {
+                Storage::disk('public')->delete($this->existingLogo);
+            }
+            $pathLogo = $this->logo->store('servicios/logos', 'public');
+            $data['logo'] = $pathLogo;
+        }
+
+        // Manejo del PDF
+        if ($this->pdf) {
+            if ($this->isEdit && $this->existingPdf && Storage::disk('public')->exists($this->existingPdf)) {
+                Storage::disk('public')->delete($this->existingPdf);
+            }
+            $pathPdf = $this->pdf->store('servicios/pdf', 'public');
+            $data['pdf'] = $pathPdf;
+        }
+
+
 
         if ($this->isEdit && $this->servicio_id) {
             BienestarServicio::whereKey($this->servicio_id)->update($data);
@@ -104,6 +139,10 @@ class ServicioForm extends Component
             'activo',
             'isOpen',
             'isEdit',
+            'logo',
+            'pdf',
+            'existingLogo',
+            'existingPdf',
         ]);
     }
 
