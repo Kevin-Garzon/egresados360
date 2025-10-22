@@ -78,34 +78,32 @@
             </p>
         </div>
 
-        @php($beneficios = [
-        ['entidad'=>'Comfamiliar','sector'=>'Caja de compensación','beneficio'=>'Descuentos en recreación y salud','logo'=>'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=900&auto=format&fit=crop'],
-        ['entidad'=>'SENA','sector'=>'Formación','beneficio'=>'Rutas de formación complementaria','logo'=>'https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=900&auto=format&fit=crop'],
-        ['entidad'=>'GymFit Center','sector'=>'Salud','beneficio'=>'30% descuento afiliación mensual','logo'=>'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=900&auto=format&fit=crop'],
-        ['entidad'=>'Optisalud','sector'=>'Salud visual','beneficio'=>'2x1 en lentes oftálmicos','logo'=>'https://images.unsplash.com/photo-1556125572-5835e88f9a4b?q=80&w=900&auto=format&fit=crop'],
-        ['entidad'=>'Edutech','sector'=>'Software','beneficio'=>'Licencias académicas con 40% dcto.','logo'=>'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=900&auto=format&fit=crop'],
-        ['entidad'=>'Banco Amigo','sector'=>'Finanzas','beneficio'=>'Tasa preferencial crédito de egresado','logo'=>'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=900&auto=format&fit=crop'],
-        ])
-
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            @foreach($beneficios as $b)
-            <article class="card p-6">
+            @forelse($servicios as $s)
+            <article class="card p-6 flex flex-col">
                 <div class="flex items-center gap-4 mb-4">
-                    <img class="h-12 w-12 rounded-full object-cover" src="{{ $b['logo'] }}" alt="{{ $b['entidad'] }}">
+                    <div class="bg-primary/10 text-primary p-3 rounded-full">
+                        <i class="fa-solid fa-hand-holding-heart text-xl"></i>
+                    </div>
                     <div>
-                        <h3 class="font-semibold">{{ $b['entidad'] }}</h3>
-                        <p class="text-xs text-rblack/60">{{ $b['sector'] }}</p>
+                        <h3 class="font-semibold">{{ $s->nombre }}</h3>
+                        <p class="text-xs text-rblack/60">{{ $s->tipo ?? '—' }}</p>
                     </div>
                 </div>
-                <p class="text-sm text-rblack/80 mb-5">{{ $b['beneficio'] }}</p>
-                <div class="flex gap-2">
-                    <a href="#" class="btn btn-primary px-4 py-2">
-                        <i class="fa-solid fa-circle-info mr-2"></i> Cómo acceder
-                    </a>
-                    {{-- El PDF será opcional dentro del modal de detalles --}}
+                <p class="text-sm text-rblack/80 mb-5 flex-1">{{ $s->descripcion ?? 'Sin descripción disponible' }}</p>
+
+                <div class="flex justify-end gap-2 mt-auto">
+                    <button
+                        type="button"
+                        class="btn btn-primary px-4 py-2"
+                        onclick="verServicio('{{ $s->id }}')">
+                        <i class="fa-solid fa-circle-info mr-2"></i> Ver detalles
+                    </button>
                 </div>
             </article>
-            @endforeach
+            @empty
+            <p class="text-center text-gray-500 col-span-full">No hay servicios registrados.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -223,5 +221,6 @@
 </section>
 
 <x-bienestar.modal-habilidad />
+<x-bienestar.modal-servicio />
 
 @endsection

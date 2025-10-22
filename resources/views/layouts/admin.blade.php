@@ -62,16 +62,28 @@
                     </button>
 
                     {{-- Submenú --}}
-                    <div x-show="open" x-transition
-                        class="mt-1 ml-8 space-y-1 overflow-hidden">
+                    <div x-show="open" x-transition class="mt-1 ml-8 space-y-1 overflow-hidden">
+
+                        {{-- Habilidades --}}
                         <a href="{{ route('admin.bienestar.habilidades.panel') }}"
-                            class="block px-3 py-2 rounded-lg transition
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg transition
             {{ request()->routeIs('admin.bienestar.habilidades.*') 
                 ? 'bg-white text-primary font-semibold shadow-sm' 
                 : 'text-white/90 hover:bg-white hover:text-primary' }}">
                             <i class="fa-solid fa-star w-4"></i>
                             <span>Habilidades</span>
                         </a>
+
+                        {{-- Servicios y Beneficios --}}
+                        <a href="{{ route('admin.bienestar.servicios.panel') }}"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.bienestar.servicios.*') 
+                ? 'bg-white text-primary font-semibold shadow-sm' 
+                : 'text-white/90 hover:bg-white hover:text-primary' }}">
+                            <i class="fa-solid fa-hand-holding-heart w-4"></i>
+                            <span>Servicios</span>
+                        </a>
+
                     </div>
                 </div>
 

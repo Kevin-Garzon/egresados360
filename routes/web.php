@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Laboral\LaboralPanel;
 use App\Livewire\Admin\Formacion\FormacionPanel;
 use App\Livewire\Admin\Bienestar\Habilidades\HabilidadesPanel;
+use App\Livewire\Admin\Bienestar\Servicios\ServiciosPanel;
 
 //provisional
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,9 @@ Route::get('/api/formacion/{id}', function ($id) {
 // Bienestar
 Route::get('/bienestar', [BienestarController::class, 'index'])->name('bienestar.index');
 
-Route::get('/bienestar/habilidad/{id}', [App\Http\Controllers\BienestarController::class, 'show'])
-    ->name('bienestar.habilidad.show');
+Route::get('/bienestar/habilidad/{id}', [App\Http\Controllers\BienestarController::class, 'show'])->name('bienestar.habilidad.show');
+
+Route::get('/bienestar/servicio/{id}', [App\Http\Controllers\BienestarController::class, 'showServicio'])->name('bienestar.servicio.show');
 
 
 // Dashboard (solo para usuarios autenticados y verificados)
@@ -83,6 +85,13 @@ Route::post('/formaciones/{id}/interaccion', [App\Http\Controllers\InteraccionCo
 
 
 // Rutas para el panel administrativo de Bienestar
+
+// Panel administrativo de habilidades
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/bienestar/habilidades', HabilidadesPanel::class)->name('bienestar.habilidades.panel');
+});
+
+// Panel administrativo de servicios
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/bienestar/servicios', ServiciosPanel::class)->name('bienestar.servicios.panel');
 });

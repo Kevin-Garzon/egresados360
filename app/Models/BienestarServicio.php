@@ -15,6 +15,8 @@ class BienestarServicio extends Model
         'contacto',
         'ubicacion',
         'url',
+        'logo',
+        'pdf',
         'activo',
     ];
 
