@@ -3,10 +3,15 @@
 namespace App\Livewire\Admin\Bienestar\Eventos;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Models\BienestarEvento;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class EventoForm extends Component
 {
+    use WithFileUploads;
+
     public bool $isOpen = false;
     public bool $isEdit = false;
 
@@ -20,22 +25,26 @@ class EventoForm extends Component
     public ?string $hora_inicio = null;
     public bool $activo = true;
 
+    public $imagen;
+    public ?string $existingImage = null;
+
     protected $listeners = [
         'open-create-evento' => 'openCreate',
-        'open-edit-evento' => 'openEdit',
+        'open-edit-evento'   => 'openEdit',
     ];
 
     protected function rules(): array
     {
         return [
-            'titulo' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'modalidad' => ['nullable', 'string', 'max:50'],
-            'ubicacion' => ['nullable', 'string', 'max:150'],
+            'titulo'       => ['required', 'string', 'max:150'],
+            'descripcion'  => ['nullable', 'string'],
+            'modalidad'    => ['nullable', 'string', 'max:50'],
+            'ubicacion'    => ['nullable', 'string', 'max:150'],
             'fecha_inicio' => ['nullable', 'date'],
-            'fecha_fin' => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
-            'hora_inicio' => ['nullable', 'date_format:H:i'],
-            'activo' => ['boolean'],
+            'fecha_fin'    => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
+            'hora_inicio'  => ['nullable', 'date_format:H:i'],
+            'imagen'       => ['nullable', 'image', 'max:2048'],
+            'activo'       => ['boolean'],
         ];
     }
 
@@ -58,22 +67,19 @@ class EventoForm extends Component
         $this->ubicacion    = $evento->ubicacion;
         $this->fecha_inicio = $evento->fecha_inicio?->format('Y-m-d');
         $this->fecha_fin    = $evento->fecha_fin?->format('Y-m-d');
-
-        
         $this->hora_inicio  = $evento->hora_inicio
             ? substr((string)$evento->hora_inicio, 0, 5)
             : null;
-
         $this->activo       = $evento->activo;
+        $this->existingImage = $evento->imagen;
 
         $this->isOpen = true;
         $this->isEdit = true;
     }
 
-
     public function save(): void
     {
-
+        // Normalizar hora
         if (is_string($this->hora_inicio) && preg_match('/^\d{2}:\d{2}:\d{2}$/', $this->hora_inicio)) {
             $this->hora_inicio = substr($this->hora_inicio, 0, 5);
         }
@@ -83,6 +89,24 @@ class EventoForm extends Component
 
         $this->validate();
 
+        // 🧠 Determinar tipo automáticamente
+        $tipo = null;
+        if ($this->fecha_inicio) {
+            $hoy = Carbon::today();
+            $inicio = Carbon::parse($this->fecha_inicio);
+            $fin = $this->fecha_fin ? Carbon::parse($this->fecha_fin) : null;
+
+            if ($inicio->isFuture()) {
+                $tipo = 'Próximo';
+            } elseif ($inicio->isToday() || ($fin && $hoy->between($inicio, $fin))) {
+                $tipo = 'En curso';
+            } elseif ($fin && $fin->isPast()) {
+                $tipo = 'Finalizado';
+            } else {
+                $tipo = 'Finalizado';
+            }
+        }
+
         $data = [
             'titulo'       => $this->titulo,
             'descripcion'  => $this->descripcion,
@@ -91,8 +115,18 @@ class EventoForm extends Component
             'fecha_inicio' => $this->fecha_inicio,
             'fecha_fin'    => $this->fecha_fin,
             'hora_inicio'  => $this->hora_inicio,
+            'tipo'         => $tipo, // asignado automáticamente
             'activo'       => $this->activo,
         ];
+
+        // Subir o reemplazar imagen
+        if ($this->imagen) {
+            if ($this->isEdit && $this->existingImage && Storage::disk('public')->exists($this->existingImage)) {
+                Storage::disk('public')->delete($this->existingImage);
+            }
+            $path = $this->imagen->store('eventos/imagenes', 'public');
+            $data['imagen'] = $path;
+        }
 
         if ($this->isEdit && $this->evento_id) {
             BienestarEvento::findOrFail($this->evento_id)->update($data);
@@ -103,8 +137,6 @@ class EventoForm extends Component
         $this->dispatch('eventoSaved');
         $this->close();
     }
-
-
 
     public function close(): void
     {
@@ -123,6 +155,8 @@ class EventoForm extends Component
             'fecha_fin',
             'hora_inicio',
             'activo',
+            'imagen',
+            'existingImage',
             'isOpen',
             'isEdit',
         ]);

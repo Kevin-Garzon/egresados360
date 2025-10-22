@@ -1,7 +1,6 @@
 <div>
     @if($isOpen)
     <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-        {{-- Caja del modal --}}
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg relative overflow-hidden">
 
             {{-- Botón cerrar --}}
@@ -23,6 +22,8 @@
 
             {{-- BODY --}}
             <div class="px-6 pb-4 max-h-[60vh] overflow-y-auto space-y-4">
+
+                {{-- Título --}}
                 <div>
                     <label class="text-sm font-medium text-gray-600">Título *</label>
                     <input type="text" wire:model.defer="titulo"
@@ -30,31 +31,34 @@
                     @error('titulo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Descripción --}}
                 <div>
                     <label class="text-sm font-medium text-gray-600">Descripción</label>
                     <textarea wire:model.defer="descripcion" rows="3"
                         class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary"></textarea>
                 </div>
 
+                {{-- Modalidad y ubicación --}}
                 <div class="grid sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-sm font-medium text-gray-600">Modalidad</label>
-                        <select wire:model.defer="modalidad"
-                            class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary">
-                            <option value="">Seleccionar</option>
-                            <option>Presencial</option>
-                            <option>Virtual</option>
-                            <option>Mixta</option>
-                        </select>
-                    </div>
-
                     <div>
                         <label class="text-sm font-medium text-gray-600">Ubicación</label>
                         <input type="text" wire:model.defer="ubicacion"
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
                     </div>
+                    <div>
+                    <label class="text-sm font-medium text-gray-600">Modalidad</label>
+                    <select wire:model.defer="modalidad"
+                        class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary">
+                        <option value="">Seleccionar</option>
+                        <option>Presencial</option>
+                        <option>Virtual</option>
+                        <option>Mixta</option>
+                    </select>
                 </div>
+                </div>
+                
 
+                {{-- Fechas --}}
                 <div class="grid sm:grid-cols-2 gap-3">
                     <div>
                         <label class="text-sm font-medium text-gray-600">Fecha inicio *</label>
@@ -70,12 +74,31 @@
                     </div>
                 </div>
 
+                {{-- Hora --}}
                 <div>
                     <label class="text-sm font-medium text-gray-600">Hora de inicio</label>
                     <input type="time" wire:model.defer="hora_inicio"
                         class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
                 </div>
 
+                {{-- Imagen --}}
+                <div>
+                    <label class="text-sm font-medium text-gray-600">Imagen del Evento</label>
+                    <input type="file" wire:model="imagen"
+                        class="w-full mt-1 text-sm border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                        accept="image/*">
+
+                    {{-- Previsualización --}}
+                    <div class="mt-2">
+                        @if ($imagen)
+                            <img src="{{ $imagen->temporaryUrl() }}" class="h-28 rounded-lg object-cover border border-gray-200">
+                        @elseif ($existingImage)
+                            <img src="{{ asset('storage/'.$existingImage) }}" class="h-28 rounded-lg object-cover border border-gray-200">
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Estado --}}
                 <div class="flex items-center mt-2">
                     <label class="flex items-center space-x-2">
                         <input type="checkbox" wire:model.defer="activo"
@@ -83,6 +106,7 @@
                         <span class="text-sm text-gray-700">Activo</span>
                     </label>
                 </div>
+
             </div>
 
             {{-- FOOTER --}}

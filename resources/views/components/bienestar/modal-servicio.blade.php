@@ -1,5 +1,5 @@
 {{-- ========================= --}}
-{{-- COMPONENTE: MODAL SERVICIO --}}
+{{-- MODAL DETALLES SERVICIO --}}
 {{-- ========================= --}}
 <div id="modal-servicio" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg relative overflow-hidden">
@@ -26,7 +26,7 @@
 
             <div class="flex justify-end pt-4">
                 <a id="servicio-url" href="#" target="_blank"
-                   class="btn btn-primary px-4 py-2 hidden">
+                    class="btn btn-primary px-4 py-2 hidden">
                     <i class="fa-solid fa-link mr-2"></i> Visitar enlace
                 </a>
             </div>
@@ -35,39 +35,39 @@
 </div>
 
 <script>
-async function verServicio(id) {
-    const modal = document.getElementById('modal-servicio');
+    async function verServicio(id) {
+        const modal = document.getElementById('modal-servicio');
 
-    try {
-        const response = await fetch(`/bienestar/servicio/${id}`);
-        const data = await response.json();
+        try {
+            const response = await fetch(`/bienestar/servicio/${id}`);
+            const data = await response.json();
 
-        document.getElementById('servicio-titulo').textContent = data.nombre ?? '—';
-        document.getElementById('servicio-tipo').textContent = data.tipo ?? '—';
-        document.getElementById('servicio-descripcion').textContent = data.descripcion ?? 'Sin descripción disponible';
-        document.getElementById('servicio-ubicacion').textContent = data.ubicacion ?? 'Ubicación no especificada';
-        document.getElementById('servicio-contacto').textContent = data.contacto ?? 'No disponible';
+            document.getElementById('servicio-titulo').textContent = data.nombre ?? '—';
+            document.getElementById('servicio-tipo').textContent = data.tipo ?? '—';
+            document.getElementById('servicio-descripcion').textContent = data.descripcion ?? 'Sin descripción disponible';
+            document.getElementById('servicio-ubicacion').textContent = data.ubicacion ?? 'Ubicación no especificada';
+            document.getElementById('servicio-contacto').textContent = data.contacto ?? 'No disponible';
 
-        const urlBtn = document.getElementById('servicio-url');
-        if (data.url) {
-            urlBtn.href = data.url;
-            urlBtn.classList.remove('hidden');
-        } else {
-            urlBtn.classList.add('hidden');
+            const urlBtn = document.getElementById('servicio-url');
+            if (data.url) {
+                urlBtn.href = data.url;
+                urlBtn.classList.remove('hidden');
+            } else {
+                urlBtn.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        } catch (error) {
+            console.error('Error al cargar el servicio:', error);
         }
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-    } catch (error) {
-        console.error('Error al cargar el servicio:', error);
     }
-}
 
-document.getElementById('close-modal-servicio').addEventListener('click', () => {
-    const modal = document.getElementById('modal-servicio');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = 'auto';
-});
+    document.getElementById('close-modal-servicio').addEventListener('click', () => {
+        const modal = document.getElementById('modal-servicio');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    });
 </script>

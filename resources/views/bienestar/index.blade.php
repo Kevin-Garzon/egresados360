@@ -256,5 +256,7 @@
 
 <x-bienestar.modal-habilidad />
 <x-bienestar.modal-servicio />
+<x-bienestar.modal-evento />
+
 
 @endsection
