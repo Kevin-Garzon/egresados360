@@ -10,6 +10,7 @@ use App\Livewire\Admin\Laboral\LaboralPanel;
 use App\Livewire\Admin\Formacion\FormacionPanel;
 use App\Livewire\Admin\Bienestar\Habilidades\HabilidadesPanel;
 use App\Livewire\Admin\Bienestar\Servicios\ServiciosPanel;
+use App\Livewire\Admin\Bienestar\Eventos\EventosPanel;
 
 //provisional
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,10 @@ Route::get('/bienestar', [BienestarController::class, 'index'])->name('bienestar
 Route::get('/bienestar/habilidad/{id}', [App\Http\Controllers\BienestarController::class, 'show'])->name('bienestar.habilidad.show');
 
 Route::get('/bienestar/servicio/{id}', [App\Http\Controllers\BienestarController::class, 'showServicio'])->name('bienestar.servicio.show');
+
+Route::get('/bienestar/evento/{id}', [App\Http\Controllers\BienestarController::class, 'showEvento'])->name('bienestar.evento.show');
+
+
 
 
 // Dashboard (solo para usuarios autenticados y verificados)
@@ -94,4 +99,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 // Panel administrativo de servicios
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/bienestar/servicios', ServiciosPanel::class)->name('bienestar.servicios.panel');
+});
+
+// Panel administrativo de Eventos
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/bienestar/eventos', EventosPanel::class)->name('bienestar.eventos.panel');
 });

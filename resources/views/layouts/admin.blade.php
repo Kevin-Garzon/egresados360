@@ -84,6 +84,16 @@
                             <span>Servicios</span>
                         </a>
 
+                        {{-- Nuevo: Eventos --}}
+                        <a href="{{ route('admin.bienestar.eventos.panel') }}"
+                            class="flex items-center gap-3 px-3 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.bienestar.eventos.*') 
+                ? 'bg-white text-primary font-semibold shadow-sm' 
+                : 'text-white/90 hover:bg-white hover:text-primary' }}">
+                            <i class="fa-solid fa-calendar-days w-4"></i>
+                            <span>Eventos</span>
+                        </a>
+
                     </div>
                 </div>
 

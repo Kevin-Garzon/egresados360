@@ -143,34 +143,46 @@
         </p>
     </div>
 
-    @php($eventos = [
-    ['tipo'=>'Encuentro','modalidad'=>'Presencial','titulo'=>'Encuentro de Egresados 2025','fecha'=>'07 Dic 2025','lugar'=>'Campus FET','img'=>'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop','desc'=>'Networking, reconocimientos y actividades culturales.'],
-    ['tipo'=>'Jornada','modalidad'=>'Presencial','titulo'=>'Jornada de Salud Integral','fecha'=>'14 Dic 2025','lugar'=>'Bienestar FET','img'=>'https://images.unsplash.com/photo-1518314916381-77a37c2a49ae?q=80&w=1200&auto=format&fit=crop','desc'=>'Chequeos básicos, pausas activas y asesoría nutricional.'],
-    ['tipo'=>'Torneo','modalidad'=>'Mixta','titulo'=>'Torneo Relámpago de Fútbol 5','fecha'=>'21 Dic 2025','lugar'=>'Cancha sintética FET','img'=>'https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop','desc'=>'Equipos mixtos, premiación y feria de emprendimientos.'],
-    ])
-
+    @if($eventos->isEmpty())
+    <p class="text-center text-gray-500">No hay eventos disponibles por el momento.</p>
+    @else
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         @foreach($eventos as $e)
         <article class="card overflow-hidden flex flex-col">
-            <img src="{{ $e['img'] }}" alt="{{ $e['titulo'] }}" class="h-44 w-full object-cover">
+            <img src="{{ $e->imagen ? asset('storage/' . $e->imagen) : 'https://images.unsplash.com/photo-1503424886302-fdbd8fcbf4e4?q=80&w=1200&auto=format&fit=crop' }}"
+                alt="{{ $e->titulo }}" class="h-44 w-full object-cover">
+
             <div class="p-6 flex-1 flex flex-col">
-                <p class="text-sm font-medium text-[#09B451] mb-1">{{ $e['modalidad'] }} • {{ $e['tipo'] }}</p>
-                <h3 class="font-poppins font-semibold text-lg">{{ $e['titulo'] }}</h3>
-                <p class="text-sm text-rblack/70 mt-2 mb-6">{{ $e['desc'] }}</p>
+                <p class="text-sm font-medium text-[#09B451] mb-1">
+                    {{ $e->modalidad ?? '—' }} • {{ $e->tipo ?? 'Evento' }}
+                </p>
+
+                <h3 class="font-poppins font-semibold text-lg">{{ $e->titulo }}</h3>
+
+                <p class="text-sm text-rblack/70 mt-2 mb-6">
+                    {{ $e->descripcion ?? 'Sin descripción disponible' }}
+                </p>
 
                 <div class="mt-auto flex items-center justify-between">
                     <div class="text-sm text-rblack/80 flex items-center gap-2">
-                        <i class="fa-regular fa-calendar"></i> {{ $e['fecha'] }}
+                        <i class="fa-regular fa-calendar"></i>
+                        {{ $e->fecha_inicio ? \Carbon\Carbon::parse($e->fecha_inicio)->translatedFormat('d M Y') : 'Por definir' }}
                     </div>
-                    <a href="#" class="btn btn-primary px-4 py-2">
+                    <button
+                        type="button"
+                        onclick="verEvento('{{ $e->id }}')"
+                        class="btn btn-primary px-4 py-2">
                         <i class="fa-solid fa-eye mr-2"></i> Ver más
-                    </a>
+                    </button>
                 </div>
             </div>
         </article>
         @endforeach
     </div>
+    @endif
 </section>
+
+
 
 {{-- ============== --}}
 {{-- LÍNEA DE APOYO --}}

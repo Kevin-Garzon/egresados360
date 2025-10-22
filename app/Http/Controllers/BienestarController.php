@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\BienestarHabilidad;
 use App\Models\BienestarServicio;
+use App\Models\BienestarEvento;
 use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
 
 class BienestarController extends Controller
 {
@@ -20,7 +22,12 @@ class BienestarController extends Controller
             ->orderBy('nombre', 'asc')
             ->get();
 
-        return view('bienestar.index', compact('habilidades', 'servicios'));
+        // Mostrar los eventos activos ordenados por fecha
+        $eventos = BienestarEvento::where('activo', true)
+            ->orderBy('fecha_inicio', 'asc')
+            ->get();
+
+        return view('bienestar.index', compact('habilidades', 'servicios', 'eventos'));
     }
 
     // =======================
@@ -54,5 +61,31 @@ class BienestarController extends Controller
         }
 
         return response()->json($servicio);
+    }
+
+    // =======================
+    // EVENTOS (LISTADO Y DETALLES)
+    // =======================
+    public function showEvento($id): JsonResponse
+    {
+        $evento = BienestarEvento::find($id);
+
+        if (!$evento) {
+            return response()->json(['error' => 'Evento no encontrado'], 404);
+        }
+
+        if ($evento->imagen) {
+            $evento->imagen_url = asset('storage/' . $evento->imagen);
+        }
+
+        $evento->fecha_inicio_format = $evento->fecha_inicio
+            ? Carbon::parse($evento->fecha_inicio)->translatedFormat('d M Y')
+            : null;
+
+        $evento->fecha_fin_format = $evento->fecha_fin
+            ? Carbon::parse($evento->fecha_fin)->translatedFormat('d M Y')
+            : null;
+
+        return response()->json($evento);
     }
 }
