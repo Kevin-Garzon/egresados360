@@ -53,8 +53,9 @@ Route::get('/bienestar/evento/{id}', [App\Http\Controllers\BienestarController::
 
 // Dashboard (solo para usuarios autenticados y verificados)
 Route::get('/dashboard', function () {
-    return view('admin.dashboard'); 
+    return view('livewire.admin.dashboard.dashboard-panel');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 //Salir provisional
 Route::get('/salir', function () {
