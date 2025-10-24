@@ -60,14 +60,10 @@
           {{ $oferta->ubicacion }}
         </p>
         <button
-          onclick="openOfertaModal(@js($oferta->id))"
+          onclick="openOfertaModal('{{ $oferta->id }}')"
           class="btn btn-primary py-2">
           Ver más
         </button>
-
-
-
-
 
       </div>
     </div>
@@ -80,7 +76,20 @@
 
 {{-- Empresas Aliadas --}}
 <section class="bg-cultured py-20" id="empresas">
-  <div class="container-app">
+  <div class="container-app"
+    x-data="{
+          scrollAmount: 1,
+          startAutoScroll() {
+            const container = this.$refs.slider;
+            setInterval(() => {
+              container.scrollLeft += this.scrollAmount;
+              if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+                container.scrollLeft = 0; // reinicia el ciclo
+              }
+            }, 20);
+          }
+        }"
+    x-init="startAutoScroll()">
     <div class="text-center max-w-2xl mx-auto mb-10">
       <h2 class="text-3xl sm:text-4xl font-poppins font-semibold mb-0">
         Empresas <span class="text-primary">Aliadas</span>
@@ -92,32 +101,41 @@
     </div>
 
     @if($empresas->count() > 0)
-    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      @foreach($empresas as $empresa)
-      <div class="card text-center p-8 flex flex-col justify-between">
-        {{-- Logo --}}
-        @if(!empty($empresa->logo))
-        <img src="{{ asset('storage/' . $empresa->logo) }}"
-          alt="{{ $empresa->nombre }}" class="h-12 mx-auto mb-4 object-contain">
-        @else
-        <div class="h-12 flex items-center justify-center text-gray-400 mb-4">
-          <i class="fa-solid fa-building text-2xl"></i>
-        </div>
-        @endif
+    <div class="relative">
+      <div
+        x-ref="slider"
+        class="flex gap-6 overflow-hidden scroll-smooth">
+        @foreach(array_merge($empresas->toArray(), $empresas->toArray()) as $empresa)
+        <div
+          class="snap-center shrink-0 bg-white rounded-2xl shadow p-8 text-center mx-2 w-[290px] sm:w-[300px] flex flex-col justify-between">
 
-        {{-- Información --}}
-        <div>
-          <h3 class="font-semibold">{{ $empresa->nombre }}</h3>
-          <p class="text-primary text-sm mb-2">{{ $empresa->sector ?? 'Sector no especificado' }}</p>
-          <p class="text-sm text-rblack/70">{{ $empresa->descripcion ?? '—' }}</p>
-        </div>
+          <div>
+            {{-- Logo --}}
+            @if(!empty($empresa['logo']))
+            <img src="{{ asset('storage/' . $empresa['logo']) }}" alt="{{ $empresa['nombre'] }}" class="h-12 mx-auto mb-4 object-contain">
+            @else
+            <div class="h-12 flex items-center justify-center text-gray-400 mb-4">
+              <i class="fa-solid fa-building text-2xl"></i>
+            </div>
+            @endif
 
-        {{-- Botón --}}
-        <div class="flex justify-center">
-          <a href="{{ $empresa->sitio_web }}" target="_blank" class="btn btn-primary mt-4">Visitar</a>
+            {{-- Información --}}
+            <div class="flex-1">
+              <h3 class="font-semibold">{{ $empresa['nombre'] }}</h3>
+              <p class="text-primary text-sm mb-2">{{ $empresa['sector'] ?? 'Sector no especificado' }}</p>
+              <p class="text-sm text-rblack/70">
+                {{ Str::limit($empresa['descripcion'] ?? '—', 150, '...') }}
+              </p>
+            </div>
+          </div>
+
+          {{-- Botón --}}
+          <div class="flex justify-center mt-4 shrink-0">
+            <a href="{{ $empresa['url'] }}" target="_blank" class="btn btn-primary mt-2">Visitar</a>
+          </div>
         </div>
+        @endforeach
       </div>
-      @endforeach
     </div>
     @else
     <p class="text-center text-rblack/70">Aún no hay empresas registradas.</p>
@@ -125,9 +143,8 @@
   </div>
 </section>
 
-
-
 @endsection
+
 
 {{-- Modal de Detalle de Oferta Laboral --}}
 <div id="ofertaModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -142,6 +159,16 @@
         <span id="modalEmpresa"></span>
       </p>
 
+      {{-- Flyer (si existe) --}}
+      <div id="modalFlyerContainer" class="mb-4 hidden">
+        <a id="modalFlyerLink" href="#" target="_blank">
+          <img id="modalFlyer"
+            src=""
+            alt="Flyer de la oferta"
+            class="w-full rounded-xl shadow-sm object-contain max-h-[280px] hover:opacity-90 transition">
+        </a>
+      </div>
+
       <p class="text-gray-700 leading-relaxed mb-4" id="modalDescripcion"></p>
 
       <div id="modalEtiquetas" class="flex flex-wrap gap-2 mb-4"></div>
@@ -152,7 +179,12 @@
       </div>
 
       <div class="pt-6 text-right">
-        <a id="modalLink" href="#" target="_blank" class="btn btn-primary">
+        <a id="modalLink"
+          href="#"
+          target="_blank"
+          class="btn btn-primary"
+          onclick="registrarInteraccion(event)"
+          data-id="">
           Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
         </a>
       </div>
@@ -161,41 +193,90 @@
 </div>
 
 <script>
-  const ofertas = @json($ofertas);
+  // Nueva versión usando fetch() para obtener la información del modal
+  async function openOfertaModal(id) {
+    try {
+      window.currentOfertaId = id; // mantiene la oferta actual para registrar interacción
 
-  function openOfertaModal(id) {
-    const oferta = ofertas.find(o => o.id === id);
-    if (!oferta) return;
+      const res = await fetch(`/api/oferta/${id}`);
+      if (!res.ok) throw new Error('Error al obtener los datos de la oferta');
+      const oferta = await res.json();
 
-    document.getElementById('modalTitulo').innerText = oferta.titulo;
-    document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
-    document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
-    document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
-    document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
-    document.getElementById('modalLink').href = oferta.url_externa ?? '#';
+      document.getElementById('modalTitulo').innerText = oferta.titulo;
+      document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
+      document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
+      document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
+      document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
+      document.getElementById('modalLink').href = oferta.url_externa ?? '#';
+      document.getElementById('modalLink').setAttribute('data-id', oferta.id);
 
-    // Etiquetas
-    const etiquetasContainer = document.getElementById('modalEtiquetas');
-    etiquetasContainer.innerHTML = '';
-    let etiquetas = oferta.etiquetas;
-    if (typeof etiquetas === 'string') {
-      try {
-        etiquetas = JSON.parse(etiquetas);
-      } catch {}
+      const flyerContainer = document.getElementById('modalFlyerContainer');
+      const flyerImg = document.getElementById('modalFlyer');
+      const flyerLink = document.getElementById('modalFlyerLink');
+
+      if (oferta.flyer) {
+        flyerContainer.classList.remove('hidden');
+        flyerImg.src = `/storage/${oferta.flyer}`;
+        flyerLink.href = `/storage/${oferta.flyer}`;
+      } else {
+        flyerContainer.classList.add('hidden');
+        flyerImg.src = '';
+        flyerLink.href = '#';
+      }
+
+      const etiquetasContainer = document.getElementById('modalEtiquetas');
+      etiquetasContainer.innerHTML = '';
+      let etiquetas = oferta.etiquetas;
+      if (typeof etiquetas === 'string') {
+        try {
+          etiquetas = JSON.parse(etiquetas);
+        } catch {}
+      }
+      if (Array.isArray(etiquetas)) {
+        etiquetas.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
+          span.innerText = tag.trim();
+          etiquetasContainer.appendChild(span);
+        });
+      }
+
+      document.getElementById('ofertaModal').classList.remove('hidden');
+    } catch (error) {
+      console.error('Error mostrando la oferta:', error);
     }
-    if (Array.isArray(etiquetas)) {
-      etiquetas.forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
-        span.innerText = tag.trim();
-        etiquetasContainer.appendChild(span);
-      });
-    }
-
-    document.getElementById('ofertaModal').classList.remove('hidden');
   }
 
   function closeOfertaModal() {
     document.getElementById('ofertaModal').classList.add('hidden');
   }
-</script> 
+
+  function registrarInteraccion(event) {
+    event.preventDefault();
+
+    const link = event.currentTarget.getAttribute('href');
+    const id = event.currentTarget.getAttribute('data-id') || window.currentOfertaId;
+
+    if (!id) {
+      window.open(link, '_blank');
+      return;
+    }
+
+    fetch(`/ofertas/${id}/interaccion`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('Interacción registrada', data);
+        window.open(link, '_blank');
+      })
+      .catch(err => {
+        console.error('Error registrando interacción:', err);
+        window.open(link, '_blank');
+      });
+  }
+</script>

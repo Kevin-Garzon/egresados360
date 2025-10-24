@@ -66,6 +66,30 @@
                     @error('url_externa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Flyer --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Flyer (opcional)</label>
+                    <input type="file" wire:model="flyer"
+                        class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
+                    @error('flyer') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                    {{-- Mostrar nombre del archivo actual o nuevo --}}
+                    <div class="mt-1 text-xs text-gray-500">
+                        @if ($flyer)
+                        Archivo seleccionado: <span class="font-medium text-primary">{{ $flyer->getClientOriginalName() }}</span>
+                        @elseif ($flyerNombre)
+                        Archivo actual: <span class="font-medium text-primary">{{ $flyerNombre }}</span>
+                        @else
+                        No hay archivo cargado.
+                        @endif
+                    </div>
+                </div>
+
+
+
+
+
+
                 {{-- Fechas --}}
                 <div class="grid grid-cols-2 gap-4">
                     <div>

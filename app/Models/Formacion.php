@@ -9,13 +9,14 @@ class Formacion extends Model
     protected $table = 'formaciones';
 
     protected $fillable = [
+        'empresa_id',
         'titulo',
         'descripcion',
-        'entidad',
         'tipo',
         'programa',
         'modalidad',
         'costo',
+        'duracion',
         'fecha_inicio',
         'fecha_fin',
         'url_externa',
@@ -27,4 +28,9 @@ class Formacion extends Model
         'fecha_fin' => 'date',
         'activo' => 'boolean',
     ];
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }
