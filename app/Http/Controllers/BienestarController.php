@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BienestarHabilidad;
 use App\Models\BienestarServicio;
 use App\Models\BienestarEvento;
+use App\Models\BienestarMentoria;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
 
@@ -27,7 +28,12 @@ class BienestarController extends Controller
             ->orderBy('fecha_inicio', 'asc')
             ->get();
 
-        return view('bienestar.index', compact('habilidades', 'servicios', 'eventos'));
+        // Mostrar las mentorías activas ordenadas por título
+        $mentorias = BienestarMentoria::where('activo', true)
+            ->orderBy('titulo', 'asc')
+            ->get();
+
+        return view('bienestar.index', compact('habilidades', 'servicios', 'eventos', 'mentorias'));
     }
 
     // =======================

@@ -25,7 +25,7 @@
                 {{-- Dashboard --}}
                 <a href="{{ route('dashboard') }}"
                     class="group flex items-center gap-3 px-3 py-2 rounded-lg transition
-                  {{ request()->routeIs('dashboard') 
+                {{ request()->routeIs('dashboard') 
                         ? 'bg-white text-primary font-semibold shadow-sm' 
                         : 'text-white/95 hover:bg-white hover:text-primary' }}">
                     <i class="fa-solid fa-gauge-high w-5 text-inherit"></i>
@@ -92,6 +92,16 @@
                 : 'text-white/90 hover:bg-white hover:text-primary' }}">
                             <i class="fa-solid fa-calendar-days w-4"></i>
                             <span>Eventos</span>
+                        </a>
+
+                        {{-- Nuevo: Mentorías --}}
+                        <a href="{{ route('admin.bienestar.mentorias.panel') }}"
+                            class="flex items-center gap-3 px-3 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.bienestar.mentorias.*') 
+                ? 'bg-white text-primary font-semibold shadow-sm' 
+                : 'text-white/90 hover:bg-white hover:text-primary' }}">
+                            <i class="fa-solid fa-chalkboard-user w-4"></i>
+                            <span>Mentorías</span>
                         </a>
 
                     </div>

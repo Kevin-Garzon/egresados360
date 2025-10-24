@@ -11,6 +11,7 @@ use App\Livewire\Admin\Formacion\FormacionPanel;
 use App\Livewire\Admin\Bienestar\Habilidades\HabilidadesPanel;
 use App\Livewire\Admin\Bienestar\Servicios\ServiciosPanel;
 use App\Livewire\Admin\Bienestar\Eventos\EventosPanel;
+use App\Livewire\Admin\Bienestar\Mentorias\MentoriasPanel;
 
 //provisional
 use Illuminate\Support\Facades\Auth;
@@ -104,4 +105,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 // Panel administrativo de Eventos
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/bienestar/eventos', EventosPanel::class)->name('bienestar.eventos.panel');
+});
+
+
+// Panel administrativo de Mentorías
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/bienestar/mentorias', MentoriasPanel::class)->name('bienestar.mentorias.panel');
 });

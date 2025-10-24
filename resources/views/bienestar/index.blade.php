@@ -209,75 +209,89 @@
 
 
 
-{{-- ============== --}}
-{{-- LÍNEA DE APOYO --}}
-{{-- ============== --}}
-<section id="apoyo" class="bg-cultured py-20">
+{{-- ================= --}}
+{{-- SECCIÓN: LÍNEA DE APOYO --}}
+{{-- ================= --}}
+<section id="apoyo" class="bg-cultured py-24">
     <div class="container-app">
-        <div class="text-center max-w-2xl mx-auto mb-10">
-            <h2 class="text-3xl sm:text-4xl font-poppins font-semibold">
-                Línea de <span class="text-primary">apoyo</span>
+
+        {{-- Título principal --}}
+        <div class="text-center mb-14">
+            <h2 class="text-3xl sm:text-4xl font-poppins font-semibold text-gunmetal">
+                Línea de <span class="text-primary">Apoyo</span>
             </h2>
-            <p class="mt-3 text-rblack/70">
-                Mentorías, espacios de escucha y orientación. Tu bienestar primero.
+            <p class="mt-3 text-rblack/70 max-w-2xl mx-auto">
+                Acompañamiento profesional, académico y emocional para fortalecer tu bienestar como egresado FET.
             </p>
         </div>
 
-        <div class="grid gap-8 md:grid-cols-2">
-            {{-- Mentorías --}}
-            <article class="card p-6">
-                <div class="flex items-start gap-4">
-                    <div class="text-5xl text-primary"><i class="fa-solid fa-user-tie"></i></div>
-                    <div>
-                        <h3 class="font-semibold text-lg mb-1">Programa de mentorías</h3>
-                        <p class="text-sm text-rblack/70">
-                            Solicita una sesión con mentores egresados en temas de carrera, portafolio y entrevistas.
-                        </p>
-                        <ul class="text-sm text-rblack/80 list-disc ml-5 mt-3 space-y-1">
-                            <li>Temas: carrera, emprendimiento, TI, diseño CV.</li>
-                            <li>Canales: virtual o presencial (Campus FET).</li>
-                            <li>Duración sugerida: 45–60 min.</li>
-                        </ul>
-                        <div class="mt-4 flex gap-2">
-                            <a href="#" class="btn btn-primary px-4 py-2">
-                                <i class="fa-solid fa-calendar-day mr-2"></i> Solicitar mentoría
-                            </a>
-                            <a href="#" class="btn px-4 py-2">
-                                <i class="fa-solid fa-circle-info mr-2"></i> Ver lineamientos
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </article>
+        {{-- ===================== --}}
+        {{-- BLOQUE 1: MENTORÍAS --}}
+        {{-- ===================== --}}
+        <div class="mb-20">
+            <h3 class="text-2xl font-semibold text-primary text-center mb-10">
+                Mentorías y Fortalecimiento
+            </h3>
 
-            {{-- Espacios de escucha --}}
-            <article class="card p-6">
-                <div class="flex items-start gap-4">
-                    <div class="text-5xl text-primary"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                    <div>
-                        <h3 class="font-semibold text-lg mb-1">Espacios de escucha</h3>
-                        <p class="text-sm text-rblack/70">
-                            Atención confidencial y acompañamiento emocional articulado con Bienestar Institucional.
-                        </p>
-                        <ul class="text-sm text-rblack/80 list-disc ml-5 mt-3 space-y-1">
-                            <li>Protocolos de confidencialidad y derivación.</li>
-                            <li>Horarios de atención y canales oficiales.</li>
-                            <li>Consentimiento informado y tratamiento de datos.</li>
-                        </ul>
-                        <div class="mt-4 flex gap-2">
-                            <a href="#" class="btn btn-primary px-4 py-2">
-                                <i class="fa-solid fa-envelope-open-text mr-2"></i> Solicitar cita
-                            </a>
-                            <a href="#" class="btn px-4 py-2">
-                                <i class="fa-solid fa-shield-heart mr-2"></i> Política de privacidad
-                            </a>
+            @if($mentorias->isEmpty())
+            <p class="text-center text-gray-500">No hay mentorías disponibles por el momento.</p>
+            @else
+            <div class="grid gap-8 md:grid-cols-3">
+                @foreach($mentorias as $m)
+                <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+                    <div class="text-center mb-4">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-full text-3xl mb-3">
+                            <i class="fa-solid {{ $m->icono ?? 'fa-user-tie' }}"></i>
                         </div>
+                        <h4 class="font-semibold text-lg text-gunmetal mb-2">{{ $m->titulo }}</h4>
+                        <p class="text-sm text-rblack/70 leading-relaxed">
+                            {{ $m->descripcion ?? 'Sin descripción disponible.' }}
+                        </p>
                     </div>
+                    <button
+                        onclick="abrirFormularioMentoria('{{ $m->titulo }}')"
+                        class="btn btn-primary w-full mt-4 py-2 flex items-center justify-center">
+                        <i class="fa-solid fa-calendar-day mr-2"></i> Solicitar mentoría
+                    </button>
                 </div>
-            </article>
+                @endforeach
+            </div>
+            @endif
         </div>
+
+
+        {{-- ===================== --}}
+        {{-- BLOQUE 2: ESPACIO DE ESCUCHA --}}
+        {{-- ===================== --}}
+
+        {{-- BLOQUE 2 — ESPACIOS DE ESCUCHA (Franja horizontal) --}}
+        <div class="bg-primary/5 border border-primary/10 rounded-xl px-8 py-10 flex flex-col md:flex-row items-center justify-between max-w-5xl mx-auto gap-6 text-center md:text-left">
+            <div class="flex items-center gap-4">
+                <div class="text-primary text-4xl">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gunmetal">Espacios de Escucha</h3>
+                    <p class="text-sm text-rblack/70 leading-relaxed">
+                        Acompañamiento emocional y orientación con el equipo de Bienestar Institucional.
+                    </p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/573001234567?text=Hola,%20soy%20egresado%20FET%20y%20quisiera%20solicitar%20un%20espacio%20de%20escucha."
+                target="_blank"
+                class="btn btn-primary px-6 py-2 flex items-center shadow">
+                <i class="fa-brands fa-whatsapp mr-2"></i> Solicitar
+            </a>
+        </div>
+
+
+
     </div>
 </section>
+
+
+
 
 <x-bienestar.modal-habilidad />
 <x-bienestar.modal-servicio />
