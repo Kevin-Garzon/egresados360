@@ -182,6 +182,33 @@
         </div>
     </div>
 
+
+    {{-- Botones de exportación CSV --}}
+    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+        <h4 class="text-lg font-semibold text-rblack mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-file-excel text-primary"></i>
+            Exportar datos
+        </h4>
+        <p class="text-sm text-gray-500 mb-4">Descarga las métricas del portal en formato XLSX (compatible con Excel y Google Sheets).</p>
+
+        <div class="flex flex-wrap gap-3">
+            <a href="{{ route('exportar.visitas') }}"
+                class="btn btn-primary flex items-center gap-2 px-4 py-2">
+                <i class="fa-solid fa-chart-line"></i> Exportar Visitas
+            </a>
+
+            <a href="{{ route('exportar.interacciones') }}"
+                class="btn btn-primary flex items-center gap-2 px-4 py-2">
+                <i class="fa-solid fa-bolt"></i> Exportar Interacciones
+            </a>
+
+            <a href="{{ route('exportar.egresados') }}"
+                class="btn btn-primary flex items-center gap-2 px-4 py-2">
+                <i class="fa-solid fa-user-graduate"></i> Exportar Egresados
+            </a>
+        </div>
+    </div>
+
 </div>
 @endsection
 

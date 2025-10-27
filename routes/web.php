@@ -24,6 +24,12 @@ use App\Models\PerfilEgresado;
 use App\Models\Interaccion;
 use App\Models\VisitaDiaria;
 
+// Exportaciones
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Sheets\VisitasSheet;
+use App\Exports\Sheets\InteraccionesSheet;
+use App\Exports\Sheets\EgresadosSheet;
+
 // Página de inicio
 Route::get('/', function () {
     return view('inicio'); 
@@ -171,3 +177,20 @@ Route::post('/api/registrar-visita', function () {
     VisitaDiaria::registrarVisita();
     return response()->json(['success' => true]);
 });
+
+
+// Rutas para exportar métricas del dashboard 
+Route::get('/exportar-visitas', function () {
+    return Excel::download(new VisitasSheet, 'visitas_diarias.xlsx', \Maatwebsite\Excel\Excel::XLSX
+);
+})->name('exportar.visitas');
+
+Route::get('/exportar-interacciones', function () {
+    return Excel::download(new InteraccionesSheet, 'interacciones.xlsx', \Maatwebsite\Excel\Excel::XLSX
+);
+})->name('exportar.interacciones');
+
+Route::get('/exportar-egresados', function () {
+    return Excel::download(new EgresadosSheet, 'egresados.xlsx', \Maatwebsite\Excel\Excel::XLSX
+);
+})->name('exportar.egresados');
