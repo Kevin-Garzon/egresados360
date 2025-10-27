@@ -7,8 +7,7 @@
             <input type="text"
                 wire:model.live="search"
                 placeholder="Buscar por título, empresa o ubicación..."
-                class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary"
-            />
+                class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary" />
         </div>
     </div>
 
@@ -53,9 +52,10 @@
                         </span>
                         @endif
                     </td>
-                    <td class="px-5 py-3 text-center text-gray-700">
-                        {{ $oferta->interacciones }}
+                    <td class="px-5 py-3 text-center text-gray-700 font-semibold">
+                        {{ $oferta->interacciones_nuevas ?? 0 }}
                     </td>
+
                     <td class="px-5 py-3 whitespace-nowrap text-right">
                         <button wire:click="edit({{ $oferta->id }})"
                             class="text-[#09B451] hover:text-green-700 font-medium transition">

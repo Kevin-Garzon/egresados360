@@ -82,8 +82,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/laboral', LaboralPanel::class)->name('laboral.panel');
 });
 
-Route::post('/ofertas/{id}/interaccion', [App\Http\Controllers\InteraccionController::class, 'registrarOferta'])
-    ->name('ofertas.interaccion');
 
 
 // Rutas para el panel administrativo de formación
@@ -91,8 +89,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/formacion', FormacionPanel::class)->name('formacion.panel');
 });
 
-Route::post('/formaciones/{id}/interaccion', [App\Http\Controllers\InteraccionController::class, 'registrarFormacion'])
-    ->name('formaciones.interaccion');
 
 
 // Rutas para el panel administrativo de Bienestar

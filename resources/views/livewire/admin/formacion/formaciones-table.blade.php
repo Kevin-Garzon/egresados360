@@ -73,10 +73,10 @@
                         </span>
                         @endif
                     </td>
-                    {{-- NUEVA CELDA --}}
-                    <td class="px-5 py-3 text-center text-gray-700">
-                        {{ $f->interacciones ?? 0 }}
+                    <td class="px-5 py-3 text-center text-gray-700 font-semibold">
+                        {{ $f->interacciones_nuevas ?? 0 }}
                     </td>
+
                     <td class="px-5 py-3 whitespace-nowrap text-right">
                         <button wire:click="openEdit({{ $f->id }})"
                             class="text-[#09B451] hover:text-green-700 font-medium transition">
