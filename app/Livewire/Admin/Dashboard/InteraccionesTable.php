@@ -14,11 +14,11 @@ class InteraccionesTable extends Component
     public $filtroIdentificacion = '';
 
     protected $paginationTheme = 'tailwind';
-
+    
     public function updating($name)
     {
-        // Cuando se cambie un filtro, reinicia la paginación
-        $this->resetPage();
+        // Cuando se cambie un filtro, reinicia la paginación de la tabla
+        $this->resetPage('interaccionesPage');
     }
 
     public function render()
@@ -35,7 +35,8 @@ class InteraccionesTable extends Component
             $query->whereNull('perfil_id');
         }
 
-        $interacciones = $query->paginate(10);
+        // 🚨 CAMBIO CLAVE: Usar 'interaccionesPage' en paginate()
+        $interacciones = $query->paginate(10, ['*'], 'interaccionesPage');
 
         return view('livewire.admin.dashboard.interacciones-table', [
             'interacciones' => $interacciones,

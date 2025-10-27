@@ -7,6 +7,7 @@ use App\Models\VisitaDiaria;
 use App\Models\Interaccion;
 use App\Models\PerfilEgresado;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardPanel extends Component
 {
@@ -24,12 +25,21 @@ class DashboardPanel extends Component
     public $totalEgresados;
 
     public $topItems = [];
+    public $interaccionesPorModulo = [];
+
+    public $variacionVisitas;
+    public $variacionInteracciones;
+
+    public $ultimasAcciones = [];
 
     public function mount()
     {
         $this->cargarVisitas();
         $this->cargarInteracciones();
         $this->cargarTasaParticipacion();
+        $this->cargarInteraccionesPorModulo();
+        $this->cargarComparativos();
+        $this->cargarActividadReciente();
     }
 
     public function cargarVisitas()
@@ -52,13 +62,9 @@ class DashboardPanel extends Component
 
     public function cargarInteracciones()
     {
-        // Total de interacciones registradas
         $this->totalInteracciones = Interaccion::count();
-
-        // Total de perfiles (egresados registrados)
         $this->totalPerfiles = PerfilEgresado::select('correo')->distinct()->count();
 
-        // Top 5 ítems más clicados
         $this->topItems = Interaccion::select('item_title')
             ->selectRaw('COUNT(*) as total')
             ->groupBy('item_title')
@@ -70,18 +76,51 @@ class DashboardPanel extends Component
 
     public function cargarTasaParticipacion()
     {
-        // Total egresados registrados (sin duplicar por correo)
         $this->totalEgresados = PerfilEgresado::select('correo')->distinct()->count();
-
-        // Egresados que han tenido al menos una interacción
         $this->egresadosActivos = Interaccion::distinct('perfil_id')->count('perfil_id');
 
-        // Cálculo de tasa de participación
-        if ($this->totalEgresados > 0) {
-            $this->tasaParticipacion = round(($this->egresadosActivos / $this->totalEgresados) * 100, 1);
-        } else {
-            $this->tasaParticipacion = 0;
-        }
+        $this->tasaParticipacion = $this->totalEgresados > 0
+            ? round(($this->egresadosActivos / $this->totalEgresados) * 100, 1)
+            : 0;
+    }
+
+    public function cargarInteraccionesPorModulo()
+    {
+        $this->interaccionesPorModulo = Interaccion::select('module', DB::raw('COUNT(*) as total'))
+            ->groupBy('module')
+            ->orderByDesc('total')
+            ->pluck('total', 'module')
+            ->toArray();
+    }
+
+    public function cargarComparativos()
+    {
+        $hoy = Carbon::today();
+        $inicioSemanaActual = $hoy->copy()->startOfWeek();
+        $inicioSemanaPasada = $inicioSemanaActual->copy()->subWeek();
+        $finSemanaPasada = $inicioSemanaActual->copy()->subDay();
+
+        $visitasActual = VisitaDiaria::whereBetween('fecha', [$inicioSemanaActual, $hoy])->sum('total');
+        $visitasAnterior = VisitaDiaria::whereBetween('fecha', [$inicioSemanaPasada, $finSemanaPasada])->sum('total');
+
+        $this->variacionVisitas = $visitasAnterior > 0
+            ? round((($visitasActual - $visitasAnterior) / $visitasAnterior) * 100, 1)
+            : 0;
+
+        $interaccionesActual = Interaccion::whereBetween('created_at', [$inicioSemanaActual, $hoy])->count();
+        $interaccionesAnterior = Interaccion::whereBetween('created_at', [$inicioSemanaPasada, $finSemanaPasada])->count();
+
+        $this->variacionInteracciones = $interaccionesAnterior > 0
+            ? round((($interaccionesActual - $interaccionesAnterior) / $interaccionesAnterior) * 100, 1)
+            : 0;
+    }
+
+    public function cargarActividadReciente()
+    {
+        $this->ultimasAcciones = Interaccion::with('perfil')
+            ->latest()
+            ->take(5)
+            ->get();
     }
 
     public function render()

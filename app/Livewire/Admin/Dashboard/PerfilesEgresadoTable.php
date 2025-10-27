@@ -17,7 +17,7 @@ class PerfilesEgresadoTable extends Component
 
     public function updatedFiltroPrograma()
     {
-        $this->resetPage();
+        $this->resetPage('perfilesPage');
     }
 
     public function render()
@@ -39,7 +39,7 @@ class PerfilesEgresadoTable extends Component
             $query->where('programa', $this->filtroPrograma);
         }
 
-        $perfiles = $query->paginate(10);
+        $perfiles = $query->paginate(10, ['*'], 'perfilesPage');
 
         return view('livewire.admin.dashboard.perfiles-egresado-table', [
             'perfiles' => $perfiles,
