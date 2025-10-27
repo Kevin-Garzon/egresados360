@@ -1,161 +1,201 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard - Admin')
-@section('header', 'Dashboard')
-
 @section('content')
-{{-- ====================== --}}
-{{-- DASHBOARD ADMIN EGRESADOS 360 --}}
-{{-- ====================== --}}
-<section class="container-app py-10 space-y-10">
 
-    {{-- TITULO Y RANGO --}}
-    <div class="flex flex-wrap justify-between items-center gap-4">
-        <div>
-            <h2 class="text-2xl font-poppins font-semibold text-gunmetal">
-                Panel de Analítica e Interacciones
-            </h2>
-            <p class="text-sm text-rblack/70 mt-1">
-                Monitorea las visitas, clics y el comportamiento de los usuarios dentro del portal.
+<div class="space-y-6">
+
+    {{-- Tarjetas resumen de visitas --}}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+            <p class="text-sm text-gray-500">Visitas hoy</p>
+            <h3 class="text-3xl font-semibold text-primary">{{ $totalHoy }}</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+            <p class="text-sm text-gray-500">Esta semana</p>
+            <h3 class="text-3xl font-semibold text-primary">{{ $totalSemana }}</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+            <p class="text-sm text-gray-500">Este mes</p>
+            <h3 class="text-3xl font-semibold text-primary">{{ $totalMes }}</h3>
+        </div>
+    </div>
+
+    {{-- Gráfica de visitas --}}
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h4 class="text-lg font-semibold text-rblack mb-4">Visitas de los últimos 14 días</h4>
+        <canvas id="graficaVisitas" class="w-full h-64"></canvas>
+    </div>
+
+    {{-- Tarjetas resumen de interacciones / perfiles --}}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+            <p class="text-sm text-gray-500">Interacciones totales</p>
+            <h3 class="text-3xl font-semibold text-primary">{{ $totalInteracciones }}</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+            <p class="text-sm text-gray-500">Egresados registrados</p>
+            <h3 class="text-3xl font-semibold text-primary">{{ $totalPerfiles }}</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+            <p class="text-sm text-gray-500">Tasa de participación</p>
+            <h3 class="text-3xl font-semibold text-primary">{{ $tasaParticipacion }}%</h3>
+            <p class="text-xs text-gray-500 mt-1">
+                {{ $egresadosActivos }} activos de {{ $totalEgresados }}
             </p>
         </div>
-
-        {{-- Selector de rango de fechas --}}
-        <div class="flex items-center gap-3">
-            <input type="date" class="border rounded-lg px-3 py-2 text-sm text-rblack/80">
-            <span class="text-gray-400">—</span>
-            <input type="date" class="border rounded-lg px-3 py-2 text-sm text-rblack/80">
-            <button class="btn btn-primary text-sm px-4 py-2">Aplicar</button>
-        </div>
     </div>
 
-
-    {{-- TARJETAS RESUMEN --}}
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <div class="card p-5 flex items-center gap-4">
-            <div class="bg-primary/10 text-primary p-3 rounded-xl text-2xl"><i class="fa-solid fa-user-group"></i></div>
-            <div>
-                <p class="text-sm text-gray-500">Visitantes únicos</p>
-                <h3 class="text-2xl font-semibold">438</h3>
-            </div>
-        </div>
-
-        <div class="card p-5 flex items-center gap-4">
-            <div class="bg-primary/10 text-primary p-3 rounded-xl text-2xl"><i class="fa-solid fa-mouse-pointer"></i></div>
-            <div>
-                <p class="text-sm text-gray-500">Clics totales</p>
-                <h3 class="text-2xl font-semibold">1,287</h3>
-            </div>
-        </div>
-
-        <div class="card p-5 flex items-center gap-4">
-            <div class="bg-primary/10 text-primary p-3 rounded-xl text-2xl"><i class="fa-solid fa-chart-pie"></i></div>
-            <div>
-                <p class="text-sm text-gray-500">% con perfil registrado</p>
-                <h3 class="text-2xl font-semibold">63%</h3>
-            </div>
-        </div>
-
-        <div class="card p-5 flex items-center gap-4">
-            <div class="bg-primary/10 text-primary p-3 rounded-xl text-2xl"><i class="fa-solid fa-clock-rotate-left"></i></div>
-            <div>
-                <p class="text-sm text-gray-500">Último clic registrado</p>
-                <h3 class="text-2xl font-semibold">Hoy, 10:42 AM</h3>
-            </div>
-        </div>
+    {{-- Gráfico de egresados activos vs inactivos --}}
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h4 class="text-lg font-semibold text-rblack mb-4">Egresados activos vs inactivos</h4>
+        <canvas id="graficoParticipacion" height="100"></canvas>
     </div>
 
-
-    {{-- GRÁFICAS PRINCIPALES --}}
-    <div class="grid gap-6 lg:grid-cols-3">
-        {{-- Gráfica de líneas - visitas --}}
-        <div class="card p-6 col-span-2">
-            <h4 class="font-semibold text-gunmetal mb-4">Visitas al portal</h4>
-            <img src="https://placehold.co/600x200/EEEEEE/09B451?text=Gráfica+de+Visitas+(líneas)" class="rounded-lg w-full">
-        </div>
-
-        {{-- Gráfica de barras - clics por módulo --}}
-        <div class="card p-6">
-            <h4 class="font-semibold text-gunmetal mb-4">Clics por módulo</h4>
-            <img src="https://placehold.co/300x200/EEEEEE/09B451?text=Gráfica+Barras+por+Módulo" class="rounded-lg w-full">
-        </div>
+    {{-- Top 5 ítems más clicados --}}
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h4 class="text-lg font-semibold text-rblack mb-4">Top 5 ítems más clicados</h4>
+        <canvas id="graficaTopItems" height="120"></canvas>
     </div>
 
-
-    {{-- DISTRIBUCION DE PROGRAMAS --}}
-    <div class="card p-6">
-        <h4 class="font-semibold text-gunmetal mb-4">Distribución por programa (usuarios con perfil)</h4>
-        <img src="https://placehold.co/600x250/EEEEEE/09B451?text=Gráfica+de+Dona+por+Programa" class="rounded-lg w-full">
+    {{-- Tablas detalladas --}}
+    <div class="bg-white rounded-2xl shadow p-4">
+        <livewire:admin.dashboard.interacciones-table />
+        <livewire:admin.dashboard.perfiles-egresado-table />
     </div>
 
-
-    {{-- TABLA DE INTERACCIONES RECIENTES --}}
-    <div class="card p-6">
-    <div class="flex justify-between items-center mb-4">
-        <h4 class="font-semibold text-gunmetal">Interacciones registradas</h4>
-        <div class="flex items-center gap-3">
-            <select class="border rounded-lg px-3 py-2 text-sm text-rblack/80">
-                <option>Todos los módulos</option>
-                <option>Laboral</option>
-                <option>Formación</option>
-                <option>Bienestar</option>
-            </select>
-            <button class="btn btn-primary text-sm px-4 py-2">
-                <i class="fa-solid fa-download mr-2"></i> Exportar
-            </button>
-        </div>
-    </div>
-
-    <div class="overflow-x-auto">
-        <table class="min-w-full text-sm text-gray-700 border border-gray-200 rounded-2xl overflow-hidden">
-            <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-                <tr>
-                    <th class="px-4 py-3 text-left">Fecha</th>
-                    <th class="px-4 py-3 text-left">Módulo</th>
-                    <th class="px-4 py-3 text-left">Acción</th>
-                    <th class="px-4 py-3 text-left">Elemento</th>
-                    <th class="px-4 py-3 text-left">Nombre</th>
-                    <th class="px-4 py-3 text-left">Correo</th>
-                    <th class="px-4 py-3 text-left">Celular</th>
-                    <th class="px-4 py-3 text-left">Programa</th>
-                    <th class="px-4 py-3 text-left">Año egreso</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100 bg-white">
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3">23 Oct 2025 - 11:05 AM</td>
-                    <td class="px-4 py-3">Laboral</td>
-                    <td class="px-4 py-3">Ir a aplicar</td>
-                    <td class="px-4 py-3">Vacante — Desarrollador Laravel</td>
-                    <td class="px-4 py-3">Kevin Garzón</td>
-                    <td class="px-4 py-3">kevin.garzon@fet.edu.co</td>
-                    <td class="px-4 py-3">321-987-4456</td>
-                    <td class="px-4 py-3">Ingeniería de Software</td>
-                    <td class="px-4 py-3">2024</td>
-                </tr>
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3">23 Oct 2025 - 10:30 AM</td>
-                    <td class="px-4 py-3">Formación</td>
-                    <td class="px-4 py-3">Inscribirse</td>
-                    <td class="px-4 py-3">Curso — Excel Avanzado</td>
-                    <td class="px-4 py-3">Anónimo</td>
-                    <td class="px-4 py-3">—</td>
-                    <td class="px-4 py-3">—</td>
-                    <td class="px-4 py-3">—</td>
-                    <td class="px-4 py-3">—</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    {{-- Pie con total y filtros de resumen --}}
-    <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
-        <span>Total: <strong>123 interacciones</strong></span>
-        <span>Mostrando últimos 50 registros</span>
-    </div>
 </div>
 
-
-</section>
-
 @endsection
+
+@push('scripts')
+    {{-- Cargar Chart.js una sola vez --}}
+    @once
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    @endonce
+
+    <script>
+        // Evitar re-inicializaciones múltiples al navegar con Livewire v3
+        let __chartsInitOnce = false;
+
+        function initVisitasChart() {
+            const ctx = document.getElementById('graficaVisitas');
+            const labels = @json($labels);
+            const values = @json($values);
+
+            if (!ctx || !labels.length || !values.length || typeof Chart === 'undefined') return;
+
+            // Destruir chart previo si existe
+            if (ctx.__chartInstance) {
+                ctx.__chartInstance.destroy();
+            }
+
+            ctx.__chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Visitas diarias',
+                        data: values,
+                        borderColor: '#09B451',
+                        backgroundColor: '#09B45122',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#09B451'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function initDonutParticipacion() {
+            const ctx = document.getElementById('graficoParticipacion');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            const activos   = Number(@json($egresadosActivos));
+            const totales   = Number(@json($totalEgresados));
+            const inactivos = Math.max(totales - activos, 0);
+
+            if (ctx.__chartInstance) {
+                ctx.__chartInstance.destroy();
+            }
+
+            ctx.__chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Activos', 'Inactivos'],
+                    datasets: [{
+                        data: [activos, inactivos],
+                        backgroundColor: ['#09B451', '#E5E7EB'],
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#374151', font: { size: 13 } } }
+                    }
+                }
+            });
+        }
+
+        function initTopItemsChart() {
+            const ctx = document.getElementById('graficaTopItems');
+            if (!ctx || typeof Chart === 'undefined') return;
+
+            const items   = @json(array_column($topItems, 'item_title'));
+            const valores = @json(array_column($topItems, 'total'));
+
+            if (!items.length) return;
+
+            if (ctx.__chartInstance) {
+                ctx.__chartInstance.destroy();
+            }
+
+            ctx.__chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: items,
+                    datasets: [{
+                        label: 'Clics',
+                        data: valores,
+                        backgroundColor: '#09B45188',
+                        borderColor: '#09B451',
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scales: { x: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function initAllCharts() {
+            // Si Chart.js aún no cargó, esperar al siguiente tick
+            if (typeof Chart === 'undefined') {
+                setTimeout(initAllCharts, 100);
+                return;
+            }
+            initVisitasChart();
+            initDonutParticipacion();
+            initTopItemsChart();
+        }
+
+        // Inicializar en diferentes eventos para cubrir Livewire v3 y cargas normales
+        document.addEventListener('DOMContentLoaded', initAllCharts);
+        document.addEventListener('livewire:load', initAllCharts);
+        window.addEventListener('livewire:navigated', initAllCharts);
+    </script>
+@endpush

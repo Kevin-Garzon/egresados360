@@ -5,6 +5,7 @@ use App\Http\Controllers\LaboralController;
 use App\Http\Controllers\FormacionController;
 use App\Http\Controllers\BienestarController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Livewire\Admin\Laboral\LaboralPanel;
 use App\Livewire\Admin\Formacion\FormacionPanel;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Formacion;
 use App\Models\OfertaLaboral;
 use App\Models\BienestarHabilidad;
+use App\Models\PerfilEgresado;
+use App\Models\Interaccion;
+use App\Models\VisitaDiaria;
 
 // Página de inicio
 Route::get('/', function () {
@@ -52,9 +56,9 @@ Route::get('/bienestar/evento/{id}', [App\Http\Controllers\BienestarController::
 
 
 // Dashboard (solo para usuarios autenticados y verificados)
-Route::get('/dashboard', function () {
-    return view('livewire.admin.dashboard.dashboard-panel');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', \App\Livewire\Admin\Dashboard\DashboardPanel::class)
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 //Salir provisional
@@ -112,4 +116,62 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 // Panel administrativo de Mentorías
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/bienestar/mentorias', MentoriasPanel::class)->name('bienestar.mentorias.panel');
+});
+
+
+
+// API interna para el dashboard de metricas de egresados
+
+Route::post('/api/profile/upsert', function (Request $request) {
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:255',
+        'correo' => 'required|email',
+        'celular' => 'nullable|string|max:20',
+        'programa' => 'nullable|string|max:255',
+        'anio_egreso' => 'nullable|digits:4',
+    ]);
+
+    // Si ya existe un perfil con ese correo, lo actualiza.
+    $perfil = PerfilEgresado::updateOrCreate(
+        ['correo' => $validated['correo']],
+        $validated
+    );
+
+    return response()->json([
+        'success' => true,
+        'perfil_id' => $perfil->id,
+    ]);
+});
+
+
+Route::post('/api/track/interaction', function (Request $request) {
+    $validated = $request->validate([
+        'module' => 'required|string|max:50',
+        'action' => 'required|string|max:50',
+        'item_type' => 'nullable|string|max:50',
+        'item_id' => 'nullable|integer',
+        'item_title' => 'nullable|string|max:255',
+        'perfil_id' => 'nullable|integer|exists:perfiles_egresado,id',
+    ]);
+
+    $interaccion = Interaccion::create([
+        'module' => $validated['module'],
+        'action' => $validated['action'],
+        'item_type' => $validated['item_type'] ?? null,
+        'item_id' => $validated['item_id'] ?? null,
+        'item_title' => $validated['item_title'] ?? null,
+        'perfil_id' => $validated['perfil_id'] ?? null,
+        'is_anonymous' => empty($validated['perfil_id']),
+        'ip' => $request->ip(),
+        'user_agent' => substr($request->userAgent(), 0, 250),
+    ]);
+
+    return response()->json(['success' => true, 'id' => $interaccion->id]);
+});
+
+
+// API para registrar visitas diarias
+Route::post('/api/registrar-visita', function () {
+    VisitaDiaria::registrarVisita();
+    return response()->json(['success' => true]);
 });

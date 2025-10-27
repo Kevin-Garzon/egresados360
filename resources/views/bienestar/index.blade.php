@@ -15,7 +15,7 @@
     description="Descubre las iniciativas de la FET para acompañarte en tu crecimiento integral como egresado."
     :btnPrimary="['text' => 'Ver Habilidades', 'icon' => 'fa-solid fa-heart-pulse', 'link' => '#habilidades']"
     :btnSecondary="['text' => 'Servicios y Beneficios', 'icon' => 'fa-solid fa-hand-holding-heart', 'link' => '#beneficios']"
-    image="https://images.unsplash.com/photo-1516302350523-4c31f511c3c7?q=80&w=1600&auto=format&fit=crop" />
+    image="https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg" />
 
 {{-- ========================= --}}
 {{-- HABILIDADES PARA LA VIDA --}}

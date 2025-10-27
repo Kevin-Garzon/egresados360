@@ -262,21 +262,60 @@
       return;
     }
 
+    const perfilId = localStorage.getItem('perfil_id');
+
+    // Si NO hay perfil -> abrir modal y guardar clic pendiente
+    if (!perfilId) {
+      const pendiente = {
+        module: 'laboral',
+        action: 'aplicar',
+        item_type: 'oferta',
+        item_id: id,
+        item_title: document.getElementById('modalTitulo')?.innerText || 'Oferta sin título',
+        url: link
+      };
+      localStorage.setItem('pendiente_click', JSON.stringify(pendiente));
+      // Abrir el modal Livewire
+      if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
+        window.Livewire.dispatch('abrirFormularioPerfil');
+      } else if (window.Livewire && typeof window.Livewire.emit === 'function') {
+        // compatibilidad Livewire v2
+        window.Livewire.emit('abrirFormularioPerfil');
+      } else {
+        console.warn('⚠️ No se pudo emitir evento Livewire, Livewire no está disponible aún.');
+      }
+
+      return; // no continuamos, esperamos a que guarde el perfil
+    }
+
+    // 1) Legacy (tu registro actual - opcional si quieres conservarlo)
     fetch(`/ofertas/${id}/interaccion`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log('Interacción registrada', data);
-        window.open(link, '_blank');
-      })
-      .catch(err => {
-        console.error('Error registrando interacción:', err);
-        window.open(link, '_blank');
-      });
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json',
+      },
+    }).catch(() => {});
+
+    // 2) Nuevo tracking (dashboard)
+    const nuevaData = {
+      module: 'laboral',
+      action: 'aplicar',
+      item_type: 'oferta',
+      item_id: id,
+      item_title: document.getElementById('modalTitulo')?.innerText || 'Oferta sin título',
+      perfil_id: perfilId
+    };
+
+    fetch('/api/track/interaction', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify(nuevaData)
+    }).catch(() => {}).finally(() => {
+      window.open(link, '_blank');
+    });
   }
 </script>
