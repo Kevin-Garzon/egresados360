@@ -11,50 +11,92 @@
         </div>
     </div>
 
-    {{-- Tarjetas principales --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {{-- visitas hoy --}}
-        <div class="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-between border border-gray-100">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-gray-500">Visitas hoy</p>
-                <i class="fa-solid fa-chart-line text-primary"></i>
+    {{-- TARJETAS COMPARATIVAS --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {{-- VISITAS --}}
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+            <h4 class="text-md font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-eye text-primary"></i> Visitas
+            </h4>
+            <div class="grid grid-cols-3 text-center">
+                <div>
+                    <p class="text-xs text-gray-500">Totales</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $visitasTotales }}</h3>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Esta semana</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $visitasSemana }}</h3>
+                    <p class="text-xs {{ $variacionVisitasSemana >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                        {{ $variacionVisitasSemana >= 0 ? '+' : '' }}{{ $variacionVisitasSemana }}%
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Hoy</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $visitasHoy }}</h3>
+                    <p class="text-xs {{ $variacionVisitasDia >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                        {{ $variacionVisitasDia >= 0 ? '+' : '' }}{{ $variacionVisitasDia }}%
+                    </p>
+                </div>
             </div>
-            <h3 class="text-3xl font-semibold text-primary mt-1">{{ $totalHoy }}</h3>
-            <p class="text-xs mt-1 {{ $variacionVisitas >= 0 ? 'text-green-600' : 'text-red-500' }}">
-                {{ $variacionVisitas >= 0 ? '+' : '' }}{{ $variacionVisitas }}% vs semana pasada
-            </p>
         </div>
 
-        {{-- visitas semana --}}
-        <div class="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-between border border-gray-100">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-gray-500">Esta semana</p>
-                <i class="fa-solid fa-calendar-week text-primary"></i>
+        {{-- INTERACCIONES --}}
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+            <h4 class="text-md font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-primary"></i> Interacciones
+            </h4>
+            <div class="grid grid-cols-3 text-center">
+                <div>
+                    <p class="text-xs text-gray-500">Totales</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $interaccionesTotales }}</h3>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Esta semana</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $interaccionesSemana }}</h3>
+                    <p class="text-xs {{ $variacionInteraccionesSemana >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                        {{ $variacionInteraccionesSemana >= 0 ? '+' : '' }}{{ $variacionInteraccionesSemana }}%
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Hoy</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $interaccionesHoy }}</h3>
+                    <p class="text-xs {{ $variacionInteraccionesDia >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                        {{ $variacionInteraccionesDia >= 0 ? '+' : '' }}{{ $variacionInteraccionesDia }}%
+                    </p>
+                </div>
             </div>
-            <h3 class="text-3xl font-semibold text-primary mt-1">{{ $totalSemana }}</h3>
         </div>
 
-        {{-- interacciones --}}
-        <div class="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-between border border-gray-100">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-gray-500">Interacciones totales</p>
-                <i class="fa-solid fa-bolt text-primary"></i>
+        {{-- EGRESADOS REGISTRADOS --}}
+        <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+            <h4 class="text-md font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-user-graduate text-primary"></i> Egresados registrados
+            </h4>
+            <div class="grid grid-cols-3 text-center">
+                <div>
+                    <p class="text-xs text-gray-500">Totales</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $egresadosTotales }}</h3>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Esta semana</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $egresadosSemana }}</h3>
+                    <p class="text-xs {{ $variacionEgresadosSemana >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                        {{ $variacionEgresadosSemana >= 0 ? '+' : '' }}{{ $variacionEgresadosSemana }}%
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Hoy</p>
+                    <h3 class="text-2xl font-bold text-primary">{{ $egresadosHoy }}</h3>
+                    <p class="text-xs {{ $variacionEgresadosDia >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                        {{ $variacionEgresadosDia >= 0 ? '+' : '' }}{{ $variacionEgresadosDia }}%
+                    </p>
+                </div>
             </div>
-            <h3 class="text-3xl font-semibold text-primary mt-1">{{ $totalInteracciones }}</h3>
-            <p class="text-xs mt-1 {{ $variacionInteracciones >= 0 ? 'text-green-600' : 'text-red-500' }}">
-                {{ $variacionInteracciones >= 0 ? '+' : '' }}{{ $variacionInteracciones }}% vs semana pasada
-            </p>
         </div>
 
-        {{-- egresados --}}
-        <div class="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-between border border-gray-100">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-gray-500">Egresados registrados</p>
-                <i class="fa-solid fa-user-graduate text-primary"></i>
-            </div>
-            <h3 class="text-3xl font-semibold text-primary mt-1">{{ $totalPerfiles }}</h3>
-        </div>
     </div>
+
 
     {{-- Gráficos principales --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

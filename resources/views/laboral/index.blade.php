@@ -131,7 +131,19 @@
 
           {{-- Botón --}}
           <div class="flex justify-center mt-4 shrink-0">
-            <a href="{{ $empresa['url'] }}" target="_blank" class="btn btn-primary mt-2">Visitar</a>
+            <a
+              href="{{ $empresa['url'] }}"
+              target="_blank"
+              class="btn btn-primary mt-2"
+              data-track
+              data-module="laboral"
+              data-action="visitar_empresa"
+              data-type="empresa"
+              data-id="{{ $empresa['id'] ?? '' }}"
+              data-title="{{ $empresa['nombre'] ?? 'Empresa sin nombre' }}">
+              Visitar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+            </a>
+
           </div>
         </div>
         @endforeach
@@ -183,10 +195,16 @@
           href="#"
           target="_blank"
           class="btn btn-primary"
-          onclick="registrarInteraccion(event)"
-          data-id="">
+          data-track
+          data-module="laboral"
+          data-action="aplicar"
+          data-type="oferta"
+          data-id=""
+          data-title="">
           Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
         </a>
+
+
       </div>
     </div>
   </div>
@@ -207,8 +225,14 @@
       document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
       document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
       document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
-      document.getElementById('modalLink').href = oferta.url_externa ?? '#';
-      document.getElementById('modalLink').setAttribute('data-id', oferta.id);
+
+      const modalLink = document.getElementById('modalLink');
+      if (modalLink) {
+        modalLink.href = oferta.url_externa ?? '#';
+        modalLink.setAttribute('data-id', oferta.id);
+        modalLink.setAttribute('data-title', oferta.titulo ?? 'Oferta sin título');
+      }
+
 
       const flyerContainer = document.getElementById('modalFlyerContainer');
       const flyerImg = document.getElementById('modalFlyer');
@@ -249,73 +273,5 @@
 
   function closeOfertaModal() {
     document.getElementById('ofertaModal').classList.add('hidden');
-  }
-
-  function registrarInteraccion(event) {
-    event.preventDefault();
-
-    const link = event.currentTarget.getAttribute('href');
-    const id = event.currentTarget.getAttribute('data-id') || window.currentOfertaId;
-
-    if (!id) {
-      window.open(link, '_blank');
-      return;
-    }
-
-    const perfilId = localStorage.getItem('perfil_id');
-
-    // Si NO hay perfil -> abrir modal y guardar clic pendiente
-    if (!perfilId) {
-      const pendiente = {
-        module: 'laboral',
-        action: 'aplicar',
-        item_type: 'oferta',
-        item_id: id,
-        item_title: document.getElementById('modalTitulo')?.innerText || 'Oferta sin título',
-        url: link
-      };
-      localStorage.setItem('pendiente_click', JSON.stringify(pendiente));
-      // Abrir el modal Livewire
-      if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
-        window.Livewire.dispatch('abrirFormularioPerfil');
-      } else if (window.Livewire && typeof window.Livewire.emit === 'function') {
-        // compatibilidad Livewire v2
-        window.Livewire.emit('abrirFormularioPerfil');
-      } else {
-        console.warn('⚠️ No se pudo emitir evento Livewire, Livewire no está disponible aún.');
-      }
-
-      return; // no continuamos, esperamos a que guarde el perfil
-    }
-
-    // 1) Legacy (tu registro actual - opcional si quieres conservarlo)
-    fetch(`/ofertas/${id}/interaccion`, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        'Content-Type': 'application/json',
-      },
-    }).catch(() => {});
-
-    // 2) Nuevo tracking (dashboard)
-    const nuevaData = {
-      module: 'laboral',
-      action: 'aplicar',
-      item_type: 'oferta',
-      item_id: id,
-      item_title: document.getElementById('modalTitulo')?.innerText || 'Oferta sin título',
-      perfil_id: perfilId
-    };
-
-    fetch('/api/track/interaction', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-      },
-      body: JSON.stringify(nuevaData)
-    }).catch(() => {}).finally(() => {
-      window.open(link, '_blank');
-    });
   }
 </script>

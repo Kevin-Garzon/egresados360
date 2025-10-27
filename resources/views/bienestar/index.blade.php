@@ -50,7 +50,16 @@
 
 
                 @if($h->enlace_inscripcion)
-                <a href="{{ $h->enlace_inscripcion }}" target="_blank" class="btn px-4 py-2">
+                <a
+                    href="{{ $h->enlace_inscripcion }}"
+                    target="_blank"
+                    class="btn px-4 py-2"
+                    data-track
+                    data-module="bienestar"
+                    data-action="inscribirse_habilidad"
+                    data-type="habilidad"
+                    data-id="{{ $h->id }}"
+                    data-title="{{ $h->titulo }}">
                     <i class="fa-solid fa-clipboard-check mr-2"></i> Inscribirme
                 </a>
                 @endif
@@ -249,10 +258,16 @@
                         </p>
                     </div>
                     <button
-                        onclick="abrirFormularioMentoria('{{ $m->titulo }}')"
-                        class="btn btn-primary w-full mt-4 py-2 flex items-center justify-center">
+                        class="btn btn-primary w-full mt-4 py-2 flex items-center justify-center"
+                        data-track
+                        data-module="bienestar"
+                        data-action="solicitar_mentoria"
+                        data-type="mentoria"
+                        data-id="{{ $m->id }}"
+                        data-title="{{ $m->titulo }}">
                         <i class="fa-solid fa-calendar-day mr-2"></i> Solicitar mentoría
                     </button>
+
                 </div>
                 @endforeach
             </div>
@@ -278,11 +293,19 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/573001234567?text=Hola,%20soy%20egresado%20FET%20y%20quisiera%20solicitar%20un%20espacio%20de%20escucha."
+            <a
+                href="https://wa.me/573001234567?text=Hola,%20soy%20egresado%20FET%20y%20quisiera%20solicitar%20un%20espacio%20de%20escucha."
                 target="_blank"
-                class="btn btn-primary px-6 py-2 flex items-center shadow">
+                class="btn btn-primary px-6 py-2 flex items-center shadow"
+                data-track
+                data-module="bienestar"
+                data-action="solicitar_espacio_escucha"
+                data-type="atencion"
+                data-id="0"
+                data-title="Espacio de Escucha">
                 <i class="fa-brands fa-whatsapp mr-2"></i> Solicitar
             </a>
+
         </div>
 
 

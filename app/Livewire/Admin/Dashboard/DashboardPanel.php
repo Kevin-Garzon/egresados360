@@ -32,13 +32,38 @@ class DashboardPanel extends Component
 
     public $ultimasAcciones = [];
 
+
+    public $visitasTotales;
+    public $visitasSemana;
+    public $visitasSemanaAnterior;
+    public $visitasHoy;
+    public $visitasHoyAnterior;
+    public $variacionVisitasSemana;
+    public $variacionVisitasDia;
+
+    public $interaccionesTotales;
+    public $interaccionesSemana;
+    public $interaccionesSemanaAnterior;
+    public $interaccionesHoy;
+    public $interaccionesHoyAnterior;
+    public $variacionInteraccionesSemana;
+    public $variacionInteraccionesDia;
+
+    public $egresadosTotales;
+    public $egresadosSemana;
+    public $egresadosSemanaAnterior;
+    public $egresadosHoy;
+    public $egresadosHoyAnterior;
+    public $variacionEgresadosSemana;
+    public $variacionEgresadosDia;
+
     public function mount()
     {
         $this->cargarVisitas();
         $this->cargarInteracciones();
         $this->cargarTasaParticipacion();
         $this->cargarInteraccionesPorModulo();
-        $this->cargarComparativos();
+        $this->cargarEstadisticasComparadas();
         $this->cargarActividadReciente();
     }
 
@@ -93,25 +118,60 @@ class DashboardPanel extends Component
             ->toArray();
     }
 
-    public function cargarComparativos()
+    public function cargarEstadisticasComparadas()
     {
         $hoy = Carbon::today();
+        $ayer = $hoy->copy()->subDay();
+        $mismoDiaSemanaPasada = $hoy->copy()->subWeek();
+
         $inicioSemanaActual = $hoy->copy()->startOfWeek();
-        $inicioSemanaPasada = $inicioSemanaActual->copy()->subWeek();
-        $finSemanaPasada = $inicioSemanaActual->copy()->subDay();
+        $inicioSemanaAnterior = $inicioSemanaActual->copy()->subWeek();
+        $finSemanaAnterior = $inicioSemanaActual->copy()->subDay();
 
-        $visitasActual = VisitaDiaria::whereBetween('fecha', [$inicioSemanaActual, $hoy])->sum('total');
-        $visitasAnterior = VisitaDiaria::whereBetween('fecha', [$inicioSemanaPasada, $finSemanaPasada])->sum('total');
+        // ---------- VISITAS ----------
+        $this->visitasTotales = VisitaDiaria::sum('total');
+        $this->visitasSemana = VisitaDiaria::whereBetween('fecha', [$inicioSemanaActual, $hoy])->sum('total');
+        $this->visitasSemanaAnterior = VisitaDiaria::whereBetween('fecha', [$inicioSemanaAnterior, $finSemanaAnterior])->sum('total');
+        $this->visitasHoy = VisitaDiaria::whereDate('fecha', $hoy)->sum('total');
+        $this->visitasHoyAnterior = VisitaDiaria::whereDate('fecha', $mismoDiaSemanaPasada)->sum('total');
 
-        $this->variacionVisitas = $visitasAnterior > 0
-            ? round((($visitasActual - $visitasAnterior) / $visitasAnterior) * 100, 1)
+        $this->variacionVisitasSemana = $this->visitasSemanaAnterior > 0
+            ? round((($this->visitasSemana - $this->visitasSemanaAnterior) / $this->visitasSemanaAnterior) * 100, 1)
+            : 0;
+        $this->variacionVisitasDia = $this->visitasHoyAnterior > 0
+            ? round((($this->visitasHoy - $this->visitasHoyAnterior) / $this->visitasHoyAnterior) * 100, 1)
             : 0;
 
-        $interaccionesActual = Interaccion::whereBetween('created_at', [$inicioSemanaActual, $hoy])->count();
-        $interaccionesAnterior = Interaccion::whereBetween('created_at', [$inicioSemanaPasada, $finSemanaPasada])->count();
+        // ---------- INTERACCIONES ----------
+        $this->interaccionesTotales = Interaccion::count();
+        $this->interaccionesSemana = Interaccion::whereBetween('created_at', [$inicioSemanaActual, $hoy->endOfDay()])->count();
+        $this->interaccionesSemanaAnterior = Interaccion::whereBetween('created_at', [$inicioSemanaAnterior, $finSemanaAnterior])->count();
+        $this->interaccionesHoy = Interaccion::whereDate('created_at', $hoy)->count();
+        $this->interaccionesHoyAnterior = Interaccion::whereDate('created_at', $mismoDiaSemanaPasada)->count();
 
-        $this->variacionInteracciones = $interaccionesAnterior > 0
-            ? round((($interaccionesActual - $interaccionesAnterior) / $interaccionesAnterior) * 100, 1)
+        $this->variacionInteraccionesSemana = $this->interaccionesSemanaAnterior > 0
+            ? round((($this->interaccionesSemana - $this->interaccionesSemanaAnterior) / $this->interaccionesSemanaAnterior) * 100, 1)
+            : 0;
+        $this->variacionInteraccionesDia = $this->interaccionesHoyAnterior > 0
+            ? round((($this->interaccionesHoy - $this->interaccionesHoyAnterior) / $this->interaccionesHoyAnterior) * 100, 1)
+            : 0;
+
+        // ---------- EGRESADOS ----------
+        $this->egresadosTotales = PerfilEgresado::select('correo')->distinct()->count();
+        $this->egresadosSemana = PerfilEgresado::whereBetween('created_at', [$inicioSemanaActual, $hoy->endOfDay()])
+            ->select('correo')->distinct()->count();
+        $this->egresadosSemanaAnterior = PerfilEgresado::whereBetween('created_at', [$inicioSemanaAnterior, $finSemanaAnterior])
+            ->select('correo')->distinct()->count();
+        $this->egresadosHoy = PerfilEgresado::whereDate('created_at', $hoy)
+            ->select('correo')->distinct()->count();
+        $this->egresadosHoyAnterior = PerfilEgresado::whereDate('created_at', $mismoDiaSemanaPasada)
+            ->select('correo')->distinct()->count();
+
+        $this->variacionEgresadosSemana = $this->egresadosSemanaAnterior > 0
+            ? round((($this->egresadosSemana - $this->egresadosSemanaAnterior) / $this->egresadosSemanaAnterior) * 100, 1)
+            : 0;
+        $this->variacionEgresadosDia = $this->egresadosHoyAnterior > 0
+            ? round((($this->egresadosHoy - $this->egresadosHoyAnterior) / $this->egresadosHoyAnterior) * 100, 1)
             : 0;
     }
 

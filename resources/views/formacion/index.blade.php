@@ -112,23 +112,23 @@
     });
   }
 
-  function mostrarDetalle(id) {
-    fetch(`/api/formacion/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        const fechaInicio = data.fecha_inicio ? new Date(data.fecha_inicio).toLocaleDateString('es-CO') : '';
-        const fechaFin = data.fecha_fin ? new Date(data.fecha_fin).toLocaleDateString('es-CO') : '';
+  async function mostrarDetalle(id) {
+    try {
+      const res = await fetch(`/api/formacion/${id}`);
+      if (!res.ok) throw new Error('Error al obtener la información del curso');
 
-        document.getElementById('detalle-contenido').innerHTML = `
+      const data = await res.json();
+      const fechaInicio = data.fecha_inicio ? new Date(data.fecha_inicio).toLocaleDateString('es-CO') : '';
+      const fechaFin = data.fecha_fin ? new Date(data.fecha_fin).toLocaleDateString('es-CO') : '';
+
+      document.getElementById('detalle-contenido').innerHTML = `
         <h2 class="text-2xl font-poppins font-semibold text-rblack">${data.titulo}</h2>
         
         ${data.empresa ? `
           <p class="text-sm text-gray-500 flex items-center gap-1">
             <i class="fa-solid fa-building text-primary"></i>
             ${data.empresa.nombre}
-          </p>
-        ` : ''}
-
+          </p>` : ''}
 
         <div class="flex items-center gap-2 text-primary font-medium text-sm">
           <i class="fa-solid fa-graduation-cap"></i>
@@ -153,7 +153,6 @@
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-clock text-primary"></i>
             <span><strong>Duración:</strong> ${data.duracion ? data.duracion + ' horas' : '—'}</span>
-
           </div>
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-money-bill-wave text-primary"></i>
@@ -162,46 +161,34 @@
         </div>
 
         <div class="pt-6 flex justify-end">
-          <a href="${data.url_externa ?? '#'}"
-             target="_blank"
-             onclick="registrarInteraccion(${id}, '${data.url_externa ?? '#'}')"
-             class="btn btn-primary px-6">
-            Inscribirme
+          <a 
+            href="${data.url_externa ?? '#'}"
+            target="_blank"
+            class="btn btn-primary px-6"
+            data-track
+            data-module="formacion"
+            data-action="inscribirse"
+            data-type="curso"
+            data-id="${data.id}"
+            data-title="${data.titulo ?? 'Curso sin título'}"
+          >
+            Inscribirme <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
           </a>
         </div>
       `;
 
-        document.getElementById('modal-detalle').classList.remove('hidden');
-        document.getElementById('modal-detalle').classList.add('flex');
-      });
+      document.getElementById('modal-detalle').classList.remove('hidden');
+      document.getElementById('modal-detalle').classList.add('flex');
+    } catch (error) {
+      console.error(' Error mostrando el curso:', error);
+    }
   }
-
 
   function cerrarModal() {
     document.getElementById('modal-detalle').classList.remove('flex');
     document.getElementById('modal-detalle').classList.add('hidden');
   }
-
-  function registrarInteraccion(id, link) {
-    event.preventDefault();
-
-    fetch(`/formaciones/${id}/interaccion`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log('Interacción registrada correctamente', data);
-        window.open(link, '_blank'); // Abre el enlace después de registrar
-      })
-      .catch(err => {
-        console.error('Error registrando interacción:', err);
-        window.open(link, '_blank'); // fallback por si falla el fetch
-      });
-  }
 </script>
+
 
 @endsection
