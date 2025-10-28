@@ -1,15 +1,23 @@
 <div class="space-y-4">
-    {{-- Buscador --}}
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between mb-3">
+
+        {{-- Buscador --}}
         <div class="relative w-full sm:w-1/3">
             <i class="fa-solid fa-magnifying-glass text-gray-400 absolute left-3 top-2.5"></i>
             <input
                 type="text"
                 wire:model.live="search"
-                placeholder="Buscar por nombre, tipo o descripción..."
+                placeholder="Buscar por nombre o tipo..."
                 class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary" />
         </div>
+
+        {{-- Botón de exportar servicios --}}
+        <a href="{{ route('exportar.servicios') }}"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            <i class="fa-solid fa-file-arrow-down"></i> Exportar
+        </a>
     </div>
+
 
     {{-- Tabla --}}
     <div class="overflow-x-auto">
@@ -34,13 +42,13 @@
                     <td class="px-5 py-3">{{ $s->ubicacion ?? '—' }}</td>
                     <td class="px-5 py-3 text-center">
                         @if ($s->activo)
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-                                Activo
-                            </span>
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                            Activo
+                        </span>
                         @else
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
-                                Inactivo
-                            </span>
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
+                            Inactivo
+                        </span>
                         @endif
                     </td>
                     <td class="px-5 py-3 whitespace-nowrap text-right">

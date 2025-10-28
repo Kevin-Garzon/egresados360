@@ -22,7 +22,7 @@
 <body class="bg-white text-rblack font-inter flex flex-col min-h-dvh">
 
     {{-- Topbar institucional --}}
-    <div class="w-full bg-gunmetal text-white text-sm">
+    <div class="w-full bg-rblack text-white text-sm">
         <div class="container-app flex items-center justify-between py-2">
             <div class="flex items-center gap-4">
                 <span class="hidden sm:inline">Egresados 360</span>

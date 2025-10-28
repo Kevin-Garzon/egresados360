@@ -1,15 +1,23 @@
 <div class="space-y-4">
 
-    {{-- Buscador --}}
-    <div class="flex items-center justify-between">
+    {{-- Encabezado superior con buscador y botón --}}
+    <div class="flex items-center justify-between mb-3">
         <div class="relative w-full sm:w-1/3">
             <i class="fa-solid fa-magnifying-glass text-gray-400 absolute left-3 top-2.5"></i>
-            <input type="text"
+            <input
+                type="text"
                 wire:model.live="search"
                 placeholder="Buscar por título, empresa o ubicación..."
                 class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary" />
         </div>
+
+        {{-- Botón con estilo coherente --}}
+        <a href="{{ route('exportar.ofertas') }}"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            <i class="fa-solid fa-file-arrow-down"></i> Exportar
+        </a>
     </div>
+
 
     {{-- Tabla sin contenedor adicional --}}
     <div class="overflow-x-auto">

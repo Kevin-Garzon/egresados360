@@ -6,11 +6,6 @@
                 <span class="font-poppins text-lg font-bold text-gunmetal text-white">Egresados 360</span>
             </div>
             <p class="text-sm text-white">Portal de egresados de la FET. Información, formación, empleabilidad y bienestar.</p>
-
-            {{-- Botón para actualizar datos del egresado --}}
-            <button id="editar-perfil" class="text-white/80 hover:text-white underline">
-                Actualizar mis datos
-            </button>
         </div>
         <div>
             <h3 class="font-poppins font-semibold text-gunmetal mb-3 text-white">Comunicaciones</h3>
@@ -55,16 +50,3 @@
 
     </div>
 </footer>
-
-{{-- Script para abrir el modal y permitir actualización --}}
-<script>
-document.addEventListener('livewire:load', () => {
-    const btn = document.getElementById('editar-perfil');
-    if (btn) {
-        btn.addEventListener('click', () => {
-            localStorage.removeItem('perfil_id');
-            Livewire.emit('abrirFormularioPerfil');
-        });
-    }
-});
-</script>

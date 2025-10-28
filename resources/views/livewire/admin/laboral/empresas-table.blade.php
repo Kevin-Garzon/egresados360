@@ -1,20 +1,23 @@
 <div class="space-y-2">
-    {{-- Fila superior: búsqueda + info --}}
-    <div class="flex items-center justify-between gap-3">
-        <div class="relative w-full max-w-sm">
+    <div class="flex items-center justify-between mb-3">
+
+        {{-- Buscador --}}
+        <div class="relative w-full sm:w-1/3">
+            <i class="fa-solid fa-magnifying-glass text-gray-400 absolute left-3 top-2.5"></i>
             <input
                 type="text"
                 wire:model.live="search"
-                placeholder="Buscar por nombre o sector…"
-                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary" />
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </span>
+                placeholder="Buscar por nombre o sector..."
+                class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary" />
         </div>
-        <div class="text-sm text-gray-500">
-            Mostrando {{ $empresas->firstItem() }}–{{ $empresas->lastItem() }} de {{ $empresas->total() }}
-        </div>
+
+        {{-- Botón de exportar empresas --}}
+        <a href="{{ route('exportar.empresas') }}"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            <i class="fa-solid fa-file-arrow-down"></i> Exportar
+        </a>
     </div>
+
 
     {{-- Tabla --}}
     <div class="overflow-x-auto">

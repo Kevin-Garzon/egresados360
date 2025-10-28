@@ -29,6 +29,12 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Sheets\VisitasSheet;
 use App\Exports\Sheets\InteraccionesSheet;
 use App\Exports\Sheets\EgresadosSheet;
+use App\Exports\Sheets\OfertasSheet;
+use App\Exports\Sheets\FormacionesSheet;
+use App\Exports\Sheets\EmpresasSheet;
+use App\Exports\Sheets\ServiciosSheet;
+use App\Exports\Sheets\HabilidadesSheet;
+use App\Exports\Sheets\EventosSheet;
 
 // Página de inicio
 Route::get('/', function () {
@@ -194,3 +200,29 @@ Route::get('/exportar-egresados', function () {
     return Excel::download(new EgresadosSheet, 'egresados.xlsx', \Maatwebsite\Excel\Excel::XLSX
 );
 })->name('exportar.egresados');
+
+
+Route::get('/exportar-ofertas', function () {
+    return Excel::download(new OfertasSheet, 'ofertas.xlsx');
+})->name('exportar.ofertas');
+
+
+Route::get('/exportar-formaciones', function () {
+    return Excel::download(new FormacionesSheet, 'formaciones.xlsx');
+})->name('exportar.formaciones');
+
+Route::get('/exportar-empresas', function () {
+    return Excel::download(new EmpresasSheet, 'empresas.xlsx');
+})->name('exportar.empresas');
+
+Route::get('/exportar-servicios', function () {
+    return Excel::download(new ServiciosSheet, 'servicios.xlsx');
+})->name('exportar.servicios');
+
+Route::get('/exportar-habilidades', function () {
+    return Excel::download(new HabilidadesSheet, 'habilidades.xlsx');
+})->name('exportar.habilidades');
+
+Route::get('/exportar-eventos', function () {
+    return Excel::download(new EventosSheet, 'eventos.xlsx');
+})->name('exportar.eventos');
