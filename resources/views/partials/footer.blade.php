@@ -1,4 +1,4 @@
-<footer class="mt-16 border-t border-silver bg-primary text-white">
+<footer id="footer" class="mt-16 border-t border-silver bg-primary text-white">
     <div class="container-app py-10 grid gap-8 md:grid-cols-4">
         <div>
             <div class="flex items-center gap-2 mb-3">
@@ -11,7 +11,7 @@
             <h3 class="font-poppins font-semibold text-gunmetal mb-3 text-white">Comunicaciones</h3>
             <ul class="space-y-1 text-sm">
                 <li>Dirección: Kilometro 12 <br> Neiva - Rivera</li>
-                <li>Email: <a class="underline" href="mailto:comunicaciones@fet.edu.co">comunicaciones@fet.edu.co</a></li>
+                <li>Email: <a class="underline" href="mailto:comunicaciones@fet.edu.co">ori-egresados@fet.edu.co</a></li>
                 <li>WhatsApp: <a class="underline" href="#">+57 (XXX) XXX XXXX</a></li>
             </ul>
         </div>

@@ -26,11 +26,21 @@
         <div class="container-app flex items-center justify-between py-2">
             <div class="flex items-center gap-4">
                 <span class="hidden sm:inline">Egresados 360</span>
-                <span class="opacity-70">Campus FET</span>
+                <span class="opacity-70">FET</span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="#" class="hover:underline">Atención</a>
-                <a href="#" class="hover:underline">Síguenos</a>
+                <a
+                    href="#footer"
+                    class="hover:underline"
+                    aria-label="Ir al pie de página (Atención)">
+                    Atención
+                </a>
+                <a
+                    href="#footer"
+                    class="hover:underline"
+                    aria-label="Ir al pie de página (Síguenos)">
+                    Síguenos
+                </a>
             </div>
         </div>
     </div>

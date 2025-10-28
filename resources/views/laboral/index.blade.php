@@ -224,7 +224,19 @@
       document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
       document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
       document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
-      document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
+      // Formatear fecha de publicación
+      let fechaFormateada = '—';
+      if (oferta.publicada_en) {
+        const fecha = new Date(oferta.publicada_en);
+        const opciones = {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        };
+        fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+      }
+      document.getElementById('modalFecha').innerText = fechaFormateada;
+
 
       const modalLink = document.getElementById('modalLink');
       if (modalLink) {

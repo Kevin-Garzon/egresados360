@@ -35,7 +35,7 @@
                         <option value="Ingeniería de Alimentos">Ingeniería de Alimentos</option>
                         <option value="Ingeniería Eléctrica">Ingeniería Eléctrica</option>
                         <option value="Ingeniería Ambiental">Ingeniería Ambiental</option>
-                        <option value="Salud Ocupacional">Salud Ocupacional</option>
+                        <option value="Salud Ocupacional">Administración de la SST</option>
                         <option value="Administración de Negocios">Administración de Negocios</option>
                     </select>
                     @error('programa') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
@@ -54,8 +54,14 @@
             </form>
 
             <p class="text-xs text-gray-500 mt-4">
-                Al continuar, aceptas la <a href="#" class="text-primary underline">Política de Tratamiento de Datos</a>.
+                Al continuar, aceptas la
+                <a href="{{ route('politica-datos') }}"
+                    target="_blank"
+                    class="text-primary underline hover:text-green-700 transition">
+                    Política de Tratamiento de Datos
+                </a>.
             </p>
+
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaboralController;
 use App\Http\Controllers\FormacionController;
@@ -37,9 +38,7 @@ use App\Exports\Sheets\HabilidadesSheet;
 use App\Exports\Sheets\EventosSheet;
 
 // Página de inicio
-Route::get('/', function () {
-    return view('inicio'); 
-})->name('inicio');
+Route::get('/', [InicioController::class, 'index'])->name('inicio');
 
 // Ofertas Laborales
 Route::get('/laboral', [LaboralController::class, 'index'])->name('laboral.index');
@@ -226,3 +225,13 @@ Route::get('/exportar-habilidades', function () {
 Route::get('/exportar-eventos', function () {
     return Excel::download(new EventosSheet, 'eventos.xlsx');
 })->name('exportar.eventos');
+
+
+
+
+
+
+
+
+
+Route::view('/politica-datos', 'politica-datos')->name('politica-datos');

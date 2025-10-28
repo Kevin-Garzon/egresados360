@@ -43,14 +43,6 @@
                         <span><strong>Lugar:</strong> Campus FET</span>
                     </div>
                 </div>
-
-                {{-- Botón de inscripción --}}
-                <div class="pt-6 flex justify-end">
-                    <a id="modal-enlace" href="#" target="_blank"
-                       class="px-6 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition flex items-center gap-2 hidden">
-                        <i class="fa-solid fa-clipboard-check"></i> Inscribirme
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -63,7 +55,6 @@ async function verHabilidad(id) {
     const tema = document.getElementById('modal-tema');
     const descripcion = document.getElementById('modal-descripcion');
     const imagen = document.getElementById('modal-imagen');
-    const enlace = document.getElementById('modal-enlace');
     const fecha = document.getElementById('modal-fecha');
 
     try {
@@ -77,13 +68,6 @@ async function verHabilidad(id) {
         fecha.textContent = data.fecha
             ? new Date(data.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })
             : '—';
-
-        if (data.enlace_inscripcion) {
-            enlace.href = data.enlace_inscripcion;
-            enlace.classList.remove('hidden');
-        } else {
-            enlace.classList.add('hidden');
-        }
 
         modal.classList.remove('hidden');
         modal.classList.add('flex');
