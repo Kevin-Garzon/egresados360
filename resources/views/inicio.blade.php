@@ -29,12 +29,7 @@
 
 {{-- Nuestra Oficina de Egresados --}}
 <section id="oficina" class="relative py-20 text-white overflow-hidden">
-    <div class="absolute inset-0">
-        <img
-            alt="Campus FET"
-            class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-[#09B451] mix-blend-multiply"></div>
-    </div>
+    <div class="absolute inset-0 bg-[#09B451]"></div>
 
     <div class="relative container-app grid lg:grid-cols-2 gap-12 items-center">
         {{-- Imagen --}}

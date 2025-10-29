@@ -80,7 +80,7 @@
             const data = await res.json();
 
             document.getElementById('evento-titulo').textContent = data.titulo || '—';
-            document.getElementById('evento-sub').textContent = `${data.modalidad ?? '—'} • ${data.tipo ?? '—'}`;
+            document.getElementById('evento-sub').textContent = `${data.modalidad ?? '—'} • ${data.estado_label ?? '—'}`;
             document.getElementById('evento-descripcion').textContent = data.descripcion ?? 'Sin descripción disponible';
             document.getElementById('evento-ubicacion').textContent = data.ubicacion ?? '—';
             document.getElementById('evento-fecha-inicio').textContent = formatearFecha(data.fecha_inicio);
