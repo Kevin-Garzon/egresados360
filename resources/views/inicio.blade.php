@@ -4,81 +4,79 @@
 
 {{-- Hero de bienvenida --}}
 @section('hero')
-<section class="relative overflow-hidden bg-white">
-    <div class="container-app min-h-[calc(100vh-64.8px)] py-16 flex items-center lg:grid lg:grid-cols-2 gap-10">
-        <div>
-            <span class="badge mb-4">Egresados 360</span>
-            <h1 class="text-4xl sm:text-5xl font-poppins font-semibold leading-tight text-gunmetal">
-                Bienvenidos <br><span class="text-primary font-bold">Egresados FET</span>
-                <span class="block">Orgullo Institucional</span>
-            </h1>
-            <p class="mt-5 text-lg text-rblack/80 max-w-prose">
-                Somos el puente entre la FET y sus egresados: aquí encontrarás oportunidades laborales, formación continua y actividades de bienestar.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-3">
-                <a href="#contacto" class="btn btn-primary"><i class="fa-brands fa-whatsapp" style="color: #ffffff;"></i>Contáctanos</a>
-                <a href="#ofertas" class="btn btn-secondary"><i class="fa-solid fa-envelope text-white"></i>Contactanos</a>
-            </div>
-        </div>
-        <div>
-            <div class="aspect-[4/3] md:aspect-[16/10] card p-2">
-                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1400&auto=format&fit=crop"
-                    alt="Egresados FET" class="w-full h-full object-cover rounded-2xl" />
-            </div>
-        </div>
-    </div>
-</section>
+<x-hero
+    badge="Egresados 360"
+    title="Bienvenidos"
+    highlight="Egresados FET"
+    subtitle="Orgullo Institucional"
+    description="Somos el puente entre la FET y sus egresados: aquí encontrarás oportunidades laborales, formación continua y actividades de bienestar."
+    :btnPrimary="[
+            'text' => 'Contáctanos',
+            'icon' => 'fa-brands fa-whatsapp',
+            'link' => 'tel:+573150000000'
+        ]"
+    :btnSecondary="[
+            'text' => 'Contáctanos',
+            'icon' => 'fa-solid fa-envelope',
+            'link' => 'mailto:ori-egresados@fet.edu.co'
+        ]"
+    image="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1400&auto=format&fit=crop" />
 @endsection
+
 
 {{-- Contenido específico de la página --}}
 @section('content')
 
 {{-- Nuestra Oficina de Egresados --}}
-<section id="oficina" class="relative py-16">
-    {{-- Capa de fondo: imagen + overlay verde (full width) --}}
-    <div class="bg-campus-overlay">
-        <div class="container-app relative py-10 md:py-14">
-            <div class="grid md:grid-cols-2 gap-8 items-center">
+<section id="oficina" class="relative py-20 text-white overflow-hidden">
+    <div class="absolute inset-0">
+        <img
+            alt="Campus FET"
+            class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-[#09B451] mix-blend-multiply"></div>
+    </div>
 
-                {{-- IMAGEN SALIDA DEL CONTENEDOR --}}
-                <figure class="relative z-10 md:-ml-16 -mt-10 md:-mt-16">
-                    <img
-                        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Oficina de Egresados"
-                        class="w-[560px] max-w-full rounded-3xl shadow-card">
-                </figure>
+    <div class="relative container-app grid lg:grid-cols-2 gap-12 items-center">
+        {{-- Imagen --}}
+        <figure class="flex justify-center lg:justify-start">
+            <img
+                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1170&auto=format&fit=crop"
+                alt="Oficina de Egresados"
+                class="w-11/12 sm:w-4/5 md:w-3/4 rounded-2xl shadow-card object-cover transition-transform duration-500 hover:scale-[1.03]">
+        </figure>
 
-                {{-- TEXTO + ACCIONES SOBRE EL FONDO VERDE --}}
-                <div class="text-white md:pr-6">
-                    <h2 class="text-3xl sm:text-4xl font-poppins font-semibold tracking-tight">
-                        Nuestra Oficina de
-                    </h2>
-                    <p class="text-6xl sm:text-6xl font-bold leading-none mt-2">Egresados</p>
+        {{-- Texto --}}
+        <div class="text-center lg:text-left">
+            <h2 class="text-3xl sm:text-4xl font-poppins font-semibold tracking-tight">
+                Nuestra Oficina de
+            </h2>
+            <p class="text-5xl sm:text-6xl font-bold leading-none mt-2 text-white">
+                Egresados
+            </p>
 
-                    <p class="mt-6 text-white/90 text-lg leading-8 max-w-prose">
-                        Interdum neque lectus sodales torquent congue a potenti mollis. Acompañamos a nuestros
-                        graduados con servicios, oportunidades y articulación con aliados para tu crecimiento profesional.
-                        Interdum neque lectus sodales torquent congue a potenti mollis. Acompañamos a nuestros graduados con
-                        servicios.
+            <p class="mt-6 text-base sm:text-lg text-white/90 leading-relaxed max-w-prose mx-auto lg:mx-0">
+                Acompañamos a nuestros graduados con servicios, oportunidades y articulación con aliados para su
+                crecimiento profesional. Fomentamos el vínculo permanente con la institución y fortalecemos la
+                proyección laboral y social de nuestros egresados.
+            </p>
 
-                    <div class="mt-8 flex flex-wrap gap-4">
-                        <button
-                            onclick="document.getElementById('mapModal').classList.remove('hidden')"
-                            class="btn btn-secondary px-8">
-                            Visítanos
-                        </button>
-                        <button
-                            onclick="document.getElementById('infoModal').classList.remove('hidden')"
-                            class="btn btn-light px-8">
-                            Leer más
-                        </button>
-                    </div>
-                </div>
-
+            {{-- Botones (alto contraste sobre fondo verde) --}}
+            <div class="mt-8 flex flex-row justify-center lg:justify-start gap-4">
+                <button
+                    onclick="document.getElementById('mapModal').classList.remove('hidden')"
+                    class="btn !bg-white !text-[#09B451] hover:!bg-silver px-8 flex items-center gap-2 font-semibold">
+                    <i class="fa-solid fa-location-dot"></i> Visítanos
+                </button>
+                <button
+                    onclick="document.getElementById('infoModal').classList.remove('hidden')"
+                    class="btn !bg-gunmetal !text-white hover:!bg-black/80 px-8 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i> Leer más
+                </button>
             </div>
         </div>
     </div>
 </section>
+
 
 
 {{-- Modal Google Maps --}}
@@ -115,54 +113,87 @@
 </div>
 
 
-
-
-{{-- Principios Institucionales --}}
-<section id="principios" class="container-app py-20">
-    {{-- Título --}}
-    <div class="text-center max-w-3xl mx-auto">
-        <h2 class="text-3xl sm:text-4xl font-poppins font-semibold mb-4">
-            Principios <span class="text-primary">Institucionales</span>
+{{-- Últimas Novedades --}}
+<section id="ultimas-novedades" class="py-24 bg-white relative">
+    <div class="container-app text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-poppins font-semibold">
+            Últimas <span class="text-primary">Novedades</span>
         </h2>
-        <p class="text-rblack/70">
-            Posuere suspendisse mattis, ligula molestie placerat odio leo accumsan nascetur pulvinar magna
-            vehicula dignissim vivamus, facilisi velit ut quis donec pellentesque.
+        <p class="mt-3 text-rblack/70 max-w-2xl mx-auto">
+            Entérate de las publicaciones más recientes de los módulos de Formación, Bienestar y Oportunidades Laborales.
         </p>
     </div>
 
-    {{-- Cards --}}
-    <div class="mt-14 grid gap-8 md:grid-cols-3">
-        {{-- Objetivo --}}
-        <div class="card p-8 text-center">
-            <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-primary text-white text-2xl mb-6">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-            <h3 class="text-xl font-poppins font-semibold mb-3">Objetivo del Programa</h3>
-            <p class="text-rblack/70">
-                Otorgar beneficios y reconocimientos a los egresados y a quienes se destaquen en su labor profesional o en su aporte a la Institución.
-            </p>
-        </div>
+    {{-- Carrusel de tarjetas --}}
+    <div x-data="{ 
+            novedadesScrollAmount: 1,
+            novedadesAutoScrollInterval: null,
+            startAutoScroll() {
+                const container = this.$refs.slider;
+                this.novedadesAutoScrollInterval = setInterval(() => {
+                    container.scrollLeft += this.novedadesScrollAmount;
+                    // Verifica si ha llegado al final de la primera copia de ítems
+                    if (container.scrollLeft >= (container.scrollWidth / 2)) {
+                        container.scrollLeft = 0; // Reinicia el ciclo
+                    }
+                }, 10); // Velocidad más rápida para scroll suave
+            },
+            stopScroll() {
+                if (this.novedadesAutoScrollInterval) {
+                    clearInterval(this.novedadesAutoScrollInterval);
+                    this.novedadesAutoScrollInterval = null;
+                }
+            }
+        }"
+        x-init="startAutoScroll()"
+        @mouseover="stopScroll()"
+        @mouseleave="startAutoScroll()"
+        class="relative">
 
-        {{-- Misión --}}
-        <div class="card p-8 text-center">
-            <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-gunmetal text-white text-2xl mb-6">
-                <i class="fa-solid fa-leaf"></i>
-            </div>
-            <h3 class="text-xl font-poppins font-semibold mb-3">Misión del Programa</h3>
-            <p class="text-rblack/70">
-                La oficina de egresados de la Fundación Escuela Tecnológica de Neiva “Jesús Oviedo Pérez” busca afianzar y mantener la unión entre los egresados y la institución, fomentando su participación por medio de procesos de formación y capacitación académica continua, creando estrategias de vinculación y los canales necesarios para la comunicación asertiva con ellos.
-            </p>
-        </div>
+        <div
+            x-ref="slider"
+            class="flex gap-8 overflow-hidden scroll-smooth px-6 md:px-12 select-none relative py-8">
 
-        {{-- Visión --}}
-        <div class="card p-8 text-center">
-            <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-primary text-white text-2xl mb-6">
-                <i class="fa-solid fa-users"></i>
+            @foreach(array_merge($items->toArray(), $items->toArray()) as $item)
+            @php
+            $visual = match($item['tipo']) {
+            'Laboral' => ['color' => 'text-primary', 'bg' => 'bg-gray-50', 'icon' => 'fa-briefcase', 'img' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop'],
+            'Formación' => ['color' => 'text-blue-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-graduation-cap', 'img' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop'],
+            'Evento' => ['color' => 'text-yellow-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-calendar-days', 'img' => 'https://images.unsplash.com/photo-1551836022-deb4988cc6c1?q=80&w=800&auto=format&fit=crop'],
+            'Habilidad' => ['color' => 'text-emerald-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-lightbulb', 'img' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop'],
+            'Servicio' => ['color' => 'text-rose-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-hand-holding-heart', 'img' => 'https://images.unsplash.com/photo-1485217988980-11786ced9454?q=80&w=800&auto=format&fit=crop'],
+            'Mentoría' => ['color' => 'text-indigo-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-user-tie', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg'],
+            default => ['color' => 'text-gray-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-circle-info', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg']
+            };
+            @endphp
+
+            {{-- Tarjetas --}}
+            <div class="snap-center shrink-0 w-[280px] sm:w-[300px] md:w-[320px] lg:w-[340px] {{ $visual['bg'] }} rounded-3xl shadow-card hover:shadow-xl transition-transform duration-300 hover:-translate-y-1">
+                <div class="h-44 w-full overflow-hidden rounded-t-3xl">
+                    {{-- Usando el placeholder de color para que sea más rápido y estable si las URLs fallan --}}
+                    <img src="{{ $visual['img'] }}"
+                        alt="{{ $item['tipo'] }}"
+                        class="w-full h-full object-cover">
+                </div>
+                <div class="p-6 text-center">
+                    <div class="flex justify-center mb-3">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-inner {{ $visual['color'] }} text-xl">
+                            <i class="fa-solid {{ $visual['icon'] }}"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-poppins font-semibold text-lg text-gunmetal mb-1">
+                        {{ Str::limit($item['titulo'], 60) }}
+                    </h3>
+                    <p class="text-sm text-rblack/60 mb-2">
+                        {{ $item['tipo'] }} — {{ \Carbon\Carbon::parse($item['created_at'])->format('d M, Y') }}
+                    </p>
+                    <a href="{{ $item['url'] }}"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2 mt-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-green-700 transition">
+                        <i class="fa-solid fa-arrow-right"></i> Ver más
+                    </a>
+                </div>
             </div>
-            <h3 class="text-xl font-poppins font-semibold mb-3">Visión del Programa</h3>
-            <p class="text-rblack/70">
-                En el año 2020, la oficina de Egresados de la Fundación Escuela Tecnológica de Neiva “Jesús Oviedo Pérez” tendrá fortalecida la relación entre los egresados, la institución y el entorno social, para asegurar la calidad en la formación integral y mantener una comunicación asertiva con la comunidad de egresados.
-            </p>
+            @endforeach
         </div>
     </div>
 </section>
@@ -228,77 +259,53 @@
 
 
 
-{{-- Nuestro Equipo --}}
-<section id="equipo" class="container-app py-20 bg-white">
+{{-- Principios Institucionales --}}
+<section id="principios" class="container-app py-20">
     {{-- Título --}}
-    <div class="text-center max-w-2xl mx-auto mb-14">
-        <h2 class="text-3xl sm:text-4xl font-poppins font-semibold">
-            Nuestro <span class="text-primary">Equipo</span>
+    <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-poppins font-semibold mb-4">
+            Principios <span class="text-primary">Institucionales</span>
         </h2>
-        <p class="mt-3 text-rblack/70">
-            Conoce a las personas que hacen parte de la Oficina de Egresados de la FET.
+        <p class="text-rblack/70">
+            Posuere suspendisse mattis, ligula molestie placerat odio leo accumsan nascetur pulvinar magna
+            vehicula dignissim vivamus, facilisi velit ut quis donec pellentesque.
         </p>
     </div>
 
-    {{-- Grid de integrantes --}}
-    <div class="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-
-        {{-- Miembro 1 --}}
-        <div>
-            <img src="https://randomuser.me/api/portraits/women/44.jpg"
-                alt="Ana Cardozo"
-                class="w-full h-72 object-cover rounded-lg">
-            <div class="mt-4">
-                <h3 class="font-poppins font-semibold text-lg">Ana Cardozo</h3>
-                <p class="text-primary font-medium">Cargo de Ana</p>
-                <p class="mt-2 text-sm text-rblack/70 leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod nunc nec lorem cursus, a bibendum urna tristique.
-                </p>
+    {{-- Cards --}}
+    <div class="mt-14 grid gap-8 md:grid-cols-3">
+        {{-- Objetivo --}}
+        <div class="card p-8 text-center">
+            <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-primary text-white text-2xl mb-6">
+                <i class="fa-solid fa-circle-check"></i>
             </div>
+            <h3 class="text-xl font-poppins font-semibold mb-3">Objetivo del Programa</h3>
+            <p class="text-rblack/70">
+                Otorgar beneficios y reconocimientos a los egresados y a quienes se destaquen en su labor profesional o en su aporte a la Institución.
+            </p>
         </div>
 
-        {{-- Miembro 2 --}}
-        <div>
-            <img src="https://randomuser.me/api/portraits/men/32.jpg"
-                alt="Carlos Rodríguez"
-                class="w-full h-72 object-cover rounded-lg">
-            <div class="mt-4">
-                <h3 class="font-poppins font-semibold text-lg">Carlos Rodríguez</h3>
-                <p class="text-primary font-medium">Cargo de Carlos</p>
-                <p class="mt-2 text-sm text-rblack/70 leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod nunc nec lorem cursus, a bibendum urna tristique.
-                </p>
+        {{-- Misión --}}
+        <div class="card p-8 text-center">
+            <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-gunmetal text-white text-2xl mb-6">
+                <i class="fa-solid fa-leaf"></i>
             </div>
+            <h3 class="text-xl font-poppins font-semibold mb-3">Misión del Programa</h3>
+            <p class="text-rblack/70">
+                La oficina de egresados de la Fundación Escuela Tecnológica de Neiva “Jesús Oviedo Pérez” busca afianzar y mantener la unión entre los egresados y la institución, fomentando su participación por medio de procesos de formación y capacitación académica continua, creando estrategias de vinculación y los canales necesarios para la comunicación asertiva con ellos.
+            </p>
         </div>
 
-        {{-- Miembro 3 --}}
-        <div>
-            <img src="https://randomuser.me/api/portraits/women/65.jpg"
-                alt="Ana Torres"
-                class="w-full h-72 object-cover rounded-lg">
-            <div class="mt-4">
-                <h3 class="font-poppins font-semibold text-lg">Ana Torres</h3>
-                <p class="text-primary font-medium">Cargo de Ana</p>
-                <p class="mt-2 text-sm text-rblack/70 leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod nunc nec lorem cursus, a bibendum urna tristique.
-                </p>
+        {{-- Visión --}}
+        <div class="card p-8 text-center">
+            <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-primary text-white text-2xl mb-6">
+                <i class="fa-solid fa-users"></i>
             </div>
+            <h3 class="text-xl font-poppins font-semibold mb-3">Visión del Programa</h3>
+            <p class="text-rblack/70">
+                En el año 2020, la oficina de Egresados de la Fundación Escuela Tecnológica de Neiva “Jesús Oviedo Pérez” tendrá fortalecida la relación entre los egresados, la institución y el entorno social, para asegurar la calidad en la formación integral y mantener una comunicación asertiva con la comunidad de egresados.
+            </p>
         </div>
-
-        {{-- Miembro 4 --}}
-        <div>
-            <img src="https://randomuser.me/api/portraits/men/71.jpg"
-                alt="Luis Martínez"
-                class="w-full h-72 object-cover rounded-lg">
-            <div class="mt-4">
-                <h3 class="font-poppins font-semibold text-lg">Luis Martínez</h3>
-                <p class="text-primary font-medium">Cargo de Luis</p>
-                <p class="mt-2 text-sm text-rblack/70 leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod nunc nec lorem cursus, a bibendum urna tristique.
-                </p>
-            </div>
-        </div>
-
     </div>
 </section>
 

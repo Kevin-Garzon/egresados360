@@ -5,6 +5,8 @@ namespace App\Livewire\Admin\Laboral;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\OfertaLaboral;
+use App\Models\Interaccion;
+
 
 class OfertasTable extends Component
 {
@@ -30,7 +32,9 @@ class OfertasTable extends Component
         $ofertas = OfertaLaboral::with('empresa')
             ->when($this->search, function ($query) {
                 $query->where('titulo', 'like', "%{$this->search}%")
-                    ->orWhereHas('empresa', fn($q) =>
+                    ->orWhereHas(
+                        'empresa',
+                        fn($q) =>
                         $q->where('nombre', 'like', "%{$this->search}%")
                     )
                     ->orWhere('ubicacion', 'like', "%{$this->search}%");
@@ -38,10 +42,19 @@ class OfertasTable extends Component
             ->latest('created_at')
             ->paginate(10);
 
+        // contador de interacciones nuevas por oferta
+        $ofertas->getCollection()->transform(function ($oferta) {
+            $oferta->interacciones_nuevas = \App\Models\Interaccion::where('module', 'laboral')
+                ->where('item_id', $oferta->id)
+                ->count();
+            return $oferta;
+        });
+
         return view('livewire.admin.laboral.ofertas-table', [
             'ofertas' => $ofertas
         ]);
     }
+
 
     public function edit($id)
     {

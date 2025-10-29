@@ -52,8 +52,8 @@
                             <option>Ingeniería de Alimentos</option>
                             <option>Ingeniería Eléctrica</option>
                             <option>Ingeniería Ambiental</option>
-                            <option>Salud Ocupacional</option>
-                            <option>Administración de Negocios Internacionales</option>
+                            <option>Administración de la SST</option>
+                            <option>Administración de Negocios</option>
                         </select>
                         @error('programa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>

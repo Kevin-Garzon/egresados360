@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class BienestarEvento extends Model
 {
@@ -12,11 +13,11 @@ class BienestarEvento extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
-        'tipo',        
+        'tipo',
         'modalidad',
         'ubicacion',
-        'imagen',      
-        'enlace',      
+        'imagen',
+        'enlace',
         'fecha_inicio',
         'fecha_fin',
         'hora_inicio',
@@ -29,37 +30,86 @@ class BienestarEvento extends Model
         'activo'       => 'boolean',
     ];
 
-    // Estado calculado: 'proximo', 'en_curso', 'finalizado'
-    public function getEstadoAttribute(): string
+    // ===============================
+    // NORMALIZACIÓN DE ESTADO (tipo)
+    // ===============================
+    public function getTipoSlugAttribute(): string
+    {
+        $raw = (string) ($this->tipo ?? '');
+
+        // Normalizar: minúsculas, sin tildes, sin espacios
+        $norm = Str::of($raw)->lower()->ascii()->replace(' ', '')->toString();
+
+        // Mapeos comunes de valores posibles
+        $map = [
+            'proximo'     => 'proximo',
+            'prox'        => 'proximo',
+            'porvenir'    => 'proximo',
+
+            'encurso'     => 'encurso',
+            'curso'       => 'encurso',
+
+            'finalizado'  => 'finalizado',
+            'terminado'   => 'finalizado',
+        ];
+
+        // Si el tipo coincide con alguno de los mapeos
+        if (isset($map[$norm])) {
+            return $map[$norm];
+        }
+
+        // Si el tipo no sirve o viene vacío, derivar por fechas
+        return $this->derivarEstadoPorFechas();
+    }
+
+
+    // ======================================
+    // CÁLCULO DE ESTADO SEGÚN FECHAS
+    // ======================================
+    private function derivarEstadoPorFechas(): string
     {
         $hoy = Carbon::today();
-
         $inicio = $this->fecha_inicio ? Carbon::parse($this->fecha_inicio) : null;
         $fin    = $this->fecha_fin ? Carbon::parse($this->fecha_fin) : null;
 
-        if ($inicio && $inicio->isFuture()) {
-            return 'proximo';
-        }
-
         if ($inicio && $fin) {
-            if ($hoy->between($inicio, $fin)) {
-                return 'en_curso';
-            }
-            if ($fin->isPast()) {
-                return 'finalizado';
-            }
+            if ($hoy->lt($inicio)) return 'proximo';
+            if ($hoy->between($inicio, $fin)) return 'encurso';
+            if ($hoy->gt($fin)) return 'finalizado';
         }
 
         if ($inicio && !$fin) {
-            return $inicio->isPast() ? 'finalizado' : 'proximo';
+            return $hoy->lt($inicio) ? 'proximo' : 'encurso';
         }
 
-        return 'proximo';
+        if (!$inicio && $fin) {
+            return $hoy->gt($fin) ? 'finalizado' : 'encurso';
+        }
+
+        // Sin fechas → se asume activo
+        return 'encurso';
     }
 
+
+    // ======================================
+    // ETIQUETA AMIGABLE PARA MOSTRAR EN LA VISTA
+    // ======================================
+    public function getTipoLabelAttribute(): string
+    {
+        return match ($this->tipo_slug) {
+            'proximo'    => 'Próximo',
+            'encurso'    => 'En curso',
+            'finalizado' => 'Finalizado',
+            default      => '—',
+        };
+    }
+
+
+    // ======================================
     // URL pública de la imagen (si existe)
+    // ======================================
     public function getImagenUrlAttribute(): ?string
     {
-        return $this->imagen ? asset('storage/'.$this->imagen) : null;
+        return $this->imagen ? asset('storage/' . $this->imagen) : null;
     }
 }

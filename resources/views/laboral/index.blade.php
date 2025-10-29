@@ -12,7 +12,7 @@
   subtitle="Conecta con empresas aliadas"
   description="Encuentra ofertas laborales vigentes gracias a nuestras alianzas con compañías e instituciones."
   :btnPrimary="['text' => 'Ver Ofertas', 'icon' => 'fa-solid fa-briefcase', 'link' => '#ofertas']"
-  :btnSecondary="['text' => 'Empresas Aliadas', 'icon' => 'fa-solid fa-building', 'link' => '#empresas']"
+  :btnSecondary="['text' => 'Ver Empresas', 'icon' => 'fa-solid fa-building', 'link' => '#empresas']"
   image="https://www.stelorder.com/wp-content/uploads/2021/09/portada-sociedad-laboral.jpg" />
 
 
@@ -59,9 +59,7 @@
           <i class="fa-solid fa-location-dot text-primary mr-1"></i>
           {{ $oferta->ubicacion }}
         </p>
-        <button
-          onclick="openOfertaModal('{{ $oferta->id }}')"
-          class="btn btn-primary py-2">
+        <button onclick="verOferta('{{ $oferta->id }}')" class="btn btn-primary py-2">
           Ver más
         </button>
 
@@ -131,7 +129,19 @@
 
           {{-- Botón --}}
           <div class="flex justify-center mt-4 shrink-0">
-            <a href="{{ $empresa['url'] }}" target="_blank" class="btn btn-primary mt-2">Visitar</a>
+            <a
+              href="{{ $empresa['url'] }}"
+              target="_blank"
+              class="btn btn-primary mt-2"
+              data-track
+              data-module="laboral"
+              data-action="visitar_empresa"
+              data-type="empresa"
+              data-id="{{ $empresa['id'] ?? '' }}"
+              data-title="{{ $empresa['nombre'] ?? 'Empresa sin nombre' }}">
+              Visitar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+            </a>
+
           </div>
         </div>
         @endforeach
@@ -143,140 +153,5 @@
   </div>
 </section>
 
+<x-laboral.modal-oferta />
 @endsection
-
-
-{{-- Modal de Detalle de Oferta Laboral --}}
-<div id="ofertaModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-  <div class="bg-white rounded-2xl shadow-card max-w-2xl w-full p-6 relative">
-    <button onclick="closeOfertaModal()"
-      class="absolute top-3 right-3 text-gray-500 hover:text-primary text-2xl">&times;</button>
-
-    <div id="ofertaContent">
-      <h3 class="text-2xl font-semibold text-primary mb-2" id="modalTitulo"></h3>
-      <p class="text-sm text-gray-500 mb-4">
-        <i class="fa-solid fa-building text-primary mr-1"></i>
-        <span id="modalEmpresa"></span>
-      </p>
-
-      {{-- Flyer (si existe) --}}
-      <div id="modalFlyerContainer" class="mb-4 hidden">
-        <a id="modalFlyerLink" href="#" target="_blank">
-          <img id="modalFlyer"
-            src=""
-            alt="Flyer de la oferta"
-            class="w-full rounded-xl shadow-sm object-contain max-h-[280px] hover:opacity-90 transition">
-        </a>
-      </div>
-
-      <p class="text-gray-700 leading-relaxed mb-4" id="modalDescripcion"></p>
-
-      <div id="modalEtiquetas" class="flex flex-wrap gap-2 mb-4"></div>
-
-      <div class="flex items-center justify-between mt-4 text-sm text-gray-600">
-        <p><i class="fa-solid fa-location-dot text-primary mr-1"></i> <span id="modalUbicacion"></span></p>
-        <p><i class="fa-regular fa-calendar text-primary mr-1"></i> Publicada: <span id="modalFecha"></span></p>
-      </div>
-
-      <div class="pt-6 text-right">
-        <a id="modalLink"
-          href="#"
-          target="_blank"
-          class="btn btn-primary"
-          onclick="registrarInteraccion(event)"
-          data-id="">
-          Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Nueva versión usando fetch() para obtener la información del modal
-  async function openOfertaModal(id) {
-    try {
-      window.currentOfertaId = id; // mantiene la oferta actual para registrar interacción
-
-      const res = await fetch(`/api/oferta/${id}`);
-      if (!res.ok) throw new Error('Error al obtener los datos de la oferta');
-      const oferta = await res.json();
-
-      document.getElementById('modalTitulo').innerText = oferta.titulo;
-      document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
-      document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
-      document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
-      document.getElementById('modalFecha').innerText = oferta.publicada_en ?? '—';
-      document.getElementById('modalLink').href = oferta.url_externa ?? '#';
-      document.getElementById('modalLink').setAttribute('data-id', oferta.id);
-
-      const flyerContainer = document.getElementById('modalFlyerContainer');
-      const flyerImg = document.getElementById('modalFlyer');
-      const flyerLink = document.getElementById('modalFlyerLink');
-
-      if (oferta.flyer) {
-        flyerContainer.classList.remove('hidden');
-        flyerImg.src = `/storage/${oferta.flyer}`;
-        flyerLink.href = `/storage/${oferta.flyer}`;
-      } else {
-        flyerContainer.classList.add('hidden');
-        flyerImg.src = '';
-        flyerLink.href = '#';
-      }
-
-      const etiquetasContainer = document.getElementById('modalEtiquetas');
-      etiquetasContainer.innerHTML = '';
-      let etiquetas = oferta.etiquetas;
-      if (typeof etiquetas === 'string') {
-        try {
-          etiquetas = JSON.parse(etiquetas);
-        } catch {}
-      }
-      if (Array.isArray(etiquetas)) {
-        etiquetas.forEach(tag => {
-          const span = document.createElement('span');
-          span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
-          span.innerText = tag.trim();
-          etiquetasContainer.appendChild(span);
-        });
-      }
-
-      document.getElementById('ofertaModal').classList.remove('hidden');
-    } catch (error) {
-      console.error('Error mostrando la oferta:', error);
-    }
-  }
-
-  function closeOfertaModal() {
-    document.getElementById('ofertaModal').classList.add('hidden');
-  }
-
-  function registrarInteraccion(event) {
-    event.preventDefault();
-
-    const link = event.currentTarget.getAttribute('href');
-    const id = event.currentTarget.getAttribute('data-id') || window.currentOfertaId;
-
-    if (!id) {
-      window.open(link, '_blank');
-      return;
-    }
-
-    fetch(`/ofertas/${id}/interaccion`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log('Interacción registrada', data);
-        window.open(link, '_blank');
-      })
-      .catch(err => {
-        console.error('Error registrando interacción:', err);
-        window.open(link, '_blank');
-      });
-  }
-</script>

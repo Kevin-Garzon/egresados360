@@ -14,8 +14,8 @@
     subtitle="Actividades, servicios y recursos que fortalecen tu desarrollo."
     description="Descubre las iniciativas de la FET para acompañarte en tu crecimiento integral como egresado."
     :btnPrimary="['text' => 'Ver Habilidades', 'icon' => 'fa-solid fa-heart-pulse', 'link' => '#habilidades']"
-    :btnSecondary="['text' => 'Servicios y Beneficios', 'icon' => 'fa-solid fa-hand-holding-heart', 'link' => '#beneficios']"
-    image="https://images.unsplash.com/photo-1516302350523-4c31f511c3c7?q=80&w=1600&auto=format&fit=crop" />
+    :btnSecondary="['text' => 'Servicios', 'icon' => 'fa-solid fa-hand-holding-heart', 'link' => '#beneficios']"
+    image="https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg" />
 
 {{-- ========================= --}}
 {{-- HABILIDADES PARA LA VIDA --}}
@@ -40,21 +40,30 @@
             <h3 class="font-poppins font-semibold text-lg">{{ $h->titulo }}</h3>
             <p class="text-sm text-rblack/70 mt-2 mb-5">{{ $h->descripcion }}</p>
 
-            <div class="mt-auto flex gap-2">
+            <div class="mt-auto flex flex-col sm:flex-row gap-2 w-full">
                 <button
                     type="button"
-                    class="btn btn-primary px-4 py-2"
+                    class="btn btn-primary w-full sm:w-auto justify-center px-4 py-2"
                     onclick="verHabilidad('{{ $h->id }}')">
                     <i class="fa-solid fa-eye mr-2"></i> Ver detalles
                 </button>
 
-
                 @if($h->enlace_inscripcion)
-                <a href="{{ $h->enlace_inscripcion }}" target="_blank" class="btn px-4 py-2">
+                <a
+                    href="{{ $h->enlace_inscripcion }}"
+                    target="_blank"
+                    class="btn w-full sm:w-auto justify-center px-4 py-2"
+                    data-track
+                    data-module="bienestar"
+                    data-action="inscribirse_habilidad"
+                    data-type="habilidad"
+                    data-id="{{ $h->id }}"
+                    data-title="{{ $h->titulo }}">
                     <i class="fa-solid fa-clipboard-check mr-2"></i> Inscribirme
                 </a>
                 @endif
             </div>
+
 
         </article>
         @empty
@@ -148,23 +157,25 @@
     {{-- FILTROS DE EVENTOS --}}
     {{-- ================= --}}
     <div class="flex flex-wrap justify-center gap-3 mb-10">
-        <button onclick="filtrarEvento('todos')"
+        <button data-filtro="todos"
             class="filtro-evento-btn activo px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             Todos
         </button>
-        <button onclick="filtrarEvento('proximo')"
+        <button data-filtro="proximo"
             class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             Próximos
         </button>
-        <button onclick="filtrarEvento('en curso')"
+        <button data-filtro="encurso"
             class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             En curso
         </button>
-        <button onclick="filtrarEvento('finalizado')"
+        <button data-filtro="finalizado"
             class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             Finalizados
         </button>
     </div>
+
+
 
 
     @if($eventos->isEmpty())
@@ -172,13 +183,13 @@
     @else
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         @foreach($eventos as $e)
-        <article class="card overflow-hidden flex flex-col evento-item" data-tipo="{{ strtolower($e->tipo) }}">
+        <article class="card overflow-hidden flex flex-col evento-item" data-tipo="{{ $e->tipo_slug }}">
             <img src="{{ $e->imagen ? asset('storage/' . $e->imagen) : 'https://images.unsplash.com/photo-1503424886302-fdbd8fcbf4e4?q=80&w=1200&auto=format&fit=crop' }}"
                 alt="{{ $e->titulo }}" class="h-44 w-full object-cover">
 
             <div class="p-6 flex-1 flex flex-col">
                 <p class="text-sm font-medium text-[#09B451] mb-1">
-                    {{ $e->modalidad ?? '—' }} • {{ $e->tipo ?? 'Evento' }}
+                    {{ $e->tipo_label }} • {{ $e->modalidad ?? '—' }}
                 </p>
 
                 <h3 class="font-poppins font-semibold text-lg">{{ $e->titulo }}</h3>
@@ -249,10 +260,16 @@
                         </p>
                     </div>
                     <button
-                        onclick="abrirFormularioMentoria('{{ $m->titulo }}')"
-                        class="btn btn-primary w-full mt-4 py-2 flex items-center justify-center">
+                        class="btn btn-primary w-full mt-4 py-2 flex items-center justify-center"
+                        data-track
+                        data-module="bienestar"
+                        data-action="solicitar_mentoria"
+                        data-type="mentoria"
+                        data-id="{{ $m->id }}"
+                        data-title="{{ $m->titulo }}">
                         <i class="fa-solid fa-calendar-day mr-2"></i> Solicitar mentoría
                     </button>
+
                 </div>
                 @endforeach
             </div>
@@ -278,11 +295,19 @@
                 </div>
             </div>
 
-            <a href="https://wa.me/573001234567?text=Hola,%20soy%20egresado%20FET%20y%20quisiera%20solicitar%20un%20espacio%20de%20escucha."
+            <a
+                href="https://wa.me/573001234567?text=Hola,%20soy%20egresado%20FET%20y%20quisiera%20solicitar%20un%20espacio%20de%20escucha."
                 target="_blank"
-                class="btn btn-primary px-6 py-2 flex items-center shadow">
+                class="btn btn-primary px-6 py-2 flex items-center shadow"
+                data-track
+                data-module="bienestar"
+                data-action="solicitar_espacio_escucha"
+                data-type="atencion"
+                data-id="0"
+                data-title="Espacio de Escucha">
                 <i class="fa-brands fa-whatsapp mr-2"></i> Solicitar
             </a>
+
         </div>
 
 
@@ -297,22 +322,4 @@
 <x-bienestar.modal-servicio />
 <x-bienestar.modal-evento />
 
-
-
-<script>
-    function filtrarEvento(tipo) {
-        document.querySelectorAll('.filtro-evento-btn').forEach(btn =>
-            btn.classList.remove('activo', 'bg-primary', 'text-white')
-        );
-        event.target.classList.add('activo', 'bg-primary', 'text-white');
-
-        document.querySelectorAll('.evento-item').forEach(item => {
-            if (tipo === 'todos' || item.dataset.tipo === tipo) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
-        });
-    }
-</script>
 @endsection

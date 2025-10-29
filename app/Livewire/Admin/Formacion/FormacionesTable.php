@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Formacion;
 
 use App\Models\Formacion;
+use App\Models\Interaccion;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -69,17 +70,25 @@ class FormacionesTable extends Component
         // Filtro por búsqueda en campos clave
         $query = Formacion::query()
             ->when($this->search, function ($q) {
-                $s = '%'.$this->search.'%';
+                $s = '%' . $this->search . '%';
                 $q->where(function ($q2) use ($s) {
                     $q2->where('titulo', 'like', $s)
-                       ->orWhere('programa', 'like', $s)
-                       ->orWhere('modalidad', 'like', $s)
-                       ->orWhere('tipo', 'like', $s);
+                        ->orWhere('programa', 'like', $s)
+                        ->orWhere('modalidad', 'like', $s)
+                        ->orWhere('tipo', 'like', $s);
                 });
             })
             ->orderBy($this->sortField, $this->sortDirection);
 
         $formaciones = $query->paginate($this->perPage);
+
+        // Reemplaza el contador viejo por el nuevo sistema global
+        $formaciones->getCollection()->transform(function ($formacion) {
+            $formacion->interacciones_nuevas = \App\Models\Interaccion::where('module', 'formacion')
+                ->where('item_id', $formacion->id)
+                ->count();
+            return $formacion;
+        });
 
         return view('livewire.admin.formacion.formaciones-table', [
             'formaciones' => $formaciones,

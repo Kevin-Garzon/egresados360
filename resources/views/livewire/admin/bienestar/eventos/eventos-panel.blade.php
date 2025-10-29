@@ -48,7 +48,7 @@
                 class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
                 x-data
                 @click="$dispatch('open-create-evento')">
-                <!-- <i class="fa-solid fa-plus mr-2"></i> --> Agregar Evento
+                <i class="fa-solid fa-plus mr-2"></i> Agregar Evento
             </button>
             
         </div>

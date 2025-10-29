@@ -1,15 +1,23 @@
 <div class="space-y-4">
-    {{-- Buscador --}}
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between mb-3">
+
+        {{-- Buscador --}}
         <div class="relative w-full sm:w-1/3">
             <i class="fa-solid fa-magnifying-glass text-gray-400 absolute left-3 top-2.5"></i>
             <input
                 type="text"
                 wire:model.live="search"
-                placeholder="Buscar por título, tema o modalidad..."
+                placeholder="Buscar por título o tema..."
                 class="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-primary focus:border-primary" />
         </div>
+
+        {{-- Botón de exportar habilidades --}}
+        <a href="{{ route('exportar.habilidades') }}"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            <i class="fa-solid fa-file-arrow-down"></i> Exportar
+        </a>
     </div>
+
 
     {{-- Tabla --}}
     <div class="overflow-x-auto">
@@ -19,13 +27,13 @@
                     <th class="px-5 py-3 text-left font-semibold cursor-pointer" wire:click="sortBy('titulo')">
                         Título
                         @if($sortField === 'titulo')
-                            <i class="fa-solid fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                        <i class="fa-solid fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
                         @endif
                     </th>
                     <th class="px-5 py-3 text-left font-semibold cursor-pointer" wire:click="sortBy('tema')">
                         Tema
                         @if($sortField === 'tema')
-                            <i class="fa-solid fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                        <i class="fa-solid fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
                         @endif
                     </th>
                     <th class="px-5 py-3 text-left font-semibold">Modalidad</th>
@@ -48,13 +56,13 @@
                     </td>
                     <td class="px-5 py-3 text-center">
                         @if ($h->activo)
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-                                Activo
-                            </span>
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                            Activo
+                        </span>
                         @else
-                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
-                                Inactivo
-                            </span>
+                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
+                            Inactivo
+                        </span>
                         @endif
                     </td>
                     <td class="px-5 py-3 whitespace-nowrap text-right">
