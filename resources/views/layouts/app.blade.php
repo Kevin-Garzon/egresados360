@@ -118,12 +118,12 @@
                         }
                     });
                     localStorage.setItem('ultima_visita', fechaHoy);
-                    console.log(' Visita registrada');
+                    /* console.log(' Visita registrada'); */
                 } catch (error) {
                     console.error(' Error al registrar la visita:', error);
                 }
             } else {
-                console.log('Visita ya registrada hoy');
+                /* console.log('Visita ya registrada hoy'); */
             }
         });
     </script>

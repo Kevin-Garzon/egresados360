@@ -33,8 +33,8 @@
 
         <div class="mt-6 text-center text-sm text-gray-600">
             ¿Tienes preguntas? <br>
-            <a href="mailto:egresados@fet.edu.co" class="text-primary hover:underline">
-                egresados@fet.edu.co
+            <a href="mailto:ori-egresados@fet.edu.co" class="text-primary hover:underline">
+                ori-egresados@fet.edu.co
             </a>
         </div>
     </div>

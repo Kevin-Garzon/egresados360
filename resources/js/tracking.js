@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("Tracking global cargado correctamente");
+    /* console.log("Tracking global cargado correctamente"); */
 
     // Escuchar clics en cualquier botón con data-track
     document.body.addEventListener("click", async (e) => {
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Si el usuario no tiene perfil → abrir modal
         if (!perfilId) {
-            console.log("No hay perfil guardado. Mostrando modal...");
+            /* console.log("No hay perfil guardado. Mostrando modal..."); */
             localStorage.setItem("pendiente_click", JSON.stringify(data));
 
             if (window.Livewire && typeof window.Livewire.dispatch === "function") {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (window.Livewire && typeof window.Livewire.emit === "function") {
                 window.Livewire.emit("abrirFormularioPerfil");
             } else {
-                console.warn("No se pudo abrir el modal de perfil (Livewire no disponible).");
+                /* console.warn("No se pudo abrir el modal de perfil (Livewire no disponible)."); */
             }
             return;
         }
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify(data),
             });
-            console.log("Interacción registrada:", data);
+            /* console.log("Interacción registrada:", data); */
         } catch (error) {
             console.error("Error registrando interacción:", error);
         }
