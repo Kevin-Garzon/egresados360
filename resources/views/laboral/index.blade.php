@@ -12,7 +12,7 @@
   subtitle="Conecta con empresas aliadas"
   description="Encuentra ofertas laborales vigentes gracias a nuestras alianzas con compañías e instituciones."
   :btnPrimary="['text' => 'Ver Ofertas', 'icon' => 'fa-solid fa-briefcase', 'link' => '#ofertas']"
-  :btnSecondary="['text' => 'Empresas Aliadas', 'icon' => 'fa-solid fa-building', 'link' => '#empresas']"
+  :btnSecondary="['text' => 'Ver Empresas', 'icon' => 'fa-solid fa-building', 'link' => '#empresas']"
   image="https://www.stelorder.com/wp-content/uploads/2021/09/portada-sociedad-laboral.jpg" />
 
 

@@ -14,7 +14,7 @@
     subtitle="Actividades, servicios y recursos que fortalecen tu desarrollo."
     description="Descubre las iniciativas de la FET para acompañarte en tu crecimiento integral como egresado."
     :btnPrimary="['text' => 'Ver Habilidades', 'icon' => 'fa-solid fa-heart-pulse', 'link' => '#habilidades']"
-    :btnSecondary="['text' => 'Servicios y Beneficios', 'icon' => 'fa-solid fa-hand-holding-heart', 'link' => '#beneficios']"
+    :btnSecondary="['text' => 'Servicios', 'icon' => 'fa-solid fa-hand-holding-heart', 'link' => '#beneficios']"
     image="https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg" />
 
 {{-- ========================= --}}
@@ -40,20 +40,19 @@
             <h3 class="font-poppins font-semibold text-lg">{{ $h->titulo }}</h3>
             <p class="text-sm text-rblack/70 mt-2 mb-5">{{ $h->descripcion }}</p>
 
-            <div class="mt-auto flex gap-2">
+            <div class="mt-auto flex flex-col sm:flex-row gap-2 w-full">
                 <button
                     type="button"
-                    class="btn btn-primary px-4 py-2"
+                    class="btn btn-primary w-full sm:w-auto justify-center px-4 py-2"
                     onclick="verHabilidad('{{ $h->id }}')">
                     <i class="fa-solid fa-eye mr-2"></i> Ver detalles
                 </button>
-
 
                 @if($h->enlace_inscripcion)
                 <a
                     href="{{ $h->enlace_inscripcion }}"
                     target="_blank"
-                    class="btn px-4 py-2"
+                    class="btn w-full sm:w-auto justify-center px-4 py-2"
                     data-track
                     data-module="bienestar"
                     data-action="inscribirse_habilidad"
@@ -64,6 +63,7 @@
                 </a>
                 @endif
             </div>
+
 
         </article>
         @empty

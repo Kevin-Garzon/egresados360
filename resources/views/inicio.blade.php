@@ -4,97 +4,79 @@
 
 {{-- Hero de bienvenida --}}
 @section('hero')
-<section class="relative overflow-hidden bg-white">
-    <div class="container-app min-h-[calc(100vh-64.8px)] py-16 flex items-center lg:grid lg:grid-cols-2 gap-10">
-        <div>
-            <span class="badge mb-4">Egresados 360</span>
-            <h1 class="text-4xl sm:text-5xl font-poppins font-semibold leading-tight text-gunmetal">
-                Bienvenidos <br><span class="text-primary font-bold">Egresados FET</span>
-                <span class="block">Orgullo Institucional</span>
-            </h1>
-            <p class="mt-5 text-lg text-rblack/80 max-w-prose">
-                Somos el puente entre la FET y sus egresados: aquí encontrarás oportunidades laborales, formación continua y actividades de bienestar.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-3">
-                <a
-                    href="tel:+573150000000"
-                    class="btn btn-primary"
-                    aria-label="Llamar o escribir al número +57 315 000 0000">
-                    <i class="fa-brands fa-whatsapp" style="color:#ffffff;"></i>
-                    Contáctanos
-                </a>
-
-                <a
-                    href="mailto:ori-egresados@fet.edu.co"
-                    class="btn btn-secondary"
-                    aria-label="Escribir a ori-egresados@fet.edu.co">
-                    <i class="fa-solid fa-envelope text-white"></i>
-                    Contáctanos
-                </a>
-
-
-
-            </div>
-        </div>
-        <div>
-            <div class="aspect-[4/3] md:aspect-[16/10] card p-2">
-                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1400&auto=format&fit=crop"
-                    alt="Egresados FET" class="w-full h-full object-cover rounded-2xl" />
-            </div>
-        </div>
-    </div>
-</section>
+<x-hero
+    badge="Egresados 360"
+    title="Bienvenidos"
+    highlight="Egresados FET"
+    subtitle="Orgullo Institucional"
+    description="Somos el puente entre la FET y sus egresados: aquí encontrarás oportunidades laborales, formación continua y actividades de bienestar."
+    :btnPrimary="[
+            'text' => 'Contáctanos',
+            'icon' => 'fa-brands fa-whatsapp',
+            'link' => 'tel:+573150000000'
+        ]"
+    :btnSecondary="[
+            'text' => 'Contáctanos',
+            'icon' => 'fa-solid fa-envelope',
+            'link' => 'mailto:ori-egresados@fet.edu.co'
+        ]"
+    image="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1400&auto=format&fit=crop" />
 @endsection
+
 
 {{-- Contenido específico de la página --}}
 @section('content')
 
 {{-- Nuestra Oficina de Egresados --}}
-<section id="oficina" class="relative py-16">
-    {{-- Capa de fondo: imagen + overlay verde (full width) --}}
-    <div class="bg-campus-overlay">
-        <div class="container-app relative py-10 md:py-14">
-            <div class="grid md:grid-cols-2 gap-8 items-center">
+<section id="oficina" class="relative py-20 text-white overflow-hidden">
+    <div class="absolute inset-0">
+        <img
+            alt="Campus FET"
+            class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-[#09B451] mix-blend-multiply"></div>
+    </div>
 
-                {{-- IMAGEN SALIDA DEL CONTENEDOR --}}
-                <figure class="relative z-10 md:-ml-16 -mt-10 md:-mt-16">
-                    <img
-                        src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Oficina de Egresados"
-                        class="w-[560px] max-w-full rounded-3xl shadow-card">
-                </figure>
+    <div class="relative container-app grid lg:grid-cols-2 gap-12 items-center">
+        {{-- Imagen --}}
+        <figure class="flex justify-center lg:justify-start">
+            <img
+                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1170&auto=format&fit=crop"
+                alt="Oficina de Egresados"
+                class="w-11/12 sm:w-4/5 md:w-3/4 rounded-2xl shadow-card object-cover transition-transform duration-500 hover:scale-[1.03]">
+        </figure>
 
-                {{-- TEXTO + ACCIONES SOBRE EL FONDO VERDE --}}
-                <div class="text-white md:pr-6">
-                    <h2 class="text-3xl sm:text-4xl font-poppins font-semibold tracking-tight">
-                        Nuestra Oficina de
-                    </h2>
-                    <p class="text-6xl sm:text-6xl font-bold leading-none mt-2">Egresados</p>
+        {{-- Texto --}}
+        <div class="text-center lg:text-left">
+            <h2 class="text-3xl sm:text-4xl font-poppins font-semibold tracking-tight">
+                Nuestra Oficina de
+            </h2>
+            <p class="text-5xl sm:text-6xl font-bold leading-none mt-2 text-white">
+                Egresados
+            </p>
 
-                    <p class="mt-6 text-white/90 text-lg leading-8 max-w-prose">
-                        Interdum neque lectus sodales torquent congue a potenti mollis. Acompañamos a nuestros
-                        graduados con servicios, oportunidades y articulación con aliados para tu crecimiento profesional.
-                        Interdum neque lectus sodales torquent congue a potenti mollis. Acompañamos a nuestros graduados con
-                        servicios.
+            <p class="mt-6 text-base sm:text-lg text-white/90 leading-relaxed max-w-prose mx-auto lg:mx-0">
+                Acompañamos a nuestros graduados con servicios, oportunidades y articulación con aliados para su
+                crecimiento profesional. Fomentamos el vínculo permanente con la institución y fortalecemos la
+                proyección laboral y social de nuestros egresados.
+            </p>
 
-                    <div class="mt-8 flex flex-wrap gap-4">
-                        <button
-                            onclick="document.getElementById('mapModal').classList.remove('hidden')"
-                            class="btn btn-secondary px-8">
-                            Visítanos
-                        </button>
-                        <button
-                            onclick="document.getElementById('infoModal').classList.remove('hidden')"
-                            class="btn btn-light px-8">
-                            Leer más
-                        </button>
-                    </div>
-                </div>
-
+            {{-- Botones (alto contraste sobre fondo verde) --}}
+            <div class="mt-8 flex flex-row justify-center lg:justify-start gap-4">
+                <button
+                    onclick="document.getElementById('mapModal').classList.remove('hidden')"
+                    class="btn !bg-white !text-[#09B451] hover:!bg-silver px-8 flex items-center gap-2 font-semibold">
+                    <i class="fa-solid fa-location-dot"></i> Visítanos
+                </button>
+                <button
+                    onclick="document.getElementById('infoModal').classList.remove('hidden')"
+                    class="btn !bg-gunmetal !text-white hover:!bg-black/80 px-8 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i> Leer más
+                </button>
             </div>
         </div>
     </div>
 </section>
+
 
 
 {{-- Modal Google Maps --}}
@@ -142,71 +124,80 @@
         </p>
     </div>
 
-    <div
-        x-data="{ scrollRight() { this.$refs.slider.scrollBy({ left: 320, behavior: 'smooth' }); }, scrollLeft() { this.$refs.slider.scrollBy({ left: -320, behavior: 'smooth' }); } }"
-        x-init="setInterval(() => scrollRight(), 5000)"
-        class="relative pb-16"> {{-- se aumentó padding-bottom --}}
+    {{-- Carrusel de tarjetas --}}
+    <div x-data="{ 
+            novedadesScrollAmount: 1,
+            novedadesAutoScrollInterval: null,
+            startAutoScroll() {
+                const container = this.$refs.slider;
+                this.novedadesAutoScrollInterval = setInterval(() => {
+                    container.scrollLeft += this.novedadesScrollAmount;
+                    // Verifica si ha llegado al final de la primera copia de ítems
+                    if (container.scrollLeft >= (container.scrollWidth / 2)) {
+                        container.scrollLeft = 0; // Reinicia el ciclo
+                    }
+                }, 10); // Velocidad más rápida para scroll suave
+            },
+            stopScroll() {
+                if (this.novedadesAutoScrollInterval) {
+                    clearInterval(this.novedadesAutoScrollInterval);
+                    this.novedadesAutoScrollInterval = null;
+                }
+            }
+        }"
+        x-init="startAutoScroll()"
+        @mouseover="stopScroll()"
+        @mouseleave="startAutoScroll()"
+        class="relative">
 
-        {{-- Botón Izquierdo --}}
-        <button @click="scrollLeft"
-            class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-card rounded-full w-10 h-10 items-center justify-center text-gunmetal hover:bg-primary hover:text-white transition z-10">
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
+        <div
+            x-ref="slider"
+            class="flex gap-8 overflow-hidden scroll-smooth px-6 md:px-12 select-none relative py-8">
 
-        {{-- Carrusel --}}
-        <div x-ref="slider"
-            class="flex gap-8 overflow-hidden px-6 md:px-12 select-none scroll-smooth bg-white pt-4 pb-6"> 
-            {{-- bg-white iguala fondo de sección, pt/pb separan tarjetas del borde --}}
+            @foreach(array_merge($items->toArray(), $items->toArray()) as $item)
+            @php
+            $visual = match($item['tipo']) {
+            'Laboral' => ['color' => 'text-primary', 'bg' => 'bg-gray-50', 'icon' => 'fa-briefcase', 'img' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop'],
+            'Formación' => ['color' => 'text-blue-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-graduation-cap', 'img' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop'],
+            'Evento' => ['color' => 'text-yellow-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-calendar-days', 'img' => 'https://images.unsplash.com/photo-1551836022-deb4988cc6c1?q=80&w=800&auto=format&fit=crop'],
+            'Habilidad' => ['color' => 'text-emerald-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-lightbulb', 'img' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop'],
+            'Servicio' => ['color' => 'text-rose-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-hand-holding-heart', 'img' => 'https://images.unsplash.com/photo-1485217988980-11786ced9454?q=80&w=800&auto=format&fit=crop'],
+            'Mentoría' => ['color' => 'text-indigo-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-user-tie', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg'],
+            default => ['color' => 'text-gray-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-circle-info', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg']
+            };
+            @endphp
 
-            @foreach($items as $item)
-                @php
-                    $visual = match($item->tipo) {
-                        'Laboral' => ['color' => 'text-primary', 'bg' => 'bg-gray-50', 'icon' => 'fa-briefcase', 'img' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop'],
-                        'Formación' => ['color' => 'text-blue-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-graduation-cap', 'img' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop'],
-                        'Evento' => ['color' => 'text-yellow-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-calendar-days', 'img' => 'https://images.unsplash.com/photo-1551836022-deb4988cc6c1?q=80&w=800&auto=format&fit=crop'],
-                        'Habilidad' => ['color' => 'text-emerald-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-lightbulb', 'img' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop'],
-                        'Servicio' => ['color' => 'text-rose-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-hand-holding-heart', 'img' => 'https://images.unsplash.com/photo-1485217988980-11786ced9454?q=80&w=800&auto=format&fit=crop'],
-                        'Mentoría' => ['color' => 'text-indigo-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-user-tie', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg'],
-                        default => ['color' => 'text-gray-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-circle-info', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg']
-                    };
-                @endphp
-
-                {{-- Tarjeta --}}
-                <div class="min-w-[320px] sm:min-w-[340px] md:min-w-[360px] lg:min-w-[380px] flex-shrink-0 snap-center">
-                    <div class="rounded-3xl overflow-hidden shadow-card hover:shadow-xl transition transform hover:-translate-y-1 {{ $visual['bg'] }}">
-                        <div class="h-44 w-full overflow-hidden">
-                            <img src="{{ $visual['img'] }}" alt="{{ $item->tipo }}" class="w-full h-full object-cover">
-                        </div>
-
-                        <div class="p-6 text-center">
-                            <div class="flex justify-center mb-3">
-                                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-inner {{ $visual['color'] }} text-xl">
-                                    <i class="fa-solid {{ $visual['icon'] }}"></i>
-                                </div>
-                            </div>
-                            <h3 class="font-poppins font-semibold text-lg text-gunmetal mb-1">
-                                {{ Str::limit($item->titulo, 60) }}
-                            </h3>
-                            <p class="text-sm text-rblack/60 mb-2">
-                                {{ $item->tipo }} — {{ $item->created_at->format('d M, Y') }}
-                            </p>
-                            <a href="{{ $item->url }}"
-                                class="inline-flex items-center justify-center gap-2 px-5 py-2 mt-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-green-700 transition">
-                                <i class="fa-solid fa-arrow-right"></i> Ver más
-                            </a>
+            {{-- Tarjetas --}}
+            <div class="snap-center shrink-0 w-[280px] sm:w-[300px] md:w-[320px] lg:w-[340px] {{ $visual['bg'] }} rounded-3xl shadow-card hover:shadow-xl transition-transform duration-300 hover:-translate-y-1">
+                <div class="h-44 w-full overflow-hidden rounded-t-3xl">
+                    {{-- Usando el placeholder de color para que sea más rápido y estable si las URLs fallan --}}
+                    <img src="{{ $visual['img'] }}"
+                        alt="{{ $item['tipo'] }}"
+                        class="w-full h-full object-cover">
+                </div>
+                <div class="p-6 text-center">
+                    <div class="flex justify-center mb-3">
+                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-inner {{ $visual['color'] }} text-xl">
+                            <i class="fa-solid {{ $visual['icon'] }}"></i>
                         </div>
                     </div>
+                    <h3 class="font-poppins font-semibold text-lg text-gunmetal mb-1">
+                        {{ Str::limit($item['titulo'], 60) }}
+                    </h3>
+                    <p class="text-sm text-rblack/60 mb-2">
+                        {{ $item['tipo'] }} — {{ \Carbon\Carbon::parse($item['created_at'])->format('d M, Y') }}
+                    </p>
+                    <a href="{{ $item['url'] }}"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2 mt-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-green-700 transition">
+                        <i class="fa-solid fa-arrow-right"></i> Ver más
+                    </a>
                 </div>
+            </div>
             @endforeach
         </div>
-
-        {{-- Botón Derecho --}}
-        <button @click="scrollRight"
-            class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-card rounded-full w-10 h-10 items-center justify-center text-gunmetal hover:bg-primary hover:text-white transition z-10">
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
     </div>
 </section>
+
 
 
 
