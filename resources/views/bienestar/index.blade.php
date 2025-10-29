@@ -157,23 +157,25 @@
     {{-- FILTROS DE EVENTOS --}}
     {{-- ================= --}}
     <div class="flex flex-wrap justify-center gap-3 mb-10">
-        <button onclick="filtrarEvento('todos')"
+        <button data-filtro="todos"
             class="filtro-evento-btn activo px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             Todos
         </button>
-        <button onclick="filtrarEvento('proximo')"
+        <button data-filtro="proximo"
             class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             Próximos
         </button>
-        <button onclick="filtrarEvento('en curso')"
+        <button data-filtro="encurso"
             class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             En curso
         </button>
-        <button onclick="filtrarEvento('finalizado')"
+        <button data-filtro="finalizado"
             class="filtro-evento-btn px-5 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition">
             Finalizados
         </button>
     </div>
+
+
 
 
     @if($eventos->isEmpty())
@@ -181,13 +183,13 @@
     @else
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         @foreach($eventos as $e)
-        <article class="card overflow-hidden flex flex-col evento-item" data-tipo="{{ strtolower($e->tipo) }}">
+        <article class="card overflow-hidden flex flex-col evento-item" data-tipo="{{ $e->tipo_slug }}">
             <img src="{{ $e->imagen ? asset('storage/' . $e->imagen) : 'https://images.unsplash.com/photo-1503424886302-fdbd8fcbf4e4?q=80&w=1200&auto=format&fit=crop' }}"
                 alt="{{ $e->titulo }}" class="h-44 w-full object-cover">
 
             <div class="p-6 flex-1 flex flex-col">
                 <p class="text-sm font-medium text-[#09B451] mb-1">
-                    {{ $e->modalidad ?? '—' }} • {{ $e->tipo ?? 'Evento' }}
+                    {{ $e->tipo_label }} • {{ $e->modalidad ?? '—' }}
                 </p>
 
                 <h3 class="font-poppins font-semibold text-lg">{{ $e->titulo }}</h3>
@@ -320,22 +322,4 @@
 <x-bienestar.modal-servicio />
 <x-bienestar.modal-evento />
 
-
-
-<script>
-    function filtrarEvento(tipo) {
-        document.querySelectorAll('.filtro-evento-btn').forEach(btn =>
-            btn.classList.remove('activo', 'bg-primary', 'text-white')
-        );
-        event.target.classList.add('activo', 'bg-primary', 'text-white');
-
-        document.querySelectorAll('.evento-item').forEach(item => {
-            if (tipo === 'todos' || item.dataset.tipo === tipo) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
-        });
-    }
-</script>
 @endsection
