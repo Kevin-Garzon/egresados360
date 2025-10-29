@@ -2,69 +2,72 @@
 {{-- MODAL DETALLE OFERTA LABORAL --}}
 {{-- =============================== --}}
 <div id="ofertaModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl shadow-card max-w-2xl w-full p-6 relative">
+  <div class="bg-white rounded-2xl shadow-card max-w-2xl w-full relative overflow-hidden">
 
-        {{-- Botón cerrar --}}
-        <button id="close-modal-oferta"
-            class="absolute top-3 right-3 text-gray-500 hover:text-primary text-2xl transition">
-            &times;
-        </button>
+    {{-- Botón cerrar --}}
+    <button id="close-modal-oferta"
+      class="absolute top-4 right-4 text-gray-500 hover:text-primary text-3xl font-light transition">
+      &times;
+    </button>
 
-        <div id="ofertaContent">
+    {{-- Contenido desplazable --}}
+    <div class="max-h-[85vh] overflow-y-auto p-8 space-y-6">
 
-            {{-- Título --}}
-            <h3 class="text-2xl font-semibold text-primary mb-2" id="modalTitulo"></h3>
+      {{-- Cabecera --}}
+      <header>
+        <h3 class="text-3xl font-semibold text-primary leading-tight" id="modalTitulo"></h3>
+        <p class="text-sm text-gray-500 mt-1 flex items-center gap-2">
+          <i class="fa-solid fa-building text-primary"></i>
+          <span id="modalEmpresa" class="font-medium"></span>
+        </p>
+      </header>
 
-            {{-- Empresa --}}
-            <p class="text-sm text-gray-500 mb-4">
-                <i class="fa-solid fa-building text-primary mr-1"></i>
-                <span id="modalEmpresa"></span>
-            </p>
+      {{-- Flyer --}}
+      <div id="modalFlyerContainer" class="hidden">
+        <a id="modalFlyerLink" href="#" target="_blank">
+          <img id="modalFlyer"
+               src=""
+               alt="Flyer de la oferta"
+               class="w-full rounded-xl object-cover shadow-md max-h-[280px] hover:opacity-90 transition" />
+        </a>
+      </div>
 
-            {{-- Flyer --}}
-            <div id="modalFlyerContainer" class="mb-4 hidden">
-                <a id="modalFlyerLink" href="#" target="_blank">
-                    <img id="modalFlyer"
-                        src=""
-                        alt="Flyer de la oferta"
-                        class="w-full rounded-xl shadow-sm object-contain max-h-[280px] hover:opacity-90 transition" />
-                </a>
-            </div>
+      {{-- Descripción --}}
+      <section id="modalDescripcion"
+               class="text-gray-700 leading-relaxed text-justify whitespace-pre-line"></section>
 
-            {{-- Descripción --}}
-            <p class="text-gray-700 leading-relaxed mb-4" id="modalDescripcion"></p>
+      {{-- Etiquetas --}}
+      <div id="modalEtiquetas" class="flex flex-wrap gap-2">
+        <!-- etiquetas dinámicas -->
+      </div>
 
-            {{-- Etiquetas --}}
-            <div id="modalEtiquetas" class="flex flex-wrap gap-2 mb-4"></div>
+      {{-- Info adicional --}}
+      <div class="border-t pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-gray-700 text-[15px] gap-3">
+        <p class="flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-primary text-lg"></i>
+          <span id="modalUbicacion" class="font-medium"></span>
+        </p>
+        <p class="flex items-center gap-2">
+          <i class="fa-regular fa-calendar text-primary text-lg"></i>
+          <span class="font-medium">Publicada:</span>
+          <span id="modalFecha"></span>
+        </p>
+      </div>
 
-            {{-- Info adicional --}}
-            <div class="flex items-center justify-between mt-4 text-sm text-gray-600">
-                <p><i class="fa-solid fa-location-dot text-primary mr-1"></i>
-                    <span id="modalUbicacion"></span>
-                </p>
-                <p><i class="fa-regular fa-calendar text-primary mr-1"></i>
-                    Publicada: <span id="modalFecha"></span>
-                </p>
-            </div>
+      {{-- Botón --}}
+      <div class="text-right pt-4">
+        <a id="modalLink"
+           href="#"
+           target="_blank"
+           class="inline-flex items-center justify-center gap-2 bg-primary text-white font-medium px-5 py-2.5 rounded-xl hover:bg-green-600 transition">
+          Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+        </a>
+      </div>
 
-            {{-- Botón de acción --}}
-            <div class="pt-6 text-right">
-                <a id="modalLink"
-                    href="#"
-                    target="_blank"
-                    class="btn btn-primary"
-                    data-track
-                    data-module="laboral"
-                    data-action="aplicar"
-                    data-type="oferta"
-                    data-id=""
-                    data-title="">
-                    Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
-                </a>
-            </div>
-        </div>
     </div>
+  </div>
 </div>
+
 
 {{-- ========================= --}}
 {{-- SCRIPT DEL MODAL --}}

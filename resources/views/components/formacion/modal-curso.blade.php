@@ -2,7 +2,7 @@
 {{-- MODAL DETALLES DE FORMACIÓN --}}
 {{-- =============================== --}}
 <div id="modal-curso" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center">
-    <div class="bg-white rounded-2xl shadow-lg max-w-2xl w-full mx-4 p-8 relative">
+    <div class="bg-white rounded-2xl shadow-lg max-w-2xl w-full mx-4 p-8 relative overflow-hidden">
 
         {{-- Botón cerrar --}}
         <button id="close-modal-curso"
@@ -10,8 +10,13 @@
             <i class="fa-solid fa-xmark text-xl"></i>
         </button>
 
-        {{-- Contenedor del contenido dinámico --}}
-        <div id="curso-contenido" class="text-left space-y-5"></div>
+        {{-- Contenedor con scroll automático --}}
+        <div class="max-h-[85vh] overflow-y-auto pr-2" id="curso-scroll">
+
+            {{-- Contenedor del contenido dinámico --}}
+            <div id="curso-contenido" class="text-left space-y-5"></div>
+
+        </div>
     </div>
 </div>
 
@@ -46,6 +51,18 @@
           ${data.empresa.nombre}
         </p>` : ''}
 
+      ${data.imagen ? `
+        <div class="my-4">
+          <a href="/storage/${data.imagen}" target="_blank">
+            <img 
+              src="/storage/${data.imagen}" 
+              alt="Imagen del curso"
+              class="w-full rounded-xl shadow-sm object-cover max-h-[280px] hover:opacity-90 transition"
+            />
+          </a>
+        </div>
+      ` : ''}
+
       <div class="flex items-center gap-2 text-primary font-medium text-sm">
         <i class="fa-solid fa-graduation-cap"></i>
         <span>${data.modalidad ?? ''}</span>
@@ -53,7 +70,7 @@
         <span>${data.tipo ?? ''}</span>
       </div>
 
-      <p class="text-sm text-rblack/70 leading-relaxed border-t border-gray-100 pt-3">
+      <p class="text-sm text-rblack/80 leading-relaxed border-t border-gray-100 pt-3 text-justify">
         ${data.descripcion ?? 'Sin descripción disponible'}
       </p>
 

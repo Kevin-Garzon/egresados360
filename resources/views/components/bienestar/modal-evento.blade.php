@@ -10,25 +10,32 @@
             <i class="fa-solid fa-xmark"></i>
         </button>
 
-        {{-- Header --}}
+        {{-- Encabezado --}}
         <div class="p-6 pb-3 border-b border-gray-200">
-            <h2 id="evento-titulo" class="text-xl font-poppins font-semibold text-[#09B451] mb-1">Título del evento</h2>
+            <h2 id="evento-titulo" class="text-2xl font-poppins font-semibold text-primary mb-1">Título del evento</h2>
             <p id="evento-sub" class="text-sm text-gray-500">Modalidad • Tipo</p>
         </div>
 
-        {{-- Body --}}
-        <div class="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
-            {{-- Imagen --}}
-            <div class="rounded-xl overflow-hidden border border-gray-200">
-                <img id="evento-imagen" src="https://via.placeholder.com/400x250?text=Sin+Imagen"
-                    class="w-full h-52 object-cover" alt="Evento">
+        {{-- Contenedor con scroll automático --}}
+        <div class="px-6 py-5 space-y-5 max-h-[75vh] overflow-y-auto text-justify">
+
+            {{-- Imagen (clicable para ver completa) --}}
+            <div id="evento-imagen-container" class="w-full flex justify-center">
+                <a id="evento-imagen-link" href="#" target="_blank" rel="noopener noreferrer">
+                    <img id="evento-imagen"
+                        src="https://via.placeholder.com/400x250?text=Sin+Imagen"
+                        alt="Imagen del evento"
+                        class="max-h-80 w-auto rounded-xl border border-gray-200 shadow-sm object-contain hover:opacity-90 transition cursor-pointer" />
+                </a>
             </div>
 
             {{-- Descripción --}}
-            <p id="evento-descripcion" class="text-gray-700 text-sm leading-relaxed"></p>
+            <p id="evento-descripcion" class="text-gray-700 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                Sin descripción disponible.
+            </p>
 
-            {{-- Info general --}}
-            <div class="grid sm:grid-cols-2 gap-4 text-sm text-gray-700">
+            {{-- Información general --}}
+            <div class="grid sm:grid-cols-2 gap-4 text-sm text-gray-700 border-t border-gray-100 pt-4">
                 <div class="flex items-center gap-2">
                     <i class="fa-regular fa-calendar text-primary"></i>
                     <span><strong>Inicio:</strong> <span id="evento-fecha-inicio">—</span></span>
@@ -50,13 +57,19 @@
     </div>
 </div>
 
-{{-- Script --}}
+{{-- ========================= --}}
+{{-- SCRIPT DEL MODAL --}}
+{{-- ========================= --}}
 <script>
     function formatearFecha(fechaISO) {
         if (!fechaISO) return '—';
         try {
             const fecha = new Date(fechaISO);
-            return fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+            return fecha.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
         } catch {
             return fechaISO;
         }
@@ -68,17 +81,23 @@
             const [h, m] = hora.split(':');
             const fecha = new Date();
             fecha.setHours(h, m);
-            return fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            return fecha.toLocaleTimeString('es-CO', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
         } catch {
             return hora;
         }
     }
+
 
     async function verEvento(id) {
         try {
             const res = await fetch(`/bienestar/evento/${id}`);
             const data = await res.json();
 
+            // Asignar texto principal
             document.getElementById('evento-titulo').textContent = data.titulo || '—';
             document.getElementById('evento-sub').textContent = `${data.modalidad ?? '—'} • ${data.estado_label ?? '—'}`;
             document.getElementById('evento-descripcion').textContent = data.descripcion ?? 'Sin descripción disponible';
@@ -86,8 +105,26 @@
             document.getElementById('evento-fecha-inicio').textContent = formatearFecha(data.fecha_inicio);
             document.getElementById('evento-fecha-fin').textContent = formatearFecha(data.fecha_fin);
             document.getElementById('evento-hora').textContent = formatearHora(data.hora_inicio);
-            document.getElementById('evento-imagen').src = data.imagen_url ?? 'https://via.placeholder.com/400x250?text=Sin+Imagen';
 
+            // Imagen clicable (abrir en nueva pestaña)
+            const imgContainer = document.getElementById('evento-imagen-container');
+            const img = document.getElementById('evento-imagen');
+            const link = document.getElementById('evento-imagen-link');
+
+            if (data.imagen_url) {
+                const fullUrl = data.imagen_url.startsWith('http') ?
+                    data.imagen_url :
+                    `${window.location.origin}${data.imagen_url}`;
+                img.src = fullUrl;
+                link.href = fullUrl;
+                imgContainer.classList.remove('hidden');
+            } else {
+                img.src = 'https://via.placeholder.com/400x250?text=Sin+Imagen';
+                link.href = '#';
+                imgContainer.classList.add('hidden');
+            }
+
+            // Mostrar modal
             const modal = document.getElementById('modal-evento');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -97,6 +134,7 @@
         }
     }
 
+    // Cerrar modal
     document.getElementById('close-modal-evento').addEventListener('click', () => {
         const modal = document.getElementById('modal-evento');
         modal.classList.add('hidden');

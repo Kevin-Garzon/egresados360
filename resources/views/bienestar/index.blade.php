@@ -38,7 +38,7 @@
                 class="rounded-xl mb-4 h-44 w-full object-cover">
 
             <h3 class="font-poppins font-semibold text-lg">{{ $h->titulo }}</h3>
-            <p class="text-sm text-rblack/70 mt-2 mb-5">{{ $h->descripcion }}</p>
+            <p class="text-sm text-rblack/70 mt-2 mb-5 line-clamp-3">{{ $h->descripcion }}</p>
 
             <div class="mt-auto flex flex-col sm:flex-row gap-2 w-full">
                 <button
@@ -106,8 +106,7 @@
                     </div>
                 </div>
 
-                {{-- Descripción --}}
-                <p class="text-sm text-rblack/80 mb-5 flex-1">
+                <p class="text-sm text-rblack/80 mb-5 flex-1 line-clamp-4">
                     {{ $s->descripcion ?? 'Sin descripción disponible' }}
                 </p>
 
@@ -194,7 +193,7 @@
 
                 <h3 class="font-poppins font-semibold text-lg">{{ $e->titulo }}</h3>
 
-                <p class="text-sm text-rblack/70 mt-2 mb-6">
+                <p class="text-sm text-rblack/70 mt-2 mb-6 line-clamp-4">
                     {{ $e->descripcion ?? 'Sin descripción disponible' }}
                 </p>
 

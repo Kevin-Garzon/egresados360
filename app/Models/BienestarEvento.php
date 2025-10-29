@@ -13,7 +13,7 @@ class BienestarEvento extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
-        'tipo',
+        /* 'tipo', */
         'modalidad',
         'ubicacion',
         'imagen',
