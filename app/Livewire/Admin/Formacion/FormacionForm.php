@@ -31,7 +31,6 @@ class FormacionForm extends Component
     public ?string $fecha_fin = null;
     public ?string $url_externa = null;
     public bool $activo = true;
-    public int $interacciones = 0;
     public $imagen; // Archivo temporal
     public ?string $existingImage = null; // Imagen existente
 
@@ -56,7 +55,6 @@ class FormacionForm extends Component
             'fecha_fin'     => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'url_externa'   => ['nullable', 'url'],
             'activo'        => ['boolean'],
-            'interacciones' => ['integer', 'min:0'],
             'imagen'        => ['nullable', 'image', 'max:2048'],
 
         ];
@@ -87,7 +85,6 @@ class FormacionForm extends Component
         $this->fecha_fin     = $formacion->fecha_fin ? Carbon::parse($formacion->fecha_fin)->format('Y-m-d') : null;
         $this->url_externa   = $formacion->url_externa;
         $this->activo        = $formacion->activo;
-        $this->interacciones = $formacion->interacciones ?? 0;
         $this->existingImage = $formacion->imagen;
 
 
@@ -112,7 +109,6 @@ class FormacionForm extends Component
             'fecha_fin'     => $this->fecha_fin,
             'url_externa'   => $this->url_externa,
             'activo'        => $this->activo,
-            'interacciones' => $this->interacciones,
         ];
 
         // Manejo de imagen
@@ -159,7 +155,6 @@ class FormacionForm extends Component
             'fecha_fin',
             'url_externa',
             'activo',
-            'interacciones',
             'isOpen',
             'isEdit',
             'imagen',

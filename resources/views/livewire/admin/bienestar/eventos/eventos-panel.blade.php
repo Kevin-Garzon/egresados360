@@ -9,6 +9,8 @@
 
     {{-- TARJETAS RESUMEN --}}
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        {{-- Total de eventos --}}
         <div class="bg-white rounded-2xl shadow p-4 flex items-center">
             <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary text-2xl mr-4">
                 <i class="fa-solid fa-calendar-days"></i>
@@ -19,6 +21,7 @@
             </div>
         </div>
 
+        {{-- Próximos --}}
         <div class="bg-white rounded-2xl shadow p-4 flex items-center">
             <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary text-2xl mr-4">
                 <i class="fa-solid fa-hourglass-start"></i>
@@ -29,6 +32,18 @@
             </div>
         </div>
 
+        {{-- En curso --}}
+        <div class="bg-white rounded-2xl shadow p-4 flex items-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary text-2xl mr-4">
+                <i class="fa-solid fa-person-running"></i>
+            </div>
+            <div>
+                <div class="text-sm text-gray-500 mb-1">En curso</div>
+                <div class="text-2xl font-semibold">{{ $enCurso }}</div>
+            </div>
+        </div>
+
+        {{-- Finalizados --}}
         <div class="bg-white rounded-2xl shadow p-4 flex items-center">
             <div class="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary text-2xl mr-4">
                 <i class="fa-solid fa-flag-checkered"></i>
@@ -38,6 +53,7 @@
                 <div class="text-2xl font-semibold">{{ $finalizados }}</div>
             </div>
         </div>
+
     </section>
 
     {{-- GESTIÓN DE EVENTOS --}}
@@ -45,12 +61,12 @@
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-[#263238]">Gestión de Eventos</h2>
             <button
-                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
+                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
                 x-data
                 @click="$dispatch('open-create-evento')">
                 <i class="fa-solid fa-plus mr-2"></i> Agregar Evento
             </button>
-            
+
         </div>
 
         <div class="bg-white rounded-2xl shadow p-4">

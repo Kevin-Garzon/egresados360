@@ -92,6 +92,8 @@ class BienestarController extends Controller
             ? Carbon::parse($evento->fecha_fin)->translatedFormat('d M Y')
             : null;
 
+        // Agregar estado dinámico 
+        $evento->estado_label = $evento->tipo_label; 
         return response()->json($evento);
     }
 }

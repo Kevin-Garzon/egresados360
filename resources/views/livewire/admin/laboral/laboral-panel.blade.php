@@ -44,7 +44,7 @@
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-[#263238]">Gestión de Oportunidades Laborales</h2>
             <button
-                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
+                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
                 x-data
                 @click="$dispatch('open-create-oferta')">
                 <i class="fa-solid fa-plus mr-2"></i> Agregar Empleo
@@ -64,7 +64,7 @@
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-[#263238]">Directorio de Empresas Aliadas</h2>
             <button
-                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
+                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
                 x-data
                 @click="$dispatch('open-create-empresa')">
                 <i class="fa-solid fa-plus mr-2"></i> Agregar Empresa

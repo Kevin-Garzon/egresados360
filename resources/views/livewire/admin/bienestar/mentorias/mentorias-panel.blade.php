@@ -45,7 +45,7 @@
         <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-[#263238]">Gestión de Áreas de Mentoría</h2>
             <button
-                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition"
+                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
                 x-data
                 @click="$dispatch('open-create-mentoria')">
                 <i class="fa-solid fa-plus mr-2"></i> Nueva Mentoría

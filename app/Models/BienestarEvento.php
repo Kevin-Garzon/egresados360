@@ -13,7 +13,7 @@ class BienestarEvento extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
-        'tipo',
+        /* 'tipo', */
         'modalidad',
         'ubicacion',
         'imagen',
@@ -31,36 +31,14 @@ class BienestarEvento extends Model
     ];
 
     // ===============================
-    // NORMALIZACIÓN DE ESTADO (tipo)
+    // NORMALIZACIÓN DE ESTADO 
     // ===============================
     public function getTipoSlugAttribute(): string
     {
-        $raw = (string) ($this->tipo ?? '');
-
-        // Normalizar: minúsculas, sin tildes, sin espacios
-        $norm = Str::of($raw)->lower()->ascii()->replace(' ', '')->toString();
-
-        // Mapeos comunes de valores posibles
-        $map = [
-            'proximo'     => 'proximo',
-            'prox'        => 'proximo',
-            'porvenir'    => 'proximo',
-
-            'encurso'     => 'encurso',
-            'curso'       => 'encurso',
-
-            'finalizado'  => 'finalizado',
-            'terminado'   => 'finalizado',
-        ];
-
-        // Si el tipo coincide con alguno de los mapeos
-        if (isset($map[$norm])) {
-            return $map[$norm];
-        }
-
-        // Si el tipo no sirve o viene vacío, derivar por fechas
+        // Siempre calcular dinámicamente según las fechas
         return $this->derivarEstadoPorFechas();
     }
+
 
 
     // ======================================

@@ -89,8 +89,8 @@ class EventoForm extends Component
 
         $this->validate();
 
-        // 🧠 Determinar tipo automáticamente
-        $tipo = null;
+        // Determinar tipo automáticamente
+        /* $tipo = null;
         if ($this->fecha_inicio) {
             $hoy = Carbon::today();
             $inicio = Carbon::parse($this->fecha_inicio);
@@ -105,7 +105,7 @@ class EventoForm extends Component
             } else {
                 $tipo = 'Finalizado';
             }
-        }
+        } */
 
         $data = [
             'titulo'       => $this->titulo,
@@ -115,7 +115,7 @@ class EventoForm extends Component
             'fecha_inicio' => $this->fecha_inicio,
             'fecha_fin'    => $this->fecha_fin,
             'hora_inicio'  => $this->hora_inicio,
-            'tipo'         => $tipo, // asignado automáticamente
+            /* 'tipo'         => $tipo,  */
             'activo'       => $this->activo,
         ];
 
