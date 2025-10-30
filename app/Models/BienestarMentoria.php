@@ -12,6 +12,7 @@ class BienestarMentoria extends Model
         'titulo',
         'descripcion',
         'icono',
+        'url',
         'activo',
     ];
 

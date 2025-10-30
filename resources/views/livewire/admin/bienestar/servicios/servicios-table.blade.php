@@ -1,5 +1,5 @@
 <div class="space-y-4">
-    <div class="flex items-center justify-between mb-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
 
         {{-- Buscador --}}
         <div class="relative w-full sm:w-1/3">
@@ -13,7 +13,7 @@
 
         {{-- Botón de exportar servicios --}}
         <a href="{{ route('exportar.servicios') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition w-auto self-start sm:self-auto">
             <i class="fa-solid fa-file-arrow-down"></i> Exportar
         </a>
     </div>

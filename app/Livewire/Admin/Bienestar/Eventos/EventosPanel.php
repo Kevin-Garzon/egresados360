@@ -11,13 +11,20 @@ class EventosPanel extends Component
     public $totalEventos;
     public $proximos;
     public $finalizados;
+    public $enCurso;
 
     public function mount()
     {
         $this->totalEventos = BienestarEvento::count();
-        $this->proximos = BienestarEvento::whereDate('fecha_inicio', '>=', Carbon::today())->count();
-        $this->finalizados = BienestarEvento::whereDate('fecha_fin', '<', Carbon::today())->count();
+
+        $eventosActivos = BienestarEvento::where('activo', true)->get();
+
+        $this->proximos    = $eventosActivos->filter(fn($e) => $e->tipo_slug === 'proximo')->count();
+        $this->enCurso     = $eventosActivos->filter(fn($e) => $e->tipo_slug === 'encurso')->count();
+        $this->finalizados = $eventosActivos->filter(fn($e) => $e->tipo_slug === 'finalizado')->count();
     }
+
+
 
     public function render()
     {

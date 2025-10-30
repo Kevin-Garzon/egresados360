@@ -119,72 +119,69 @@
         </p>
     </div>
 
-    {{-- Carrusel de tarjetas --}}
-    <div x-data="{ 
-            novedadesScrollAmount: 1,
-            novedadesAutoScrollInterval: null,
-            startAutoScroll() {
-                const container = this.$refs.slider;
-                this.novedadesAutoScrollInterval = setInterval(() => {
-                    container.scrollLeft += this.novedadesScrollAmount;
-                    // Verifica si ha llegado al final de la primera copia de ítems
-                    if (container.scrollLeft >= (container.scrollWidth / 2)) {
-                        container.scrollLeft = 0; // Reinicia el ciclo
-                    }
-                }, 10); // Velocidad más rápida para scroll suave
-            },
-            stopScroll() {
-                if (this.novedadesAutoScrollInterval) {
-                    clearInterval(this.novedadesAutoScrollInterval);
-                    this.novedadesAutoScrollInterval = null;
-                }
+    {{-- Carrusel --}}
+    <div
+        x-data="{
+        scrollAmount: 1,
+        startAutoScroll() {
+          const container = this.$refs.slider;
+          setInterval(() => {
+            container.scrollLeft += this.scrollAmount;
+            if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+              container.scrollLeft = 0;
             }
-        }"
+          }, 20);
+        }
+      }"
         x-init="startAutoScroll()"
-        @mouseover="stopScroll()"
-        @mouseleave="startAutoScroll()"
-        class="relative">
+        class="relative px-6 md:px-12">
 
         <div
             x-ref="slider"
-            class="flex gap-8 overflow-hidden scroll-smooth px-6 md:px-12 select-none relative py-8">
+            class="flex gap-6 overflow-hidden scroll-smooth select-none py-8">
 
             @foreach(array_merge($items->toArray(), $items->toArray()) as $item)
             @php
             $visual = match($item['tipo']) {
-            'Laboral' => ['color' => 'text-primary', 'bg' => 'bg-gray-50', 'icon' => 'fa-briefcase', 'img' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop'],
-            'Formación' => ['color' => 'text-blue-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-graduation-cap', 'img' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800&auto=format&fit=crop'],
-            'Evento' => ['color' => 'text-yellow-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-calendar-days', 'img' => 'https://images.unsplash.com/photo-1551836022-deb4988cc6c1?q=80&w=800&auto=format&fit=crop'],
-            'Habilidad' => ['color' => 'text-emerald-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-lightbulb', 'img' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop'],
-            'Servicio' => ['color' => 'text-rose-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-hand-holding-heart', 'img' => 'https://images.unsplash.com/photo-1485217988980-11786ced9454?q=80&w=800&auto=format&fit=crop'],
-            'Mentoría' => ['color' => 'text-indigo-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-user-tie', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg'],
-            default => ['color' => 'text-gray-600', 'bg' => 'bg-gray-50', 'icon' => 'fa-circle-info', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg']
+            'Laboral' => ['color' => 'text-primary', 'bg' => 'bg-white', 'icon' => 'fa-briefcase', 'img' => 'https://www.stelorder.com/wp-content/uploads/2021/09/portada-sociedad-laboral.jpg'],
+            'Formación' => ['color' => 'text-blue-600', 'bg' => 'bg-white', 'icon' => 'fa-graduation-cap', 'img' => 'https://www.ceduk.edu.mx/blog/wp-content/uploads/2024/07/tecnicas-de-estudio-ejercicios.jpg'],
+            'Evento' => ['color' => 'text-yellow-600', 'bg' => 'bg-white', 'icon' => 'fa-calendar-days', 'img' => 'https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg'],
+            'Habilidad' => ['color' => 'text-emerald-600', 'bg' => 'bg-white', 'icon' => 'fa-lightbulb', 'img' => 'https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg'],
+            'Servicio' => ['color' => 'text-rose-600', 'bg' => 'bg-white', 'icon' => 'fa-hand-holding-heart', 'img' => 'https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg'],
+            'Mentoría' => ['color' => 'text-indigo-600', 'bg' => 'bg-white', 'icon' => 'fa-user-tie', 'img' => 'https://storage.googleapis.com/www-saludiario-com/wp-content/uploads/2023/08/8e35f3c3-bienestar-integral.jpg'],
+            default => ['color' => 'text-gray-600', 'bg' => 'bg-white', 'icon' => 'fa-circle-info', 'img' => 'https://blog.oncosalud.pe/hubfs/Bienestar%20Emocional%20Qu%C3%A9%20Debes%20Saber.jpg']
             };
+
+            // Usa fecha_inicio o fecha si existe, sino created_at
+            $fecha = $item['fecha_inicio'] ?? $item['fecha'] ?? $item['created_at'];
             @endphp
 
-            {{-- Tarjetas --}}
-            <div class="snap-center shrink-0 w-[280px] sm:w-[300px] md:w-[320px] lg:w-[340px] {{ $visual['bg'] }} rounded-3xl shadow-card hover:shadow-xl transition-transform duration-300 hover:-translate-y-1">
+            {{-- Tarjeta --}}
+            <div
+                class="snap-center shrink-0 w-[280px] sm:w-[300px] md:w-[320px] lg:w-[340px] {{ $visual['bg'] }} rounded-3xl shadow-card hover:shadow-xl transition-transform duration-300 hover:-translate-y-1 mx-2 flex flex-col">
                 <div class="h-44 w-full overflow-hidden rounded-t-3xl">
-                    {{-- Usando el placeholder de color para que sea más rápido y estable si las URLs fallan --}}
-                    <img src="{{ $visual['img'] }}"
-                        alt="{{ $item['tipo'] }}"
-                        class="w-full h-full object-cover">
+                    <img src="{{ $visual['img'] }}" alt="{{ $item['tipo'] }}" class="w-full h-full object-cover">
                 </div>
-                <div class="p-6 text-center">
-                    <div class="flex justify-center mb-3">
-                        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-inner {{ $visual['color'] }} text-xl">
-                            <i class="fa-solid {{ $visual['icon'] }}"></i>
+
+                <div class="p-6 text-center flex flex-col flex-1 justify-between">
+                    <div>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50 shadow-inner {{ $visual['color'] }} text-xl">
+                                <i class="fa-solid {{ $visual['icon'] }}"></i>
+                            </div>
                         </div>
+                        <h3 class="font-poppins font-semibold text-lg text-gunmetal mb-1">
+                            {{ Str::limit($item['titulo'], 60) }}
+                        </h3>
+                        <p class="text-sm text-rblack/60 mb-4">
+                            {{ $item['tipo'] }} — {{ \Carbon\Carbon::parse($fecha)->translatedFormat('d M, Y') }}
+                        </p>
                     </div>
-                    <h3 class="font-poppins font-semibold text-lg text-gunmetal mb-1">
-                        {{ Str::limit($item['titulo'], 60) }}
-                    </h3>
-                    <p class="text-sm text-rblack/60 mb-2">
-                        {{ $item['tipo'] }} — {{ \Carbon\Carbon::parse($item['created_at'])->format('d M, Y') }}
-                    </p>
-                    <a href="{{ $item['url'] }}"
-                        class="inline-flex items-center justify-center gap-2 px-5 py-2 mt-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-green-700 transition">
-                        <i class="fa-solid fa-arrow-right"></i> Ver más
+
+                    {{-- Botón unificado --}}
+                    <a href="{{ $item['url'] }}" target="_blank"
+                        class="btn btn-primary w-full justify-center py-2">
+                        <i class="fa-solid fa-arrow-right mr-2"></i> Ver más
                     </a>
                 </div>
             </div>
@@ -192,6 +189,7 @@
         </div>
     </div>
 </section>
+
 
 
 

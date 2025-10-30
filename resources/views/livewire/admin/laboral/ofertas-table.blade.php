@@ -1,7 +1,7 @@
 <div class="space-y-4">
 
     {{-- Encabezado superior con buscador y botón --}}
-    <div class="flex items-center justify-between mb-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
         <div class="relative w-full sm:w-1/3">
             <i class="fa-solid fa-magnifying-glass text-gray-400 absolute left-3 top-2.5"></i>
             <input
@@ -13,7 +13,7 @@
 
         {{-- Botón con estilo coherente --}}
         <a href="{{ route('exportar.ofertas') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition w-auto self-start sm:self-auto">
             <i class="fa-solid fa-file-arrow-down"></i> Exportar
         </a>
     </div>

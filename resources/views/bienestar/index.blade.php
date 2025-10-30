@@ -248,18 +248,19 @@
             @else
             <div class="grid gap-8 md:grid-cols-3">
                 @foreach($mentorias as $m)
-                <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition">
+                <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition flex flex-col h-full">
+
                     <div class="text-center mb-4">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-full text-3xl mb-3">
                             <i class="fa-solid {{ $m->icono ?? 'fa-user-tie' }}"></i>
                         </div>
                         <h4 class="font-semibold text-lg text-gunmetal mb-2">{{ $m->titulo }}</h4>
-                        <p class="text-sm text-rblack/70 leading-relaxed">
+                        <p class="text-sm text-rblack/70 leading-relaxed text-justify flex-1">
                             {{ $m->descripcion ?? 'Sin descripción disponible.' }}
                         </p>
                     </div>
-                    <button
-                        class="btn btn-primary w-full mt-4 py-2 flex items-center justify-center"
+                    <a href="{{ $m->url }}" target="_blank" rel="noopener noreferrer"
+                        class="btn btn-primary w-full mt-auto py-2 flex items-center justify-center"
                         data-track
                         data-module="bienestar"
                         data-action="solicitar_mentoria"
@@ -267,7 +268,9 @@
                         data-id="{{ $m->id }}"
                         data-title="{{ $m->titulo }}">
                         <i class="fa-solid fa-calendar-day mr-2"></i> Solicitar mentoría
-                    </button>
+                    </a>
+
+
 
                 </div>
                 @endforeach
