@@ -26,15 +26,15 @@
       <div id="modalFlyerContainer" class="hidden">
         <a id="modalFlyerLink" href="#" target="_blank">
           <img id="modalFlyer"
-               src=""
-               alt="Flyer de la oferta"
-               class="w-full rounded-xl object-cover shadow-md max-h-[280px] hover:opacity-90 transition" />
+            src=""
+            alt="Flyer de la oferta"
+            class="w-full rounded-xl object-cover shadow-md max-h-[280px] hover:opacity-90 transition" />
         </a>
       </div>
 
       {{-- Descripción --}}
       <section id="modalDescripcion"
-               class="text-gray-700 leading-relaxed text-justify whitespace-pre-line"></section>
+        class="text-gray-700 leading-relaxed text-justify whitespace-pre-line"></section>
 
       {{-- Etiquetas --}}
       <div id="modalEtiquetas" class="flex flex-wrap gap-2">
@@ -57,10 +57,16 @@
       {{-- Botón --}}
       <div class="text-right pt-4">
         <a id="modalLink"
-           href="#"
-           target="_blank"
-           class="inline-flex items-center justify-center gap-2 bg-primary text-white font-medium px-5 py-2.5 rounded-xl hover:bg-green-600 transition">
-          Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+          href="#"
+          target="_blank"
+          class="btn btn-primary"
+          data-track
+          data-module="laboral"
+          data-action="aplicar"
+          data-type="oferta"
+          data-id=""
+          data-title="">
+          Ir a aplicar <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
         </a>
       </div>
 
@@ -73,81 +79,81 @@
 {{-- SCRIPT DEL MODAL --}}
 {{-- ========================= --}}
 <script>
-    async function verOferta(id) {
+  async function verOferta(id) {
+    try {
+      window.currentOfertaId = id;
+
+      const res = await fetch(`/api/oferta/${id}`);
+      if (!res.ok) throw new Error('Error al obtener los datos de la oferta');
+      const oferta = await res.json();
+
+      // Asignar datos
+      document.getElementById('modalTitulo').innerText = oferta.titulo ?? '—';
+      document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
+      document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
+      document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
+
+      // Fecha formateada
+      let fechaFormateada = '—';
+      if (oferta.publicada_en) {
+        const fecha = new Date(oferta.publicada_en);
+        fechaFormateada = fecha.toLocaleDateString('es-CO', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        });
+      }
+      document.getElementById('modalFecha').innerText = fechaFormateada;
+
+      // Enlace de acción
+      const modalLink = document.getElementById('modalLink');
+      modalLink.href = oferta.url_externa ?? '#';
+      modalLink.setAttribute('data-id', oferta.id);
+      modalLink.setAttribute('data-title', oferta.titulo ?? 'Oferta sin título');
+
+      // Flyer (si existe)
+      const flyerContainer = document.getElementById('modalFlyerContainer');
+      const flyerImg = document.getElementById('modalFlyer');
+      const flyerLink = document.getElementById('modalFlyerLink');
+
+      if (oferta.flyer) {
+        flyerContainer.classList.remove('hidden');
+        flyerImg.src = `/storage/${oferta.flyer}`;
+        flyerLink.href = `/storage/${oferta.flyer}`;
+      } else {
+        flyerContainer.classList.add('hidden');
+        flyerImg.src = '';
+        flyerLink.href = '#';
+      }
+
+      // Etiquetas dinámicas
+      const etiquetasContainer = document.getElementById('modalEtiquetas');
+      etiquetasContainer.innerHTML = '';
+      let etiquetas = oferta.etiquetas;
+      if (typeof etiquetas === 'string') {
         try {
-            window.currentOfertaId = id;
+          etiquetas = JSON.parse(etiquetas);
+        } catch {}
+      }
+      if (Array.isArray(etiquetas)) {
+        etiquetas.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
+          span.innerText = tag.trim();
+          etiquetasContainer.appendChild(span);
+        });
+      }
 
-            const res = await fetch(`/api/oferta/${id}`);
-            if (!res.ok) throw new Error('Error al obtener los datos de la oferta');
-            const oferta = await res.json();
-
-            // Asignar datos
-            document.getElementById('modalTitulo').innerText = oferta.titulo ?? '—';
-            document.getElementById('modalEmpresa').innerText = oferta.empresa?.nombre ?? 'Empresa no disponible';
-            document.getElementById('modalDescripcion').innerText = oferta.descripcion ?? '';
-            document.getElementById('modalUbicacion').innerText = oferta.ubicacion ?? 'Ubicación no especificada';
-
-            // Fecha formateada
-            let fechaFormateada = '—';
-            if (oferta.publicada_en) {
-                const fecha = new Date(oferta.publicada_en);
-                fechaFormateada = fecha.toLocaleDateString('es-CO', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                });
-            }
-            document.getElementById('modalFecha').innerText = fechaFormateada;
-
-            // Enlace de acción
-            const modalLink = document.getElementById('modalLink');
-            modalLink.href = oferta.url_externa ?? '#';
-            modalLink.setAttribute('data-id', oferta.id);
-            modalLink.setAttribute('data-title', oferta.titulo ?? 'Oferta sin título');
-
-            // Flyer (si existe)
-            const flyerContainer = document.getElementById('modalFlyerContainer');
-            const flyerImg = document.getElementById('modalFlyer');
-            const flyerLink = document.getElementById('modalFlyerLink');
-
-            if (oferta.flyer) {
-                flyerContainer.classList.remove('hidden');
-                flyerImg.src = `/storage/${oferta.flyer}`;
-                flyerLink.href = `/storage/${oferta.flyer}`;
-            } else {
-                flyerContainer.classList.add('hidden');
-                flyerImg.src = '';
-                flyerLink.href = '#';
-            }
-
-            // Etiquetas dinámicas
-            const etiquetasContainer = document.getElementById('modalEtiquetas');
-            etiquetasContainer.innerHTML = '';
-            let etiquetas = oferta.etiquetas;
-            if (typeof etiquetas === 'string') {
-                try {
-                    etiquetas = JSON.parse(etiquetas);
-                } catch {}
-            }
-            if (Array.isArray(etiquetas)) {
-                etiquetas.forEach(tag => {
-                    const span = document.createElement('span');
-                    span.className = 'bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full';
-                    span.innerText = tag.trim();
-                    etiquetasContainer.appendChild(span);
-                });
-            }
-
-            // Mostrar modal
-            document.getElementById('ofertaModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        } catch (error) {
-            console.error('Error mostrando la oferta:', error);
-        }
+      // Mostrar modal
+      document.getElementById('ofertaModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } catch (error) {
+      console.error('Error mostrando la oferta:', error);
     }
+  }
 
-    document.getElementById('close-modal-oferta').addEventListener('click', () => {
-        document.getElementById('ofertaModal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    });
+  document.getElementById('close-modal-oferta').addEventListener('click', () => {
+    document.getElementById('ofertaModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  });
 </script>
