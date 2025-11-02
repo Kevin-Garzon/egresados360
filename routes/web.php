@@ -158,9 +158,11 @@ Route::post('/api/track/interaction', function (Request $request) {
         'item_id' => 'nullable|integer',
         'item_title' => 'nullable|string|max:255',
         'perfil_id' => 'nullable|integer|exists:perfiles_egresado,id',
+        'url' => 'nullable|string|max:255',
     ]);
 
-    $interaccion = Interaccion::create([
+    // Crear la interacción normalmente
+    $interaccion = \App\Models\Interaccion::create([
         'module' => $validated['module'],
         'action' => $validated['action'],
         'item_type' => $validated['item_type'] ?? null,
@@ -172,8 +174,80 @@ Route::post('/api/track/interaction', function (Request $request) {
         'user_agent' => substr($request->userAgent(), 0, 250),
     ]);
 
-    return response()->json(['success' => true, 'id' => $interaccion->id]);
+    // ==================================================
+    // Redirecciones especiales hacia WhatsApp Business
+    // ==================================================
+    if (!empty($validated['perfil_id'])) {
+        $perfil = PerfilEgresado::find($validated['perfil_id']);
+        $tipo = strtolower($validated['item_type'] ?? '');
+        $titulo = $validated['item_title'] ?? '';
+        $itemId = $validated['item_id'] ?? null;
+
+        if ($perfil) {
+            $nombre = $perfil->nombre ?? 'un egresado';
+            $programa = $perfil->programa ?? 'su programa';
+            $anio = $perfil->anio_egreso ?? 'su año de egreso';
+            $numero = '573224650595'; // WhatsApp Business oficial FET
+            $mensaje = null;
+
+            switch ($tipo) {
+                case 'mentoria':
+                    $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y me interesa la mentoría \"{$titulo}\".";
+                    break;
+
+                case 'atencion':
+                    $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y deseo solicitar un espacio de escucha con Bienestar Institucional.";
+                    break;
+
+                case 'habilidad':
+                    $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y deseo inscribirme en el taller \"{$titulo}\".";
+                    break;
+
+                case 'curso': // Formación continua (si la empresa es FET)
+                    $formacion = Formacion::with('empresa')->find($itemId);
+                    if ($formacion && $formacion->empresa && strtolower(trim($formacion->empresa->nombre)) === 'fet') {
+                        $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y deseo inscribirme en la oferta de formación \"{$titulo}\" organizada por la FET.";
+                    }
+                    break;
+
+                case 'oferta': // Ofertas laborales de la FET
+                    $oferta = OfertaLaboral::with('empresa')->find($itemId);
+                    if ($oferta && $oferta->empresa && strtolower(trim($oferta->empresa->nombre)) === 'fet') {
+                        $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y me interesa postularme a la oferta laboral \"{$titulo}\" publicada por la FET.";
+                    }
+                    break;
+            }
+
+            // Si se construyó mensaje → redirigir a WhatsApp
+            if ($mensaje) {
+                $mensaje = urlencode($mensaje);
+
+                $userAgent = strtolower($request->userAgent());
+                $isMobile = str_contains($userAgent, 'mobile') || str_contains($userAgent, 'android') || str_contains($userAgent, 'iphone');
+
+                $enlace = $isMobile
+                    ? "https://api.whatsapp.com/send?phone={$numero}&text={$mensaje}"
+                    : "https://web.whatsapp.com/send?phone={$numero}&text={$mensaje}";
+
+                return response()->json([
+                    'success' => true,
+                    'id' => $interaccion->id,
+                    'redirect' => $enlace
+                ]);
+            }
+        }
+    }
+
+    // =============================================
+    // Si no aplica redirección especial → URL normal
+    // =============================================
+    return response()->json([
+        'success' => true,
+        'id' => $interaccion->id,
+        'redirect' => $validated['url'] ?? null
+    ]);
 });
+
 
 
 // Registrar visitas diarias
