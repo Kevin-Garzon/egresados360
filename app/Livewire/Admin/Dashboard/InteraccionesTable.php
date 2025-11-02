@@ -5,19 +5,20 @@ namespace App\Livewire\Admin\Dashboard;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Interaccion;
+use Illuminate\Support\Facades\DB;
 
 class InteraccionesTable extends Component
 {
     use WithPagination;
 
     public $filtroModulo = '';
-    public $filtroIdentificacion = '';
+    public $filtroPrograma = '';
 
     protected $paginationTheme = 'tailwind';
-    
+
     public function updating($name)
     {
-        // Cuando se cambie un filtro, reinicia la paginación de la tabla
+        // Reinicia la paginación cuando cambia un filtro
         $this->resetPage('interaccionesPage');
     }
 
@@ -25,21 +26,30 @@ class InteraccionesTable extends Component
     {
         $query = Interaccion::with('perfil')->latest();
 
+        // Filtro por módulo
         if ($this->filtroModulo) {
             $query->where('module', $this->filtroModulo);
         }
 
-        if ($this->filtroIdentificacion === 'identificado') {
-            $query->whereNotNull('perfil_id');
-        } elseif ($this->filtroIdentificacion === 'anonimo') {
-            $query->whereNull('perfil_id');
+        // Filtro por programa (a través de la relación con perfil)
+        if ($this->filtroPrograma) {
+            $query->whereHas('perfil', function ($q) {
+                $q->where('programa', $this->filtroPrograma);
+            });
         }
 
-        // 🚨 CAMBIO CLAVE: Usar 'interaccionesPage' en paginate()
         $interacciones = $query->paginate(10, ['*'], 'interaccionesPage');
+
+        // Obtener programas distintos disponibles (desde los perfiles asociados)
+        $programas = DB::table('perfiles_egresado')
+            ->whereNotNull('programa')
+            ->distinct()
+            ->orderBy('programa')
+            ->pluck('programa');
 
         return view('livewire.admin.dashboard.interacciones-table', [
             'interacciones' => $interacciones,
+            'programas' => $programas,
         ]);
     }
 }
