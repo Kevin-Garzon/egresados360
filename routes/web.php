@@ -1,35 +1,56 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
+/*
+|--------------------------------------------------------------------------
+| Controladores Principales
+|--------------------------------------------------------------------------
+*/
 use App\Http\Controllers\{
     InicioController,
     ProfileController,
     LaboralController,
     FormacionController,
     BienestarController,
+    TrackingController,
+    MetricsController,
+    EgresadoProfileController,
 };
 
+/*
+|--------------------------------------------------------------------------
+| Componentes Livewire (Paneles Administrativos)
+|--------------------------------------------------------------------------
+*/
 use App\Livewire\Admin\{
     Laboral\LaboralPanel,
     Formacion\FormacionPanel,
     Bienestar\Habilidades\HabilidadesPanel,
     Bienestar\Servicios\ServiciosPanel,
     Bienestar\Eventos\EventosPanel,
-    Bienestar\Mentorias\MentoriasPanel
+    Bienestar\Mentorias\MentoriasPanel,
+    Dashboard\DashboardPanel
 };
 
+/*
+|--------------------------------------------------------------------------
+| Modelos
+|--------------------------------------------------------------------------
+*/
 use App\Models\{
     Formacion,
-    OfertaLaboral,
-    PerfilEgresado,
-    Interaccion,
-    VisitaDiaria
+    OfertaLaboral
 };
 
+/*
+|--------------------------------------------------------------------------
+| Exportaciones (Métricas a Excel)
+|--------------------------------------------------------------------------
+*/
 use App\Exports\Sheets\{
     VisitasSheet,
     InteraccionesSheet,
@@ -44,24 +65,18 @@ use App\Exports\Sheets\{
 
 
 
-
-
 /* ============================================================
 |  PÁGINAS PÚBLICAS
 |============================================================ */
-
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
-
 
 // --- Ofertas Laborales ---
 Route::get('/laboral', [LaboralController::class, 'index'])->name('laboral.index');
 Route::get('/api/oferta/{id}', fn($id) => OfertaLaboral::with('empresa')->findOrFail($id));
 
-
 // --- Formación Continua ---
 Route::get('/formacion', [FormacionController::class, 'index'])->name('formacion.index');
 Route::get('/api/formacion/{id}', fn($id) => Formacion::with('empresa')->findOrFail($id));
-
 
 // --- Bienestar Institucional ---
 Route::get('/bienestar', [BienestarController::class, 'index'])->name('bienestar.index');
@@ -69,135 +84,74 @@ Route::get('/bienestar/habilidad/{id}', [BienestarController::class, 'show'])->n
 Route::get('/bienestar/servicio/{id}', [BienestarController::class, 'showServicio'])->name('bienestar.servicio.show');
 Route::get('/bienestar/evento/{id}', [BienestarController::class, 'showEvento'])->name('bienestar.evento.show');
 
-
 // --- Política de Tratamiento de Datos ---
 Route::view('/politica-datos', 'politica-datos')->name('politica-datos');
-
-
 
 
 
 /* ============================================================
 |  AUTENTICACIÓN Y PERFIL ADMINISTRADOR
 |============================================================ */
-
 // Panel principal (Dashboard)
-Route::get('/dashboard', \App\Livewire\Admin\Dashboard\DashboardPanel::class)
+Route::get('/dashboard', DashboardPanel::class)
     ->middleware(['auth'])
     ->name('dashboard');
 
-// Perfil de usuario administrador
+// Perfil de usuario administrador (auth Breeze)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Archivo de rutas base de Breeze (mantiene login funcional)
+// Rutas Breeze (login / registro / logout)
 require __DIR__ . '/auth.php';
-
-
 
 
 
 /* ============================================================
 |  PANELES ADMINISTRATIVOS (PROTEGIDOS)
 |============================================================ */
-
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-
-    // Ofertas laborales
+    // Laboral
     Route::get('/laboral', LaboralPanel::class)->name('laboral.panel');
 
-    // Formación continua
+    // Formación Continua
     Route::get('/formacion', FormacionPanel::class)->name('formacion.panel');
 
-    // Bienestar institucional
-    Route::get('/bienestar/habilidades', HabilidadesPanel::class)->name('bienestar.habilidades.panel');
-    Route::get('/bienestar/servicios', ServiciosPanel::class)->name('bienestar.servicios.panel');
-    Route::get('/bienestar/eventos', EventosPanel::class)->name('bienestar.eventos.panel');
-    Route::get('/bienestar/mentorias', MentoriasPanel::class)->name('bienestar.mentorias.panel');
+    // Bienestar Institucional
+    Route::prefix('bienestar')->name('bienestar.')->group(function () {
+        Route::get('/habilidades', HabilidadesPanel::class)->name('habilidades.panel');
+        Route::get('/servicios', ServiciosPanel::class)->name('servicios.panel');
+        Route::get('/eventos', EventosPanel::class)->name('eventos.panel');
+        Route::get('/mentorias', MentoriasPanel::class)->name('mentorias.panel');
+    });
 });
-
-
 
 
 
 /* ============================================================
-|  API INTERNA PARA MÉTRICAS E INTERACCIONES
+|  API INTERNA (Egresados, Métricas, Interacciones)
 |============================================================ */
-
-// Registrar o actualizar perfil de egresado
-Route::post('/api/profile/upsert', function (Request $request) {
-    $validated = $request->validate([
-        'nombre' => 'required|string|max:255',
-        'correo' => 'required|email',
-        'celular' => 'nullable|string|max:20',
-        'programa' => 'nullable|string|max:255',
-        'anio_egreso' => 'nullable|digits:4',
-    ]);
-
-    $perfil = PerfilEgresado::updateOrCreate(
-        ['correo' => $validated['correo']],
-        $validated
-    );
-
-    return response()->json([
-        'success' => true,
-        'perfil_id' => $perfil->id,
-    ]);
+Route::prefix('api')->group(function () {
+    Route::post('/profile/upsert', [EgresadoProfileController::class, 'upsert'])->name('api.profile.upsert');
+    Route::post('/track/interaction', [TrackingController::class, 'registrarInteraccion'])->name('api.track.interaction');
+    Route::post('/registrar-visita', [MetricsController::class, 'registrarVisita'])->name('api.metrics.visita');
 });
-
-
-// Registrar interacciones de usuario
-Route::post('/api/track/interaction', function (Request $request) {
-    $validated = $request->validate([
-        'module' => 'required|string|max:50',
-        'action' => 'required|string|max:50',
-        'item_type' => 'nullable|string|max:50',
-        'item_id' => 'nullable|integer',
-        'item_title' => 'nullable|string|max:255',
-        'perfil_id' => 'nullable|integer|exists:perfiles_egresado,id',
-    ]);
-
-    $interaccion = Interaccion::create([
-        'module' => $validated['module'],
-        'action' => $validated['action'],
-        'item_type' => $validated['item_type'] ?? null,
-        'item_id' => $validated['item_id'] ?? null,
-        'item_title' => $validated['item_title'] ?? null,
-        'perfil_id' => $validated['perfil_id'] ?? null,
-        'is_anonymous' => empty($validated['perfil_id']),
-        'ip' => $request->ip(),
-        'user_agent' => substr($request->userAgent(), 0, 250),
-    ]);
-
-    return response()->json(['success' => true, 'id' => $interaccion->id]);
-});
-
-
-// Registrar visitas diarias
-Route::post('/api/registrar-visita', function () {
-    VisitaDiaria::registrarVisita();
-    return response()->json(['success' => true]);
-});
-
-
 
 
 
 /* ============================================================
-|  EXPORTACIONES DE MÉTRICAS A EXCEL
+|  EXPORTACIONES A EXCEL (Métricas y Registros)
 |============================================================ */
-
-Route::prefix('exportar')->group(function () {
-    Route::get('/visitas', fn() => Excel::download(new VisitasSheet, 'visitas_diarias.xlsx'))->name('exportar.visitas');
-    Route::get('/interacciones', fn() => Excel::download(new InteraccionesSheet, 'interacciones.xlsx'))->name('exportar.interacciones');
-    Route::get('/egresados', fn() => Excel::download(new EgresadosSheet, 'egresados.xlsx'))->name('exportar.egresados');
-    Route::get('/ofertas', fn() => Excel::download(new OfertasSheet, 'ofertas.xlsx'))->name('exportar.ofertas');
-    Route::get('/formaciones', fn() => Excel::download(new FormacionesSheet, 'formaciones.xlsx'))->name('exportar.formaciones');
-    Route::get('/empresas', fn() => Excel::download(new EmpresasSheet, 'empresas.xlsx'))->name('exportar.empresas');
-    Route::get('/servicios', fn() => Excel::download(new ServiciosSheet, 'servicios.xlsx'))->name('exportar.servicios');
-    Route::get('/habilidades', fn() => Excel::download(new HabilidadesSheet, 'habilidades.xlsx'))->name('exportar.habilidades');
-    Route::get('/eventos', fn() => Excel::download(new EventosSheet, 'eventos.xlsx'))->name('exportar.eventos');
+Route::prefix('exportar')->name('exportar.')->group(function () {
+    Route::get('/visitas', fn() => Excel::download(new VisitasSheet, 'visitas_diarias.xlsx'))->name('visitas');
+    Route::get('/interacciones', fn() => Excel::download(new InteraccionesSheet, 'interacciones.xlsx'))->name('interacciones');
+    Route::get('/egresados', fn() => Excel::download(new EgresadosSheet, 'egresados.xlsx'))->name('egresados');
+    Route::get('/ofertas', fn() => Excel::download(new OfertasSheet, 'ofertas.xlsx'))->name('ofertas');
+    Route::get('/formaciones', fn() => Excel::download(new FormacionesSheet, 'formaciones.xlsx'))->name('formaciones');
+    Route::get('/empresas', fn() => Excel::download(new EmpresasSheet, 'empresas.xlsx'))->name('empresas');
+    Route::get('/servicios', fn() => Excel::download(new ServiciosSheet, 'servicios.xlsx'))->name('servicios');
+    Route::get('/habilidades', fn() => Excel::download(new HabilidadesSheet, 'habilidades.xlsx'))->name('habilidades');
+    Route::get('/eventos', fn() => Excel::download(new EventosSheet, 'eventos.xlsx'))->name('eventos');
 });

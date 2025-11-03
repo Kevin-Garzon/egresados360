@@ -37,15 +37,6 @@
                 </div>
 
                 <div>
-                    <label class="text-sm font-medium text-gray-600">URL / Enlace (opcional)</label>
-                    <input type="url" wire:model.defer="url"
-                        class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary"
-                        placeholder="https://forms.gle/tu-enlace-de-mentoria" />
-                    @error('url') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                </div>
-
-
-                <div>
                     <label class="text-sm font-medium text-gray-600">Ícono representativo *</label>
                     <select wire:model.defer="icono"
                         class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary">

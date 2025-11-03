@@ -14,7 +14,6 @@ class BienestarHabilidad extends Model
         'tema',
         'modalidad',
         'fecha',
-        'enlace_inscripcion',
         'imagen',
         'activo',
     ];

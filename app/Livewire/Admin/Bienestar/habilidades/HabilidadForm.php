@@ -21,7 +21,6 @@ class HabilidadForm extends Component
     public ?string $tema = null;
     public ?string $modalidad = null;
     public ?string $fecha = null;
-    public ?string $enlace_inscripcion = null;
     public bool $activo = true;
     public $imagen;
     public ?string $existingImage = null;
@@ -39,7 +38,6 @@ class HabilidadForm extends Component
             'tema' => ['nullable', 'string', 'max:100'],
             'modalidad' => ['nullable', 'string', 'max:50'],
             'fecha' => ['nullable', 'date'],
-            'enlace_inscripcion' => ['nullable', 'url'],
             'activo' => ['boolean'],
             'imagen' => ['nullable', 'image', 'max:2048'],
         ];
@@ -63,7 +61,6 @@ class HabilidadForm extends Component
         $this->tema = $habilidad->tema;
         $this->modalidad = $habilidad->modalidad;
         $this->fecha = $habilidad->fecha ? Carbon::parse($habilidad->fecha)->format('Y-m-d') : null;
-        $this->enlace_inscripcion = $habilidad->enlace_inscripcion;
         $this->activo = $habilidad->activo;
         $this->existingImage = $habilidad->imagen;
 
@@ -81,7 +78,6 @@ class HabilidadForm extends Component
             'tema' => $this->tema,
             'modalidad' => $this->modalidad,
             'fecha' => $this->fecha,
-            'enlace_inscripcion' => $this->enlace_inscripcion,
             'activo' => $this->activo,
         ];
 
@@ -119,7 +115,6 @@ class HabilidadForm extends Component
             'tema',
             'modalidad',
             'fecha',
-            'enlace_inscripcion',
             'activo',
             'isOpen',
             'isEdit',

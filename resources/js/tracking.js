@@ -34,14 +34,19 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Si sí hay perfil, registrar interacción directamente
-        await registrarInteraccion({ ...data, perfil_id: perfilId });
+        // Registrar interacción y manejar posible redirección
+        const response = await registrarInteraccion({ ...data, perfil_id: perfilId });
 
-        // Si el botón tiene una URL, abrirla en una nueva pestaña
+        if (response?.redirect) {
+            // Si el backend devuelve un enlace (por ejemplo WhatsApp), redirigir directamente
+            window.open(response.redirect, "_blank");
+            return;
+        }
+
+        // Si no hay redirección especial, abrir URL normal (si existe)
         if (data.url) {
             window.open(data.url, "_blank");
         }
-
     });
 
     // Reintentar clic pendiente tras guardar perfil
@@ -52,18 +57,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = JSON.parse(pendiente);
         data.perfil_id = localStorage.getItem("perfil_id");
 
-        await registrarInteraccion(data);
+        const response = await registrarInteraccion(data);
 
-        // Si tenía URL asociada, abrirla
-        if (data.url) window.open(data.url, "_blank");
+        // Si el backend devuelve redirección (WhatsApp, etc.)
+        if (response?.redirect) {
+            window.open(response.redirect, "_blank");
+        } else if (data.url) {
+            // Si no hay redirect, abrir la URL normal
+            window.open(data.url, "_blank");
+        }
 
         localStorage.removeItem("pendiente_click");
     });
 
-    // Función auxiliar
+    // Función auxiliar: registrar interacción vía API
     async function registrarInteraccion(data) {
         try {
-            await fetch("/api/track/interaction", {
+            const response = await fetch("/api/track/interaction", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -71,9 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify(data),
             });
-            /* console.log("Interacción registrada:", data); */
+            return await response.json(); // Devuelve el JSON con 'redirect' si aplica
         } catch (error) {
             console.error("Error registrando interacción:", error);
+            return null;
         }
     }
 });

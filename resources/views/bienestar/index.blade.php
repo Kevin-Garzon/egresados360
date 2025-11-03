@@ -298,9 +298,7 @@
             </div>
 
             <a
-                href="https://wa.me/573001234567?text=Hola,%20soy%20egresado%20FET%20y%20quisiera%20solicitar%20un%20espacio%20de%20escucha."
-                target="_blank"
-                class="btn btn-primary px-6 py-2 flex items-center shadow"
+                class="btn btn-primary px-6 py-2 flex items-center shadow cursor-pointer"
                 data-track
                 data-module="bienestar"
                 data-action="solicitar_espacio_escucha"
