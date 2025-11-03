@@ -11,7 +11,7 @@
     badge="Bienestar del Egresado"
     title="Tu bienestar,"
     highlight="nuestra prioridad"
-    subtitle="Actividades, servicios y recursos que fortalecen tu desarrollo."
+    subtitle="Actividades y recursos que te fortalecen"
     description="Descubre las iniciativas de la FET para acompañarte en tu crecimiento integral como egresado."
     :btnPrimary="['text' => 'Ver Habilidades', 'icon' => 'fa-solid fa-heart-pulse', 'link' => '#habilidades']"
     :btnSecondary="['text' => 'Servicios', 'icon' => 'fa-solid fa-hand-holding-heart', 'link' => '#beneficios']"
