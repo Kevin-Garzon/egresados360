@@ -51,12 +51,6 @@
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Enlace de inscripción</label>
-                        <input type="url" wire:model.defer="enlace_inscripcion"
-                            class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
-                    </div>
-
-                    <div>
                         <label class="text-sm font-medium text-gray-600">Descripción</label>
                         <textarea wire:model.defer="descripcion" rows="3"
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary"></textarea>

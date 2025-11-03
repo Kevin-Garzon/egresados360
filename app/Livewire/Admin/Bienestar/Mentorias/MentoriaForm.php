@@ -14,7 +14,6 @@ class MentoriaForm extends Component
     public string $titulo = '';
     public ?string $descripcion = null;
     public ?string $icono = null;
-    public ?string $url = null;
     public bool $activo = true;
 
     protected $listeners = [
@@ -28,7 +27,6 @@ class MentoriaForm extends Component
             'titulo' => ['required', 'string', 'max:100'],
             'descripcion' => ['nullable', 'string', 'max:200'],
             'icono' => ['required', 'string', 'max:100'],
-            'url' => ['nullable', 'url', 'max:255'],
             'activo' => ['boolean'],
         ];
     }
@@ -49,7 +47,6 @@ class MentoriaForm extends Component
         $this->titulo = $mentoria->titulo;
         $this->descripcion = $mentoria->descripcion;
         $this->icono = $mentoria->icono;
-        $this->url = $mentoria->url;
         $this->activo = $mentoria->activo;
 
         $this->isOpen = true;
@@ -64,7 +61,6 @@ class MentoriaForm extends Component
             'titulo' => $this->titulo,
             'descripcion' => $this->descripcion,
             'icono' => $this->icono,
-            'url' => $this->url,
             'activo' => $this->activo,
         ];
 
@@ -90,7 +86,6 @@ class MentoriaForm extends Component
             'titulo',
             'descripcion',
             'icono',
-            'url',
             'activo',
             'isOpen',
             'isEdit',
