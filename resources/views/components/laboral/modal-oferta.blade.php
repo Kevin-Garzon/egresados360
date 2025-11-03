@@ -42,7 +42,7 @@
       </div>
 
       {{-- Info adicional --}}
-      <div class="border-t pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-gray-700 text-[15px] gap-3">
+      <div class="border-t border-gray-100 pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-gray-700 text-[15px] gap-3">
         <p class="flex items-center gap-2">
           <i class="fa-solid fa-location-dot text-primary text-lg"></i>
           <span id="modalUbicacion" class="font-medium"></span>
