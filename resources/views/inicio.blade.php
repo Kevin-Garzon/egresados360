@@ -13,7 +13,7 @@
     :btnPrimary="[
             'text' => 'Contáctanos',
             'icon' => 'fa-brands fa-whatsapp',
-            'link' => 'tel:+573150000000'
+            'link' => 'tel:+573224650595'
         ]"
     :btnSecondary="[
             'text' => 'Contáctanos',
@@ -212,8 +212,7 @@
                 Nuestros <span class="text-primary">Egresados FET</span>
             </h2>
             <p class="text-rblack/70 leading-relaxed mb-10">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Nuestros egresados son el orgullo de la FET. Profesionales íntegros, innovadores y comprometidos con el desarrollo social y productivo de la región. A través de su desempeño, fortalecen el nombre de nuestra institución y mantienen viva la misión formativa que nos une.
             </p>
 
             {{-- Datos destacados --}}
@@ -223,9 +222,9 @@
                         <i class="fa-solid fa-plus"></i>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">Dato 1</h3>
+                        <h3 class="font-semibold text-lg">Talento y Liderazgo</h3>
                         <p class="text-sm text-rblack/70">
-                            With lots of unique blocks, you can easily build a page without.
+                            Egresados que marcan la diferencia con su compromiso y excelencia profesional.
                         </p>
                     </div>
                 </div>
@@ -235,9 +234,9 @@
                         <i class="fa-solid fa-plus"></i>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">Dato 2</h3>
+                        <h3 class="font-semibold text-lg">Proyección Constante</h3>
                         <p class="text-sm text-rblack/70">
-                            With lots of unique blocks, you can easily build a page without.
+                            Egresados que siguen creciendo y aportando al desarrollo de la regional e institucional.
                         </p>
                     </div>
                 </div>
@@ -260,8 +259,7 @@
             Principios <span class="text-primary">Institucionales</span>
         </h2>
         <p class="text-rblack/70">
-            Posuere suspendisse mattis, ligula molestie placerat odio leo accumsan nascetur pulvinar magna
-            vehicula dignissim vivamus, facilisi velit ut quis donec pellentesque.
+            Los principios institucionales de la FET reflejan nuestro compromiso con la excelencia académica, la innovación y el desarrollo sostenible de nuestra comunidad.
         </p>
     </div>
 
@@ -319,9 +317,7 @@
             </h2>
 
             <p class="text-rblack/70 leading-relaxed mb-8">
-                La carnetización de egresados de la FET es un proceso que permite a nuestros graduados
-                acceder a beneficios, servicios y reconocimiento institucional mediante un documento
-                oficial que los identifica como parte activa de nuestra comunidad universitaria.
+                Es de suma importancia que los estudiantes al terminar sus estudios y obtener el título de grado, efectúen los trámites correspondientes para obtener el carné de graduado, que además de identificarlo como parte activa de la comunidad universitaria FET , posibilita el acceso a los servicios que la institución le ofrece.
             </p>
 
             <button
@@ -391,8 +387,8 @@
             <div class="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-primary text-white text-2xl mb-6">
                 <i class="fa-solid fa-file-pdf"></i>
             </div>
-            <h3 class="text-lg font-poppins font-semibold">Resolución 001-2024</h3>
-            <p class="text-primary font-medium mb-2">Sobre los egresados</p>
+            <h3 class="text-lg font-poppins font-semibold">Acuerdo N° 018</h3>
+            <p class="text-primary font-medium mb-2">Politica de Egresados</p>
             <p class="text-sm text-rblack/70 mb-6">
                 Política Institucional de Egresados y Servicios de Acompañamiento.
             </p>

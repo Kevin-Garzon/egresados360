@@ -5,14 +5,14 @@
                 <!-- <span class="inline-block w-2.5 h-6 bg-primary rounded"></span> -->
                 <span class="font-poppins text-lg font-bold text-gunmetal text-white">Egresados 360</span>
             </div>
-            <p class="text-sm text-white">Portal de egresados de la FET. Información, formación, empleabilidad y bienestar.</p>
+            <p class="text-sm text-white">Portal de egresados de la FET. Información, formación, empleabilidad y bienestar del egresado.</p>
         </div>
         <div>
             <h3 class="font-poppins font-semibold text-gunmetal mb-3 text-white">Comunicaciones</h3>
             <ul class="space-y-1 text-sm">
                 <li>Dirección: Kilometro 12 <br> Neiva - Rivera</li>
                 <li>Email: <a class="underline" href="mailto:comunicaciones@fet.edu.co">ori-egresados@fet.edu.co</a></li>
-                <li>WhatsApp: <a class="underline" href="#">+57 (XXX) XXX XXXX</a></li>
+                <li>WhatsApp: <a class="underline" href="tel:+573224650595">+57 322 4650595</a></li>
             </ul>
         </div>
         <div>
