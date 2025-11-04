@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Bienestar\habilidades;
+namespace App\Livewire\Admin\Bienestar\Habilidades;
 
 use Livewire\Component;
 use Livewire\WithPagination;
