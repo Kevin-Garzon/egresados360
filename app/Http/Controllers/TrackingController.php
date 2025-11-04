@@ -48,21 +48,33 @@ class TrackingController extends Controller
                 $programa = $perfil->programa ?? 'su programa';
                 $anio     = $perfil->anio_egreso ?? 'su año de egreso';
 
-                // Número oficial de WhatsApp Business FET
-                $numero   = '573224650595';
-                $mensaje  = null;
+
+                // Número por defecto (general)
+                $numero_general = '573224650595';
+
+                // Números específicos por área
+                $numero_bienestar = '573173684913';
+                $numero_formacion = '573223042498';
+                $numero_laboral   = '573224650595';
+
+                $mensaje = null;
+                $numero  = $numero_general; // valor por defecto
+
 
                 switch ($tipo) {
                     case 'mentoria':
                         $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y me interesa la mentoría \"{$titulo}\".";
+                        $numero  = $numero_bienestar; // redirige al número de Bienestar
                         break;
 
                     case 'atencion':
                         $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y deseo solicitar un espacio de escucha con Bienestar Institucional.";
+                        $numero  = $numero_bienestar; // redirige al número de Bienestar
                         break;
 
                     case 'habilidad':
                         $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y deseo inscribirme en el taller \"{$titulo}\".";
+                        $numero  = $numero_bienestar; // redirige al número de Bienestar
                         break;
 
                     // Formación continua (si la empresa es FET)
@@ -70,6 +82,7 @@ class TrackingController extends Controller
                         $formacion = Formacion::with('empresa')->find($itemId);
                         if ($formacion && $formacion->empresa && strtolower(trim($formacion->empresa->nombre)) === 'fet') {
                             $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y deseo inscribirme en la oferta de formación \"{$titulo}\" organizada por la FET.";
+                            $numero  = $numero_formacion; // redirige al número de Formación Continua
                         }
                         break;
 
@@ -78,6 +91,7 @@ class TrackingController extends Controller
                         $oferta = OfertaLaboral::with('empresa')->find($itemId);
                         if ($oferta && $oferta->empresa && strtolower(trim($oferta->empresa->nombre)) === 'fet') {
                             $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y me interesa postularme a la oferta laboral \"{$titulo}\" publicada por la FET.";
+                            $numero  = $numero_laboral; // redirige al número de Empleabilidad
                         }
                         break;
                 }

@@ -12,7 +12,7 @@
   subtitle="Cursos, diplomados y seminarios FET"
   description="Explora nuestra oferta de formación continua y fortalece tus competencias profesionales con programas actualizados y accesibles."
   :btnPrimary="['text' => 'Ver Cursos', 'icon' => 'fa-solid fa-book-open-reader', 'link' => '#formacion']"
-  :btnSecondary="['text' => 'Contacto', 'icon' => 'fa-solid fa-envelope', 'link' => '#contacto']"
+  :btnSecondary="['text' => 'Contacto', 'icon' => 'fa-solid fa-envelope', 'link' => 'https://wa.me/573223042498']"
   image="https://www.ceduk.edu.mx/blog/wp-content/uploads/2024/07/tecnicas-de-estudio-ejercicios.jpg" />
 
 {{-- Sección principal de formación --}}

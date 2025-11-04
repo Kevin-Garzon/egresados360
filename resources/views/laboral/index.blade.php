@@ -24,8 +24,7 @@
       Oportunidades <span class="text-primary">Laborales</span>
     </h2>
     <p class="mt-3 text-rblack/70">
-      Posuere suspendisse mattis, ligula molestie placerat odio leo accumsan nascetur pulvinar magna
-      vehicula dignissim vivamus, facilisi velit ut quis donec pellentesque.
+      Explora las oportunidades laborales que la FET y sus aliados estratégicos ofrecen a los egresados para impulsar su crecimiento profesional y contribuir al desarrollo regional.
     </p>
   </div>
 
@@ -93,8 +92,7 @@
         Empresas <span class="text-primary">Aliadas</span>
       </h2>
       <p class="mt-3 text-rblack/70">
-        Posuere suspendisse mattis, ligula molestie placerat odio leo accumsan nascetur pulvinar magna
-        vehicula dignissim vivamus, facilisi velit ut quis donec pellentesque.
+        Conoce las empresas que trabajan junto a la FET para generar oportunidades de empleo, innovación y crecimiento para nuestra comunidad de egresados.
       </p>
     </div>
 
