@@ -5,20 +5,18 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('bienestar_mentorias', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo', 100);
+            $table->string('titulo');
             $table->text('descripcion')->nullable();
-            $table->string('icono', 100)->nullable();   
+            $table->string('icono')->nullable();
             $table->boolean('activo')->default(true);
             $table->timestamps();
         });
     }
-
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('bienestar_mentorias');
     }
 };
+

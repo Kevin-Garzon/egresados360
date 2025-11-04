@@ -4,19 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
+return new class extends Migration {
+    public function up(): void {
         Schema::create('bienestar_eventos', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo', 150);
+            $table->string('titulo');
             $table->text('descripcion')->nullable();
-            $table->string('modalidad', 50)->nullable(); 
-            $table->string('ubicacion', 150)->nullable(); 
+            $table->string('tipo')->nullable();        // en tu modelo aparece comentado; lo dejamos opcional
+            $table->string('modalidad')->nullable();
+            $table->string('ubicacion')->nullable();
+            $table->string('imagen')->nullable();
+            $table->string('enlace')->nullable();
             $table->date('fecha_inicio')->nullable();
             $table->date('fecha_fin')->nullable();
             $table->time('hora_inicio')->nullable();
@@ -24,14 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
-
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('bienestar_eventos');
     }
 };
