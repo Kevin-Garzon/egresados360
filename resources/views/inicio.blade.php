@@ -109,15 +109,16 @@
     {{-- Carrusel --}}
     <div
         x-data="{
-        scrollAmount: 1,
+        scrollAmount: window.innerWidth < 640 ? 2 : 1,
         startAutoScroll() {
           const container = this.$refs.slider;
+          const intervalTime = window.innerWidth < 640 ? 15 : 20;
           setInterval(() => {
             container.scrollLeft += this.scrollAmount;
             if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
               container.scrollLeft = 0;
             }
-          }, 20);
+          }, intervalTime);
         }
       }"
         x-init="startAutoScroll()"

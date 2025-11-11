@@ -41,6 +41,7 @@
             <p class="text-sm text-rblack/70 mt-2 mb-5 line-clamp-3">{{ $h->descripcion }}</p>
 
             <div class="mt-auto flex flex-col sm:flex-row gap-2 w-full">
+                {{-- Botón de ver detalles --}}
                 <button
                     type="button"
                     class="btn btn-primary w-full sm:w-auto justify-center px-4 py-2"
@@ -48,10 +49,9 @@
                     <i class="fa-solid fa-eye mr-2"></i> Ver detalles
                 </button>
 
-                @if($h->enlace_inscripcion)
+                {{-- Botón fijo de inscripción --}}
                 <a
-                    href="{{ $h->enlace_inscripcion }}"
-                    target="_blank"
+                    href="#"
                     class="btn w-full sm:w-auto justify-center px-4 py-2"
                     data-track
                     data-module="bienestar"
@@ -61,7 +61,6 @@
                     data-title="{{ $h->titulo }}">
                     <i class="fa-solid fa-clipboard-check mr-2"></i> Inscribirme
                 </a>
-                @endif
             </div>
 
 
