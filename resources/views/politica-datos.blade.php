@@ -55,7 +55,7 @@
                 <strong>Fundación Escuela Tecnológica de Neiva “Jesús Oviedo Pérez” (FET)</strong><br>
                 Área de Egresados y Relaciones Institucionales<br>
                 Correo: <a href="mailto:ori-egresados@fet.edu.co" class="text-primary hover:underline">ori-egresados@fet.edu.co</a><br>
-                Teléfono: (+57) xxx xxx xxxx
+                Teléfono: (+57) 322 4650595
             </p>
 
             <h2 class="text-2xl font-semibold text-gunmetal mt-10 mb-3">5. Vigencia</h2>
