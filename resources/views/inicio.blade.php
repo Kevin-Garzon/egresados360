@@ -20,7 +20,7 @@
             'icon' => 'fa-solid fa-envelope',
             'link' => 'mailto:ori-egresados@fet.edu.co'
         ]"
-    image="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1400&auto=format&fit=crop" />
+    image="{{ asset('imgs/egre9.jpg') }}" />
 @endsection
 
 
@@ -189,7 +189,7 @@
 
         {{-- Imagen --}}
         <div>
-            <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg"
+            <img src="{{ asset('imgs/egre3.jpg') }}"
                 alt="Egresados FET"
                 class="w-full h-full object-cover rounded-lg shadow-card">
         </div>
@@ -322,7 +322,7 @@
             {{-- Esquina inferior derecha decorativa --}}
             <span class="absolute -bottom-4 -right-4 w-10 h-10 bg-primary rounded-lg"></span>
 
-            <img src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg"
+            <img src="{{ asset('imgs/egre1.jpg') }}"
                 alt="Carnetización de Egresados"
                 class="max-w-xs md:max-w-sm lg:max-w-md rounded-2xl shadow-card relative z-10">
         </div>
