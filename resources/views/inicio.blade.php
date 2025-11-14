@@ -35,7 +35,7 @@
         {{-- Imagen --}}
         <figure class="flex justify-center lg:justify-start">
             <img
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1170&auto=format&fit=crop"
+                src="{{ asset('imgs/egre7.png') }}"
                 alt="Oficina de Egresados"
                 class="w-11/12 sm:w-4/5 md:w-3/4 rounded-2xl shadow-card object-cover transition-transform duration-500 hover:scale-[1.03]">
         </figure>
