@@ -28,8 +28,8 @@
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Tema</label>
-                        <input type="text" wire:model.defer="tema"
+                        <label class="text-sm font-medium text-gray-600">Tema *</label>
+                        <input type="text" wire:model.defer="tema" required 
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
                     </div>
 

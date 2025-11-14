@@ -35,7 +35,7 @@ class HabilidadForm extends Component
         return [
             'titulo' => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
-            'tema' => ['nullable', 'string', 'max:100'],
+            'tema' => ['required', 'string', 'max:100'],
             'modalidad' => ['nullable', 'string', 'max:50'],
             'fecha' => ['nullable', 'date'],
             'activo' => ['boolean'],
