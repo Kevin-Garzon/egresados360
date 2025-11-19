@@ -47,9 +47,10 @@
 
         h1 {
             text-align: center;
-            font-size: 18px;
+            font-size: 22px;
             margin-bottom: 25px;
-            font-weight: 800;
+            font-weight: 900;
+            letter-spacing: 0.3px;
             color: #000;
         }
 
@@ -58,9 +59,8 @@
             font-weight: 700;
             margin-top: 28px;
             margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #09B451;
             color: #09B451;
+            border-bottom: none !important;
         }
 
         h3 {
@@ -78,6 +78,12 @@
         ul,
         ol {
             margin: 8px 0 12px 20px;
+        }
+
+        hr {
+            border: none !important;
+            height: 0;
+            margin: 0;
         }
 
         table {

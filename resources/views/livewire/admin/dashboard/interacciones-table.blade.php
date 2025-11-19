@@ -4,7 +4,9 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h4 class="text-lg font-poppins font-semibold text-rblack">Interacciones registradas</h4>
 
-        <div class="flex items-center gap-3 ml-auto sm:flex-wrap md:flex-nowrap">
+        <div class="flex flex-wrap md:flex-nowrap items-center gap-3 ml-auto">
+
+            {{-- Filtro por módulo --}}
             <select wire:model.live="filtroModulo"
                 class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-44 focus:ring-2 focus:ring-primary/40 focus:border-primary transition">
                 <option value="">Todos los módulos</option>
@@ -13,6 +15,7 @@
                 <option value="bienestar">Bienestar</option>
             </select>
 
+            {{-- Filtro por programa --}}
             <select wire:model.live="filtroPrograma"
                 class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-44 focus:ring-2 focus:ring-primary/40 focus:border-primary transition">
                 <option value="">Todos los programas</option>
@@ -20,6 +23,12 @@
                 <option value="{{ $programa }}">{{ $programa }}</option>
                 @endforeach
             </select>
+
+            {{-- Fecha --}}
+            <input
+                type="date"
+                wire:model.live="fechaFiltro"
+                class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-full sm:w-44 focus:ring-2 focus:ring-primary/40 focus:border-primary transition">
         </div>
 
 

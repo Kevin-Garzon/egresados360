@@ -153,7 +153,7 @@ EOT;
 
                 $client   = OpenAI::client(env('OPENAI_API_KEY'));
                 $response = $client->chat()->create([
-                    'model'    => 'gpt-4o-mini',
+                    'model'    => 'gpt-4.1',
                     'messages' => [
                         ['role' => 'system', 'content' => 'Eres un analista institucional experto en educación superior.'],
                         ['role' => 'user',   'content' => $prompt . "\n\nDATOS EN JSON:\n" . json_encode($contexto, JSON_PRETTY_PRINT)],
@@ -343,7 +343,7 @@ EOT;
 
             $client   = OpenAI::client(env('OPENAI_API_KEY'));
             $response = $client->chat()->create([
-                'model'    => 'gpt-4o-mini',
+                'model'    => 'gpt-4.1',
                 'messages' => [
                     ['role' => 'system', 'content' => 'Eres un analista institucional experto en educación superior.'],
                     ['role' => 'user',   'content' => $prompt . "\n\nDATOS EN JSON:\n" . json_encode($contexto, JSON_PRETTY_PRINT)],

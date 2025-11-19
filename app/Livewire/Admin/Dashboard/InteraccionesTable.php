@@ -13,12 +13,13 @@ class InteraccionesTable extends Component
 
     public $filtroModulo = '';
     public $filtroPrograma = '';
+    public $fechaFiltro = null;
 
     protected $paginationTheme = 'tailwind';
 
     public function updating($name)
     {
-        // Reinicia la paginación cuando cambia un filtro
+        // Reinicia la paginación cuando cambia cualquier filtro
         $this->resetPage('interaccionesPage');
     }
 
@@ -38,9 +39,14 @@ class InteraccionesTable extends Component
             });
         }
 
+        // Filtro por fecha 
+        if ($this->fechaFiltro) {
+            $query->whereDate('created_at', $this->fechaFiltro);
+        }
+
         $interacciones = $query->paginate(10, ['*'], 'interaccionesPage');
 
-        // Obtener programas distintos disponibles (desde los perfiles asociados)
+        // Programas distintos disponibles
         $programas = DB::table('perfiles_egresado')
             ->whereNotNull('programa')
             ->distinct()
@@ -49,7 +55,7 @@ class InteraccionesTable extends Component
 
         return view('livewire.admin.dashboard.interacciones-table', [
             'interacciones' => $interacciones,
-            'programas' => $programas,
+            'programas'     => $programas,
         ]);
     }
 }

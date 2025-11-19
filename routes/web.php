@@ -119,6 +119,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Laboral
     Route::get('/laboral', LaboralPanel::class)->name('laboral.panel');
 
+    // Importar ofertas desde Excel
+    Route::post('/laboral/importar-excel', [LaboralController::class, 'importar'])
+        ->name('laboral.importarExcel');
+
     // Formación Continua
     Route::get('/formacion', FormacionPanel::class)->name('formacion.panel');
 
