@@ -11,7 +11,34 @@ class InformePanel extends Component
 {
     public $informe = null;
     public $generando = false;
-    public $periodo = 'general'; // Filtro de periodo
+
+    // Tipo de informe seleccionado
+    // institucional, comparativo, predictivo, modulo, express
+    public $tipoInforme = 'institucional';
+
+    // Periodo (para institucional, por módulo, express)
+    // dia, semana, mes, general
+    public $periodo = 'general';
+
+    // Tipo de comparación (solo para comparativos)
+    // mes_vs_mes_anterior, semana_vs_semana_anterior, dia_vs_dia_semana_pasada
+    public $comparativo = 'mes_vs_mes_anterior';
+
+    // Módulo específico (solo para informes por módulo)
+    // laboral, formacion, bienestar
+    public $modulo = 'laboral';
+
+    // Reset de campos cuando cambia el tipo de informe
+    public function updatedTipoInforme()
+    {
+        // Reset campos dependientes
+        $this->periodo = 'general';
+        $this->comparativo = 'mes_vs_mes_anterior';
+        $this->modulo = 'laboral';
+        
+        // Limpiar informe anterior si existe
+        $this->informe = null;
+    }
 
     public function generarInforme()
     {
@@ -20,13 +47,18 @@ class InformePanel extends Component
         try {
             $controller = new InformeInteligenteController();
 
-            // Enviar periodo como parámetro
-            $request = request()->merge(['periodo' => $this->periodo]);
-            $response = $controller->generar($request);
+            // Enviar parámetros al controlador
+            $request = request();
+            $request->merge([
+                'tipo_informe' => $this->tipoInforme,
+                'periodo'      => $this->periodo,
+                'comparativo'  => $this->comparativo,
+                'modulo'       => $this->modulo,
+            ]);
 
+            $response = $controller->generar($request);
             $data = $response->getData(true);
 
-            // Convertimos el Markdown a HTML para mostrarlo en el panel
             $this->informe = isset($data['informe'])
                 ? Str::markdown($data['informe'])
                 : 'No se pudo generar el informe.';
@@ -41,12 +73,11 @@ class InformePanel extends Component
     {
         if (!$this->informe) return;
 
-        // Usamos directamente el contenido HTML ya procesado
         $contenido = html_entity_decode($this->informe);
 
         $pdf = Pdf::loadView('pdf.informe-inteligente', [
             'contenido' => $contenido,
-            'fecha' => now()->format('d/m/Y H:i'),
+            'fecha'     => now()->format('d/m/Y H:i'),
         ]);
 
         return response()->streamDownload(function () use ($pdf) {

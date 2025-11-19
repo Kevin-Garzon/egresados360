@@ -1,109 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Inteligente - Egresados 360</title>
 
     <style>
         @page {
-            margin: 80px 60px;
+            margin-top: 190px;
+            margin-left: 60px;
+            margin-right: 60px;
+            margin-bottom: 0px;
         }
 
         body {
-            font-family: 'Helvetica', sans-serif;
-            color: #333;
+            font-family: "Helvetica", sans-serif;
+            line-height: 1.55;
             font-size: 13px;
-            line-height: 1.6;
+            text-align: justify;
+            position: relative;
         }
 
-        header {
+        .background {
             position: fixed;
-            top: -60px;
-            left: 0;
-            right: 0;
-            height: 60px;
-            text-align: center;
-            border-bottom: 2px solid #09B451;
+            top: -190px;
+            left: -60px;
+            right: -60px;
+            bottom: 0px;
+            z-index: -1;
         }
 
-        header img {
-            height: 45px;
-            margin-top: 5px;
+        .background img {
+            width: 100%;
+            height: 100%;
         }
 
-        footer {
-            position: fixed;
-            bottom: -40px;
-            left: 0;
-            right: 0;
-            height: 40px;
-            text-align: center;
-            font-size: 11px;
-            color: #666;
-            border-top: 1px solid #ccc;
-            padding-top: 5px;
+        main {
+            padding-bottom: 120px;
         }
 
-        h1, h2, h3 {
-            color: #333;
+        .fecha {
+            text-align: right;
+            font-size: 13px;
+            margin-bottom: 25px;
             font-weight: bold;
         }
 
         h1 {
-            font-size: 20px;
             text-align: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            font-size: 18px;
+            margin-bottom: 25px;
+            font-weight: 800;
+            color: #000;
         }
 
         h2 {
-            font-size: 16px;
-            margin-top: 25px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #09B451;
-            padding-bottom: 4px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 28px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #09B451;
+            color: #09B451;
         }
 
         h3 {
             font-size: 14px;
+            font-weight: bold;
             margin-top: 18px;
             margin-bottom: 6px;
-        }
-
-        p {
-            text-align: justify;
-            margin-bottom: 8px;
-        }
-
-        ul {
-            margin-left: 25px;
-            margin-bottom: 10px;
-        }
-
-        b, strong {
             color: #000;
         }
 
-        .contenido {
-            margin-top: 30px;
+        p {
+            margin-bottom: 10px;
+        }
+
+        ul,
+        ol {
+            margin: 8px 0 12px 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        table thead {
+            background: #09B451;
+            color: white;
+            font-weight: bold;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #cccccc;
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #f5f5f5;
         }
     </style>
+
 </head>
+
 <body>
-    <header>
-        <img src="{{ public_path('logo.png') }}" alt="Fundación Escuela Tecnológica de Neiva">
-    </header>
 
-    <footer>
-        Portal Egresados 360 — Fundación Escuela Tecnológica de Neiva "Jesús Oviedo Pérez"  
-        <br>Informe generado el {{ $fecha }}
-    </footer>
+    <div class="background">
+        <img src="{{ public_path('imgs/membrete.png') }}" />
+    </div>
 
-    <main class="contenido">
-        <h1>Informe Inteligente del Portal Egresados 360</h1>
-        <div>{!! $contenido !!}</div>
+    <main>
+
+        <div class="fecha">
+            @php \Carbon\Carbon::setLocale('es'); @endphp
+            Neiva, {{ \Carbon\Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}
+        </div>
+
+        <h1>Informe Inteligente – Portal EGRESADOS 360</h1>
+
+        {!! $contenido !!}
+
     </main>
+
 </body>
+
 </html>

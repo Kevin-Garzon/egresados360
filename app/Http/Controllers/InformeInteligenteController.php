@@ -15,145 +15,338 @@ class InformeInteligenteController extends Controller
     public function generar(Request $request)
     {
         try {
-            $periodo = $request->get('periodo', 'general');
+            $tipoInforme = $request->get('tipo_informe', 'institucional'); // institucional, comparativo, predictivo, modulo, express
+            $periodo     = $request->get('periodo', 'general');           // dia, semana, mes, general
+            $comparativo = $request->get('comparativo', 'mes_vs_mes_anterior');
 
-            // ===========================
-            // Filtrado por periodo
-            // ===========================
-            $fechaInicio = match ($periodo) {
-                'dia' => now()->subDay(),
-                'semana' => now()->subWeek(),
-                'mes' => now()->subMonth(),
-                default => null
-            };
+            // ============================
+            //  Módulo: solo válido para
+            //  informe por módulo específico
+            // ============================
+            $modulosValidos = ['laboral', 'formacion', 'bienestar'];
+            $moduloInput    = $request->get('modulo');
+            $modulo         = in_array($moduloInput, $modulosValidos) ? $moduloInput : null;
 
-            $visitasQuery = VisitaDiaria::query();
-            $interaccionesQuery = Interaccion::query();
-            $egresadosQuery = PerfilEgresado::query();
-
-            if ($fechaInicio) {
-                $visitasQuery->where('fecha', '>=', $fechaInicio);
-                $interaccionesQuery->where('interacciones.created_at', '>=', $fechaInicio);
-                $egresadosQuery->where('perfiles_egresado.created_at', '>=', $fechaInicio);
+            if ($tipoInforme !== 'modulo') {
+                // Para todos los demás tipos, el análisis es del portal completo
+                $modulo = null;
             }
 
-            // ===========================
-            // Métricas principales
-            // ===========================
-            $totalVisitas = $visitasQuery->sum('total');
-            $totalInteracciones = $interaccionesQuery->count();
-            $totalEgresados = $egresadosQuery->count();
+            /* ============================================================
+               1. INFORME COMPARATIVO (portal completo, sin filtro por módulo)
+            ============================================================ */
+            if ($tipoInforme === 'comparativo') {
 
-            // ===========================
-            // Distribución de interacciones
-            // ===========================
-            $porModulo = (clone $interaccionesQuery)
+                switch ($comparativo) {
+                    case 'dia_vs_dia_semana_pasada':
+                        $inicioActual   = now()->startOfDay();
+                        $finActual      = now()->endOfDay();
+                        $inicioAnterior = now()->subWeek()->startOfDay();
+                        $finAnterior    = now()->subWeek()->endOfDay();
+                        break;
+
+                    case 'semana_vs_semana_anterior':
+                        $inicioActual   = now()->startOfWeek();
+                        $finActual      = now()->endOfWeek();
+                        $inicioAnterior = now()->subWeek()->startOfWeek();
+                        $finAnterior    = now()->subWeek()->endOfWeek();
+                        break;
+
+                    case 'mes_vs_mes_anterior':
+                    default:
+                        $inicioActual   = now()->startOfMonth();
+                        $finActual      = now()->endOfMonth();
+                        $inicioAnterior = now()->subMonth()->startOfMonth();
+                        $finAnterior    = now()->subMonth()->endOfMonth();
+                        break;
+                }
+
+                $buildContextRange = function (Carbon $inicio, Carbon $fin) {
+                    // Visitas del dashboard
+                    $visitasQuery = VisitaDiaria::query()
+                        ->whereBetween('fecha', [
+                            $inicio->toDateString(),
+                            $fin->toDateString()
+                        ]);
+
+                    // Interacciones del portal (TODOS los módulos)
+                    $interaccionesQuery = Interaccion::query()
+                        ->whereBetween('created_at', [$inicio, $fin]);
+
+                    // Egresados registrados en ese rango
+                    $egresadosQuery = PerfilEgresado::query()
+                        ->whereBetween('created_at', [$inicio, $fin]);
+
+                    $totalVisitas       = $visitasQuery->sum('total');
+                    $totalInteracciones = $interaccionesQuery->count();
+                    $egresadosRegistrados = $egresadosQuery->count();
+
+                    // Egresados activos: perfiles con interacciones no anónimas
+                    $egresadosActivos = (clone $interaccionesQuery)
+                        ->where('is_anonymous', false)
+                        ->whereNotNull('perfil_id')
+                        ->distinct('perfil_id')
+                        ->count('perfil_id');
+
+                    // Distribución por módulo
+                    $porModulo = (clone $interaccionesQuery)
+                        ->selectRaw('module, COUNT(*) as cantidad')
+                        ->groupBy('module')
+                        ->orderByDesc('cantidad')
+                        ->pluck('cantidad', 'module')
+                        ->toArray();
+
+                    // Programas más activos
+                    $porPrograma = Interaccion::join(
+                            'perfiles_egresado',
+                            'interacciones.perfil_id',
+                            '=',
+                            'perfiles_egresado.id'
+                        )
+                        ->whereBetween('interacciones.created_at', [$inicio, $fin])
+                        ->selectRaw('perfiles_egresado.programa, COUNT(*) as cantidad')
+                        ->groupBy('perfiles_egresado.programa')
+                        ->orderByDesc('cantidad')
+                        ->limit(10)
+                        ->pluck('cantidad', 'programa')
+                        ->toArray();
+
+                    return [
+                        'rango'                => [
+                            'inicio' => $inicio->toDateTimeString(),
+                            'fin'    => $fin->toDateTimeString(),
+                        ],
+                        'visitas'              => $totalVisitas,
+                        'interacciones'        => $totalInteracciones,
+                        'egresados_registrados'=> $egresadosRegistrados,
+                        'egresados_activos'    => $egresadosActivos,
+                        'por_modulo'           => $porModulo,
+                        'por_programa'         => $porPrograma,
+                    ];
+                };
+
+                $contexto = [
+                    'tipo_informe' => 'comparativo',
+                    'comparativo'  => $comparativo,
+                    'actual'       => $buildContextRange($inicioActual, $finActual),
+                    'anterior'     => $buildContextRange($inicioAnterior, $finAnterior),
+                ];
+
+                $prompt = <<<EOT
+Eres un analista institucional experto en educación superior.
+
+Debes generar un **INFORME COMPARATIVO** sobre el uso del portal Egresados 360 de la FET, comparando dos periodos del portal completo (módulos laboral, formación y bienestar en conjunto).
+
+Utiliza las métricas entregadas (visitas, interacciones, egresados activos, distribución por módulos y por programas) para identificar aumentos, disminuciones o estabilidad.
+
+Incluye las tablas en formato Markdown. Las tablas deben tener encabezados y mostrar:
+
+- Comparativo general (Visitas, Interacciones, Egresados Registrados, Egresados Activos)
+- Comparativo por módulos (formación, laboral, bienestar)
+- Comparativo por programas (los más activos)
+
+Asegúrate de que las tablas estén completas, sean claras y no contengan texto dentro de celdas con saltos de línea.
+
+
+Extensión sugerida: 700–1000 palabras.
+EOT;
+
+                $client   = OpenAI::client(env('OPENAI_API_KEY'));
+                $response = $client->chat()->create([
+                    'model'    => 'gpt-4o-mini',
+                    'messages' => [
+                        ['role' => 'system', 'content' => 'Eres un analista institucional experto en educación superior.'],
+                        ['role' => 'user',   'content' => $prompt . "\n\nDATOS EN JSON:\n" . json_encode($contexto, JSON_PRETTY_PRINT)],
+                    ],
+                ]);
+
+                $informe = $response->choices[0]->message->content ?? 'No se pudo generar el informe comparativo.';
+
+                return response()->json([
+                    'success' => true,
+                    'informe' => $informe,
+                ]);
+            }
+
+            /* ============================================================
+            2. INFORMES NO COMPARATIVOS
+            (institucional, predictivo, módulo, express)
+            ============================================================ */
+
+            $fechaInicio = null;
+            $fechaFin    = null;
+
+            if ($tipoInforme !== 'predictivo') {
+                switch ($periodo) {
+                    case 'dia':
+                        $fechaInicio = now()->startOfDay();
+                        $fechaFin    = now()->endOfDay();
+                        break;
+                    case 'semana':
+                        $fechaInicio = now()->startOfWeek();
+                        $fechaFin    = now()->endOfWeek();
+                        break;
+                    case 'mes':
+                        $fechaInicio = now()->startOfMonth();
+                        $fechaFin    = now()->endOfMonth();
+                        break;
+                    default:
+                        $fechaInicio = null;
+                        $fechaFin    = null;
+                }
+            }
+
+            // Consultas base (portal completo o módulo específico sólo si tipo = modulo)
+            $visitasQuery       = VisitaDiaria::query();
+            $interaccionesQuery = Interaccion::query();
+            $egresadosQuery     = PerfilEgresado::query();
+
+            if ($fechaInicio && $fechaFin) {
+                $visitasQuery->whereBetween('fecha', [
+                    $fechaInicio->toDateString(),
+                    $fechaFin->toDateString()
+                ]);
+
+                $interaccionesQuery->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+                $egresadosQuery->whereBetween('created_at', [$fechaInicio, $fechaFin]);
+            }
+
+            if ($tipoInforme === 'modulo' && $modulo) {
+                $interaccionesQuery->where('module', $modulo);
+            }
+
+            $totalVisitas          = $visitasQuery->sum('total');
+
+            $baseInteracciones     = clone $interaccionesQuery;
+
+            $totalInteracciones    = $baseInteracciones->count();
+            $egresadosRegistrados  = $egresadosQuery->count();
+
+            $egresadosActivos      = (clone $baseInteracciones)
+                ->where('is_anonymous', false)
+                ->whereNotNull('perfil_id')
+                ->distinct('perfil_id')
+                ->count('perfil_id');
+
+            $porModulo = (clone $baseInteracciones)
                 ->selectRaw('module, COUNT(*) as cantidad')
                 ->groupBy('module')
                 ->orderByDesc('cantidad')
                 ->pluck('cantidad', 'module')
                 ->toArray();
 
-            // ===========================
-            // Programas más activos
-            // ===========================
-            $porPrograma = Interaccion::join('perfiles_egresado', 'interacciones.perfil_id', '=', 'perfiles_egresado.id')
-                ->when($fechaInicio, fn($q) => $q->where('interacciones.created_at', '>=', $fechaInicio))
+            $porProgramaQuery = Interaccion::join(
+                    'perfiles_egresado',
+                    'interacciones.perfil_id',
+                    '=',
+                    'perfiles_egresado.id'
+                );
+
+            if ($fechaInicio && $fechaFin) {
+                $porProgramaQuery->whereBetween('interacciones.created_at', [$fechaInicio, $fechaFin]);
+            }
+
+            if ($tipoInforme === 'modulo' && $modulo) {
+                $porProgramaQuery->where('interacciones.module', $modulo);
+            }
+
+            $porPrograma = $porProgramaQuery
                 ->selectRaw('perfiles_egresado.programa, COUNT(*) as cantidad')
                 ->groupBy('perfiles_egresado.programa')
                 ->orderByDesc('cantidad')
-                ->limit(5)
+                ->limit(10)
                 ->pluck('cantidad', 'programa')
                 ->toArray();
 
-            // ===========================
-            // Preparar contexto y continuar igual...
-            // ===========================
-
             $contexto = [
-                'periodo' => $periodo,
-                'visitas' => $totalVisitas,
-                'interacciones' => $totalInteracciones,
-                'egresados' => $totalEgresados,
-                'por_modulo' => $porModulo,
-                'por_programa' => $porPrograma,
+                'tipo_informe'          => $tipoInforme,
+                'periodo'               => $periodo,
+                'modulo'                => $modulo,
+                'visitas'               => $totalVisitas,
+                'interacciones'         => $totalInteracciones,
+                'egresados_registrados' => $egresadosRegistrados,
+                'egresados_activos'     => $egresadosActivos,
+                // Por compatibilidad, "egresados" será egresados activos
+                'egresados'             => $egresadosActivos,
+                'por_modulo'            => $porModulo,
+                'por_programa'          => $porPrograma,
             ];
 
-            // ===========================
-            // Prompt profesional
-            // ===========================
-            $prompt = <<<EOT
-                Eres un **analista institucional experto en educación superior**, especializado en la redacción de **informes ejecutivos y de gestión académica**.
+            // ============================
+            //  Prompts específicos
+            // ============================
 
-                Tu tarea es generar un **informe profesional completo y detallado** sobre la actividad del **Portal Egresados 360** de la Fundación Escuela Tecnológica de Neiva “Jesús Oviedo Pérez” (FET), usando el conjunto de datos proporcionado en formato JSON.
+            $promptInstitucional = <<<EOT
+Eres un analista institucional experto en educación superior.
 
-                ** Instrucciones de redacción:**
-                - Usa un **tono institucional, técnico y formal**, como si el informe estuviera dirigido a la coordinación de Egresados y a la Dirección Académica.  
-                - Usa redacción fluida, con conectores y lenguaje de gestión.  
-                - Evita repetir datos sin analizarlos: interpreta lo que significan.  
-                - Usa subtítulos claros y consistentes (nivel 2 o 3 de encabezado).  
-                - Agrega conclusiones interpretativas, no solo descripciones.  
-                - Sé extenso: entre **700 y 1000 palabras**.  
-                - Utiliza una **estructura jerárquica con numeración** y formato ordenado.
+Debes generar un **INFORME INSTITUCIONAL** sobre el uso del portal Egresados 360 de la FET.
 
-                ---
+El análisis se basa en:
+- visitas totales al portal
+- interacciones registradas
+- egresados activos (perfiles que han interactuado en el periodo)
+- egresados registrados
+- distribución de uso por módulos (laboral, formación, bienestar)
+- participación por programas académicos
 
-                ### ESTRUCTURA DEL INFORME:
+Solo analiza los módulos "laboral", "formación" y "bienestar". No menciones otros módulos que no generan interacciones.
 
-                1. **Introducción institucional**  
-                Explica el propósito del informe, el periodo analizado (general, mes, semana o día), y la relevancia del portal Egresados 360 dentro de la estrategia de vinculación de egresados FET.
+Extensión: 700–1000 palabras.
+EOT;
 
-                2. **Resumen general de actividad**  
-                Expón las cifras globales (visitas, interacciones, egresados registrados).  
-                Interpreta qué representan en términos de participación o crecimiento.  
-                Si los valores son bajos, señala posibles causas institucionales.
+            $promptPredictivo = <<<EOT
+Eres un analista de datos institucional experto en educación superior.
 
-                3. **Análisis de comportamiento y uso del portal**  
-                Examina las dinámicas de acceso, participación y comportamiento.  
-                Analiza la proporción entre egresados identificados y anónimos.  
-                Describe los picos o descensos según los módulos o acciones.
+Debes generar un **INFORME PREDICTIVO** sobre el comportamiento futuro del portal Egresados 360, considerando en conjunto los módulos laboral, formación y bienestar.
 
-                4. **Desglose por módulos del portal**  
-                Detalla la actividad registrada en los módulos principales:  
-                - **Laboral**: ofertas consultadas o aplicaciones realizadas.  
-                - **Formación Continua**: cursos o diplomados con mayor interés.  
-                - **Bienestar Institucional**: mentorías, talleres o espacios de escucha.  
-                Describe tendencias, participación y posibles áreas de mejora.
+Utiliza las métricas actuales (visitas, interacciones, egresados activos, distribución por módulos y programas) para:
+- identificar tendencias
+- proyectar escenarios a corto plazo (3–6 meses)
+- señalar riesgos y oportunidades
+- proponer acciones preventivas y de mejora
 
-                5. **Participación académica (por programa y año de egreso)**  
-                Resume cuántos egresados participaron por programa académico.  
-                Identifica los programas más activos y los menos representados.  
-                Menciona los rangos de año de egreso con mayor interacción.
+Extensión: 700–1000 palabras.
+EOT;
 
-                6. **Análisis interpretativo y tendencias institucionales**  
-                Explica qué comportamientos son más notables o inusuales.  
-                Si hay disminución o crecimiento, plantea causas (comunicación, visibilidad, actividades).  
-                Incluye una lectura cualitativa: qué podría estar motivando esas cifras.
+            $promptModulo = <<<EOT
+Eres un analista institucional especializado en evaluación de servicios.
 
-                7. **Recomendaciones estratégicas**  
-                Propón acciones concretas y justificadas con base en los datos.  
-                Ejemplo: campañas de divulgación, actualización de contenido, incentivos para registro, alianzas con bienestar o empleabilidad, etc.  
-                Incluye entre 3 y 5 recomendaciones.
+Debes generar un **INFORME POR MÓDULO ESPECÍFICO** del portal Egresados 360. En los datos JSON se indica cuál módulo se está analizando (laboral, formación o bienestar).
 
-                8. **Conclusión institucional**  
-                Cierra el informe con una síntesis clara del impacto del portal, su importancia dentro del ecosistema FET y una reflexión sobre la mejora continua del vínculo con los egresados.
+Analiza:
+- actividad y uso del módulo
+- egresados activos en el módulo
+- comparación del módulo frente al resto del portal
+- fortalezas y debilidades
+- recomendaciones específicas para fortalecer ese módulo
 
-                ---
+Extensión: 600–900 palabras.
+EOT;
 
-                ### DATOS DISPONIBLES:
-            EOT;
+            $promptExpress = <<<EOT
+Debes generar un **INFORME EXPRESS RESUMIDO** sobre el estado actual del portal Egresados 360.
 
+Máximo 10–15 líneas.
 
-            // ===========================
-            // Llamada a OpenAI
-            // ===========================
-            $client = OpenAI::client(env('OPENAI_API_KEY'));
+Incluye:
+- 3 a 5 cifras clave (visitas, interacciones, egresados activos, módulo más usado o programa más activo)
+- una frase corta de diagnóstico general
+- 3 recomendaciones concretas en formato de lista o viñetas
+EOT;
 
+            $prompt = match ($tipoInforme) {
+                'predictivo' => $promptPredictivo,
+                'modulo'     => $promptModulo,
+                'express'    => $promptExpress,
+                default      => $promptInstitucional,
+            };
+
+            $client   = OpenAI::client(env('OPENAI_API_KEY'));
             $response = $client->chat()->create([
-                'model' => 'gpt-4o-mini',
+                'model'    => 'gpt-4o-mini',
                 'messages' => [
                     ['role' => 'system', 'content' => 'Eres un analista institucional experto en educación superior.'],
-                    ['role' => 'user', 'content' => $prompt . json_encode($contexto, JSON_PRETTY_PRINT)],
+                    ['role' => 'user',   'content' => $prompt . "\n\nDATOS EN JSON:\n" . json_encode($contexto, JSON_PRETTY_PRINT)],
                 ],
             ]);
 
@@ -163,6 +356,7 @@ class InformeInteligenteController extends Controller
                 'success' => true,
                 'informe' => $informe,
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -171,14 +365,15 @@ class InformeInteligenteController extends Controller
         }
     }
 
-    //Descargar PDF
+    // ============================================================
+    // DESCARGA PDF
+    // ============================================================
     public function descargarPDF(Request $request)
     {
         try {
             $contenidoCodificado = $request->get('contenido', '');
             $contenido = urldecode($contenidoCodificado);
 
-            // Convertir Markdown a HTML profesional
             $converter = new CommonMarkConverter([
                 'html_input' => 'strip',
                 'allow_unsafe_links' => false,
@@ -189,10 +384,11 @@ class InformeInteligenteController extends Controller
 
             $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.informe-inteligente', [
                 'contenido' => $contenidoHtml,
-                'fecha' => $fecha,
+                'fecha'     => $fecha,
             ]);
 
             return $pdf->stream('informe_inteligente_' . now()->format('Ymd_His') . '.pdf');
+
         } catch (\Exception $e) {
             return response('Error generando PDF: ' . $e->getMessage());
         }

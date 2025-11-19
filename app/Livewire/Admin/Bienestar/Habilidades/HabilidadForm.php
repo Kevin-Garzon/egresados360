@@ -39,7 +39,7 @@ class HabilidadForm extends Component
             'modalidad' => ['nullable', 'string', 'max:50'],
             'fecha' => ['nullable', 'date'],
             'activo' => ['boolean'],
-            'imagen' => ['nullable', 'image', 'max:2048'],
+            'imagen' => ['nullable', 'image', 'max:10240'],
         ];
     }
 
