@@ -46,11 +46,12 @@
         }
 
         h1 {
+            font-family: sans-serif !important;
             text-align: center;
-            font-size: 22px;
+            font-size: 26px;
+            font-weight: bold;
             margin-bottom: 25px;
-            font-weight: 900;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             color: #000;
         }
 

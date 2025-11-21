@@ -98,11 +98,11 @@ class InformeInteligenteController extends Controller
 
                     // Programas más activos
                     $porPrograma = Interaccion::join(
-                            'perfiles_egresado',
-                            'interacciones.perfil_id',
-                            '=',
-                            'perfiles_egresado.id'
-                        )
+                        'perfiles_egresado',
+                        'interacciones.perfil_id',
+                        '=',
+                        'perfiles_egresado.id'
+                    )
                         ->whereBetween('interacciones.created_at', [$inicio, $fin])
                         ->selectRaw('perfiles_egresado.programa, COUNT(*) as cantidad')
                         ->groupBy('perfiles_egresado.programa')
@@ -139,7 +139,7 @@ Debes generar un **INFORME COMPARATIVO** sobre el uso del portal Egresados 360 d
 
 Utiliza las métricas entregadas (visitas, interacciones, egresados activos, distribución por módulos y por programas) para identificar aumentos, disminuciones o estabilidad.
 
-Incluye las tablas en formato Markdown. Las tablas deben tener encabezados y mostrar:
+Incluye las tablas. Las tablas deben tener encabezados y mostrar:
 
 - Comparativo general (Visitas, Interacciones, Egresados Registrados, Egresados Activos)
 - Comparativo por módulos (formación, laboral, bienestar)
@@ -151,7 +151,13 @@ Asegúrate de que las tablas estén completas, sean claras y no contengan texto 
 Extensión sugerida: 700–1000 palabras.
 EOT;
 
-                $client   = OpenAI::client(env('OPENAI_API_KEY'));
+                $client = OpenAI::factory()
+                    ->withApiKey(env('OPENAI_API_KEY'))
+                    ->withHttpClient(new \GuzzleHttp\Client([
+                        'timeout' => 120, 
+                    ]))
+                    ->make();
+
                 $response = $client->chat()->create([
                     'model'    => 'gpt-4.1',
                     'messages' => [
@@ -236,11 +242,11 @@ EOT;
                 ->toArray();
 
             $porProgramaQuery = Interaccion::join(
-                    'perfiles_egresado',
-                    'interacciones.perfil_id',
-                    '=',
-                    'perfiles_egresado.id'
-                );
+                'perfiles_egresado',
+                'interacciones.perfil_id',
+                '=',
+                'perfiles_egresado.id'
+            );
 
             if ($fechaInicio && $fechaFin) {
                 $porProgramaQuery->whereBetween('interacciones.created_at', [$fechaInicio, $fechaFin]);
