@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Panel Admin — Egresados 360')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="icon" type="image/png" href="{{ asset('fet.png') }}">
@@ -16,7 +17,7 @@
     <div class="h-screen flex overflow-hidden">
 
         {{-- Sidebar (colapsable en móvil, fijo en desktop) --}}
-        <aside 
+        <aside
             :class="openSidebar ? 'translate-x-0' : '-translate-x-full'"
             class="fixed md:static inset-y-0 left-0 z-50 w-64 bg-primary text-white flex flex-col transform transition-transform duration-300 md:translate-x-0">
 
@@ -111,6 +112,16 @@
                         </a>
                     </div>
                 </div>
+
+                {{-- Informe Inteligente --}}
+                <a href="{{ route('admin.informe.panel') }}"
+                    class="group flex items-center gap-3 px-3 py-2 rounded-lg transition
+                    {{ request()->routeIs('admin.informe.*') 
+                        ? 'bg-white text-primary font-semibold shadow-sm' 
+                        : 'text-white/95 hover:bg-white hover:text-primary' }}">
+                    <i class="fa-solid fa-robot w-5 text-inherit"></i>
+                    <span>Informe</span>
+                </a>
             </nav>
 
             {{-- Logout --}}
@@ -127,8 +138,8 @@
         </aside>
 
         {{-- Overlay para móvil --}}
-        <div 
-            x-show="openSidebar" 
+        <div
+            x-show="openSidebar"
             @click="openSidebar = false"
             class="fixed inset-0 bg-black/40 z-40 md:hidden"
             x-transition.opacity></div>

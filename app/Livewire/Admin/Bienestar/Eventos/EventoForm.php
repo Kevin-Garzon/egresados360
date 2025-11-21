@@ -43,7 +43,7 @@ class EventoForm extends Component
             'fecha_inicio' => ['nullable', 'date'],
             'fecha_fin'    => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'hora_inicio'  => ['nullable', 'date_format:H:i'],
-            'imagen'       => ['nullable', 'image', 'max:2048'],
+            'imagen'       => ['nullable', 'image', 'max:4096'],
             'activo'       => ['boolean'],
         ];
     }
@@ -83,9 +83,9 @@ class EventoForm extends Component
         if (is_string($this->hora_inicio) && preg_match('/^\d{2}:\d{2}:\d{2}$/', $this->hora_inicio)) {
             $this->hora_inicio = substr($this->hora_inicio, 0, 5);
         }
-        if ($this->hora_inicio === '') {
-            $this->hora_inicio = null;
-        }
+
+        $this->fecha_inicio = $this->fecha_inicio ?: null;
+        $this->fecha_fin    = $this->fecha_fin ?: null;
 
         $this->validate();
 

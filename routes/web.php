@@ -19,6 +19,7 @@ use App\Http\Controllers\{
     TrackingController,
     MetricsController,
     EgresadoProfileController,
+    InformeInteligenteController,
 };
 
 /*
@@ -33,7 +34,8 @@ use App\Livewire\Admin\{
     Bienestar\Servicios\ServiciosPanel,
     Bienestar\Eventos\EventosPanel,
     Bienestar\Mentorias\MentoriasPanel,
-    Dashboard\DashboardPanel
+    Dashboard\DashboardPanel,
+    Informe\InformePanel
 };
 
 /*
@@ -68,6 +70,7 @@ use App\Exports\Sheets\{
 /* ============================================================
 |  PÁGINAS PÚBLICAS
 |============================================================ */
+
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
 
 // --- Ofertas Laborales ---
@@ -116,6 +119,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Laboral
     Route::get('/laboral', LaboralPanel::class)->name('laboral.panel');
 
+    // Importar ofertas desde Excel
+    Route::post('/laboral/importar-excel', [LaboralController::class, 'importar'])
+        ->name('laboral.importarExcel');
+
     // Formación Continua
     Route::get('/formacion', FormacionPanel::class)->name('formacion.panel');
 
@@ -126,6 +133,17 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::get('/eventos', EventosPanel::class)->name('eventos.panel');
         Route::get('/mentorias', MentoriasPanel::class)->name('mentorias.panel');
     });
+
+    // --- Informe Inteligente ---
+    Route::get('/informe', InformePanel::class)->name('informe.panel');
+
+    // --- Endpoint para generar informe ---
+    Route::post('/api/informe-inteligente', [InformeInteligenteController::class, 'generar'])
+        ->name('api.informe.inteligente');
+
+    // --- Descarga del informe en PDF ---
+    Route::get('/informe/descargar', [InformeInteligenteController::class, 'descargarPDF'])
+        ->name('informe.descargar');
 });
 
 

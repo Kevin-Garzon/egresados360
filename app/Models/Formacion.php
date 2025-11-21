@@ -21,6 +21,7 @@ class Formacion extends Model
         'fecha_fin',
         'url_externa',
         'activo',
+        'imagen',
     ];
 
     protected $casts = [

@@ -28,9 +28,10 @@
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Tema</label>
-                        <input type="text" wire:model.defer="tema"
+                        <label class="text-sm font-medium text-gray-600">Tema *</label>
+                        <input type="text" wire:model.defer="tema" required 
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                        @error('tema') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
@@ -45,9 +46,10 @@
                     </div>
 
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Fecha</label>
+                        <label class="text-sm font-medium text-gray-600">Fecha *</label>
                         <input type="date" wire:model.defer="fecha"
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                        @error('fecha') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>

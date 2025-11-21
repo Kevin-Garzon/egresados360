@@ -41,20 +41,35 @@
 
     {{-- Gestión de Oportunidades Laborales --}}
     <section class="space-y-4">
-        <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-[#263238]">Gestión de Oportunidades Laborales</h2>
-            <button
-                class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
-                x-data
-                @click="$dispatch('open-create-oferta')">
-                <i class="fa-solid fa-plus mr-2"></i> Agregar Empleo
-            </button>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-[#263238]">
+                Gestión de Oportunidades Laborales
+            </h2>
+
+            <div class="flex items-center gap-3">
+                {{-- Botón para Importar Excel --}}
+                <button
+                    class="px-4 py-2 rounded-lg bg-primary text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
+                    x-data
+                    @click="$dispatch('open-importar-excel')">
+                    <i class="fa-solid fa-file-import mr-2"></i> Importar Excel
+                </button>
+
+                {{-- Botón para Crear Oferta --}}
+                <button
+                    class="px-4 py-2 rounded-lg bg-[#09B451] text-white shadow hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap"
+                    x-data
+                    @click="$dispatch('open-create-oferta')">
+                    <i class="fa-solid fa-plus mr-2"></i> Agregar Empleo
+                </button>
+            </div>
         </div>
 
         <div class="bg-white rounded-2xl shadow p-4">
             <livewire:admin.laboral.ofertas-table />
         </div>
 
+        <livewire:admin.laboral.importar-excel />
         <livewire:admin.laboral.oferta-form />
         <livewire:admin.laboral.delete-confirm />
     </section>

@@ -35,11 +35,11 @@ class HabilidadForm extends Component
         return [
             'titulo' => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
-            'tema' => ['nullable', 'string', 'max:100'],
+            'tema' => ['required', 'string', 'max:100'],
             'modalidad' => ['nullable', 'string', 'max:50'],
-            'fecha' => ['nullable', 'date'],
+            'fecha' => ['required', 'date'],
             'activo' => ['boolean'],
-            'imagen' => ['nullable', 'image', 'max:2048'],
+            'imagen' => ['nullable', 'image', 'max:4096'],
         ];
     }
 
@@ -70,6 +70,8 @@ class HabilidadForm extends Component
 
     public function save(): void
     {
+        $this->fecha = $this->fecha ?: null;
+
         $this->validate();
 
         $data = [
