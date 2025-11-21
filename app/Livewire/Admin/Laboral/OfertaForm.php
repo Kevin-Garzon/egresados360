@@ -96,6 +96,9 @@ class OfertaForm extends Component
 
     public function save()
     {
+        $this->publicada_en = $this->publicada_en ?: null;
+        $this->fecha_cierre = $this->fecha_cierre ?: null;
+
         $path = $this->existingFlyer; // mantiene el actual por defecto
 
         if ($this->flyer) {
@@ -119,7 +122,7 @@ class OfertaForm extends Component
             'publicada_en' => 'nullable|date',
             'fecha_cierre' => 'nullable|date|after_or_equal:publicada_en',
             'activo'       => 'boolean',
-            'flyer'        => 'nullable|image|max:2048',
+            'flyer'        => 'nullable|image|max:4096',
         ]);
 
         // Convertir etiquetas de texto a array
@@ -140,7 +143,7 @@ class OfertaForm extends Component
                     'publicada_en' => $this->publicada_en ?? now(),
                     'fecha_cierre' => $this->fecha_cierre,
                     'activo'       => $this->activo,
-                    'flyer'        => $path, 
+                    'flyer'        => $path,
                 ]);
             }
         } else {

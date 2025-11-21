@@ -10,26 +10,49 @@
             </p>
 
             <form wire:submit.prevent="guardarPerfil" class="space-y-3">
+                {{-- Nombre --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Nombre completo</label>
-                    <input type="text" wire:model.defer="nombre" class="w-full border-gray-300 rounded-md" required>
+                    <input type="text"
+                        wire:model.defer="nombre"
+                        class="w-full border-gray-300 rounded-md"
+                        required
+                        pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                        title="Solo se permiten letras y espacios">
                     @error('nombre') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Correo --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-                    <input type="email" wire:model.defer="correo" class="w-full border-gray-300 rounded-md" required>
+                    <input type="email"
+                        wire:model.defer="correo"
+                        class="w-full border-gray-300 rounded-md"
+                        required>
                     @error('correo') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Celular --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Celular</label>
-                    <input type="text" wire:model.defer="celular" class="w-full border-gray-300 rounded-md">
+                    <input type="text"
+                        wire:model.defer="celular"
+                        class="w-full border-gray-300 rounded-md"
+                        required
+                        inputmode="numeric"
+                        pattern="[0-9]{7,20}"
+                        minlength="7"
+                        maxlength="20"
+                        title="El celular debe tener entre 7 y 20 números">
+                    @error('celular') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Programa --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Programa</label>
-                    <select wire:model.defer="programa" class="w-full border-gray-300 rounded-md" required>
+                    <select wire:model.defer="programa"
+                        class="w-full border-gray-300 rounded-md"
+                        required>
                         <option value="">Seleccione su programa</option>
                         <option value="Ingeniería de Software">Ingeniería de Software</option>
                         <option value="Ingeniería de Alimentos">Ingeniería de Alimentos</option>
@@ -41,12 +64,21 @@
                     @error('programa') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
-
+                {{-- Año de egreso --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Año de egreso</label>
-                    <input type="number" wire:model.defer="anio_egreso" class="w-full border-gray-300 rounded-md" min="2000" max="{{ date('Y') }}">
+                    <input type="number"
+                        wire:model.defer="anio_egreso"
+                        class="w-full border-gray-300 rounded-md"
+                        required
+                        min="2000"
+                        max="{{ date('Y') }}"
+                        maxlength="4"
+                        title="Ingrese un año válido de 4 dígitos">
+                    @error('anio_egreso') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                {{-- Botones --}}
                 <div class="flex justify-end gap-2 mt-4">
                     <button type="button" @click="open = false" class="text-gray-600 hover:text-gray-800">Cancelar</button>
                     <button type="submit" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">Guardar</button>

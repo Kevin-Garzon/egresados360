@@ -61,7 +61,7 @@
                 {{-- Fechas --}}
                 <div class="grid sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Fecha inicio *</label>
+                        <label class="text-sm font-medium text-gray-600">Fecha inicio</label>
                         <input type="date" wire:model.defer="fecha_inicio"
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
                         @error('fecha_inicio') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -71,6 +71,7 @@
                         <label class="text-sm font-medium text-gray-600">Fecha fin</label>
                         <input type="date" wire:model.defer="fecha_fin"
                             class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                        @error('fecha_fin') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
 

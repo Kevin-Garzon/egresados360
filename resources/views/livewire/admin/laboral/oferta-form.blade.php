@@ -24,7 +24,7 @@
             <form wire:submit.prevent="save" class="px-6 py-4 overflow-y-auto flex-1 space-y-4">
                 {{-- Empresa --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Empresa</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Empresa *</label>
                     <select wire:model="empresa_id" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
                         <option value="">-- Selecciona una empresa --</option>
                         @foreach($empresas as $empresa)
@@ -36,7 +36,7 @@
 
                 {{-- Título --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Título</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Título *</label>
                     <input type="text" wire:model="titulo" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
                     @error('titulo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -61,7 +61,7 @@
 
                 {{-- URL Externa --}}
                 <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">URL Externa</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">URL Externa *</label>
                     <input type="url" wire:model="url_externa" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
                     @error('url_externa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -99,6 +99,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-600 mb-1">Cierre</label>
                         <input type="date" wire:model="fecha_cierre" class="w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary">
+                        @error('fecha_cierre')<span class="text-red-500 text-xs">{{ $message }}</span>@enderror
                     </div>
                 </div>
 

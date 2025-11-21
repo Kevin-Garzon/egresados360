@@ -29,6 +29,12 @@
                     Iniciar sesión
                 </button>
             </div>
+
+            @if ($errors->any())
+            <div class="mt-3 text-red-600 text-sm text-center">
+                {{ $errors->first() }}
+            </div>
+            @endif
         </form>
 
         <div class="mt-6 text-center text-sm text-gray-600">

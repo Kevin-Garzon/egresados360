@@ -116,13 +116,14 @@
                     <div class="flex gap-3">
                         <div class="flex-1">
                             <label class="text-sm font-medium text-gray-600">Fecha Inicio</label>
-                            <input type="date" wire:model.defer="fecha_inicio"
-                                class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                            <input type="date" wire:model.defer="fecha_inicio" class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                            @error('fecha_inicio')<span class="text-red-500 text-xs">{{ $message }}</span>@enderror
                         </div>
+
                         <div class="flex-1">
                             <label class="text-sm font-medium text-gray-600">Fecha Fin</label>
-                            <input type="date" wire:model.defer="fecha_fin"
-                                class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                            <input type="date" wire:model.defer="fecha_fin" class="w-full mt-1 border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary" />
+                            @error('fecha_fin')<span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 

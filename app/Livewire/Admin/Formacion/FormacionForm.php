@@ -55,7 +55,7 @@ class FormacionForm extends Component
             'fecha_fin'     => ['nullable', 'date', 'after_or_equal:fecha_inicio'],
             'url_externa'   => ['nullable', 'url'],
             'activo'        => ['boolean'],
-            'imagen'        => ['nullable', 'image', 'max:2048'],
+            'imagen'        => ['nullable', 'image', 'max:4096'],
 
         ];
     }
@@ -94,6 +94,9 @@ class FormacionForm extends Component
 
     public function save(): void
     {
+        $this->fecha_inicio = $this->fecha_inicio ?: null;
+        $this->fecha_fin = $this->fecha_fin ?: null;
+
         $this->validate();
 
         $data = [
