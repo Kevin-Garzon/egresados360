@@ -11,8 +11,8 @@
             <h3 class="font-poppins font-semibold text-gunmetal mb-3 text-white">Comunicaciones</h3>
             <ul class="space-y-1 text-sm">
                 <li>Dirección: Kilometro 12 <br> Neiva - Rivera</li>
-                <li>Email: <a class="underline" href="mailto:comunicaciones@fet.edu.co">ori-egresados@fet.edu.co</a></li>
-                <li>WhatsApp: <a class="underline" href="tel:+573224650595">+57 322 4650595</a></li>
+                <li>Email: <a class="underline" href="https://mail.google.com/mail/?view=cm&to=ori-egresados@fet.edu.co" target="_blank">ori-egresados@fet.edu.co</a></li>
+                <li>WhatsApp: <a class="underline" href="https://wa.me/573224650595" target="_blank">+57 322 4650595</a></li>
             </ul>
         </div>
         <div>

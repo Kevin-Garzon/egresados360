@@ -13,7 +13,7 @@
   description="Explora nuestra oferta de formación continua y fortalece tus competencias profesionales con programas actualizados y accesibles."
   :btnPrimary="['text' => 'Ver Cursos', 'icon' => 'fa-solid fa-book-open-reader', 'link' => '#formacion']"
   :btnSecondary="['text' => 'Contacto', 'icon' => 'fa-solid fa-envelope', 'link' => 'https://wa.me/573223042498']"
-  image="https://www.ceduk.edu.mx/blog/wp-content/uploads/2024/07/tecnicas-de-estudio-ejercicios.jpg" />
+  image="{{ asset('imgs/egre10.png') }}" />
 
 {{-- Sección principal de formación --}}
 <section id="formacion" class="container-app py-20">

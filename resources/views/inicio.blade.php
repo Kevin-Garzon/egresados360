@@ -13,12 +13,12 @@
     :btnPrimary="[
             'text' => 'Contáctanos',
             'icon' => 'fa-brands fa-whatsapp',
-            'link' => 'tel:+573224650595'
+            'link' => 'https://wa.me/573224650595'
         ]"
     :btnSecondary="[
             'text' => 'Contáctanos',
             'icon' => 'fa-solid fa-envelope',
-            'link' => 'mailto:ori-egresados@fet.edu.co'
+            'link' => 'https://mail.google.com/mail/?view=cm&to=ori-egresados@fet.edu.co'
         ]"
     image="{{ asset('imgs/egre9.jpg') }}" />
 @endsection
@@ -289,6 +289,181 @@
 </section>
 
 
+
+
+
+{{-- Canal Egresados WhatsApp --}}
+<section id="canal-egresados" class="relative py-24 overflow-hidden">
+    {{-- Fondo con gradiente --}}
+    <div class="absolute inset-0 bg-gradient-to-r from-[#09B451] via-[#0a9a45] to-[#087d38]"></div>
+
+    {{-- Patrón decorativo de fondo --}}
+    <div class="absolute inset-0 opacity-10">
+        <svg class="w-full h-full" viewBox="0 0 1200 600">
+            <defs>
+                <pattern id="whatsapp-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="white" stroke-width="2" opacity="0.3" />
+                    <text x="100" y="110" text-anchor="middle" fill="white" opacity="0.2" font-size="30">✓</text>
+                </pattern>
+            </defs>
+            <rect width="1200" height="600" fill="url(#whatsapp-pattern)" />
+        </svg>
+    </div>
+
+    {{-- Contenido --}}
+    <div class="relative container-app">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+
+
+            {{-- Lado izquierdo: Elementos visuales (Oculto en móvil, visible en md en adelante) --}}
+            <div class="relative hidden md:flex items-center justify-center mt-12 md:mt-0">
+                {{-- Círculos decorativos --}}
+                <div class="absolute w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute w-40 h-40 bg-white/5 rounded-full blur-3xl top-20 left-20"></div>
+
+                {{-- Mockup de teléfono/Chat --}}
+                <div class="relative z-10 max-w-xs sm:max-w-sm md:max-w-xs lg:max-w-xs">
+                    {{-- Teléfono --}}
+                    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-900 aspect-[9/16]">
+                        {{-- Status bar --}}
+                        <div class="bg-gray-900 text-white px-4 py-1 text-xs flex justify-between items-center">
+                            <span>9:41</span>
+                            <div class="flex gap-1">
+                                <i class="fa-solid fa-signal"></i>
+                                <i class="fa-solid fa-wifi"></i>
+                                <i class="fa-solid fa-battery-full"></i>
+                            </div>
+                        </div>
+
+                        {{-- WhatsApp Header --}}
+                        <div class="bg-[#128C7E] text-white px-4 py-3 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                <span class="font-semibold text-sm">Canal Egresados</span>
+                            </div>
+                            <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
+                        </div>
+
+                        {{-- Chat área --}}
+                        <div class="bg-gray-50 px-3 py-4 space-y-3 h-80 overflow-hidden">
+                            {{-- Mensaje entrada --}}
+                            <div class="flex justify-start">
+                                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 shadow-sm max-w-xs">
+                                    <p class="text-xs text-gray-700">¡Hola! Bienvenido al canal de egresados 👋</p>
+                                </div>
+                            </div>
+
+                            {{-- Mensaje salida --}}
+                            <div class="flex justify-end">
+                                <div class="bg-[#DCF8C6] rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-xs">
+                                    <p class="text-xs text-gray-800">¡Gracias! Quiero estar siempre informado 📢</p>
+                                </div>
+                            </div>
+
+                            {{-- Mensaje entrada --}}
+                            <div class="flex justify-start">
+                                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 shadow-sm max-w-xs">
+                                    <p class="text-xs text-gray-700">Aquí compartimos ofertas laborales, eventos y más 💼✨</p>
+                                </div>
+                            </div>
+
+                            {{-- Indicador de escritura --}}
+                            <div class="flex justify-start">
+                                <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 shadow-sm">
+                                    <div class="flex gap-1">
+                                        <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                                        <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></span>
+                                        <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Input area --}}
+                        <div class="bg-gray-100 px-3 py-3 flex items-center gap-2 border-t border-gray-200">
+                            <i class="fa-solid fa-face-smile text-[#128C7E] text-lg cursor-pointer"></i>
+                            <input type="text" placeholder="Escribe un mensaje..." class="flex-1 bg-white rounded-full px-4 py-2 text-xs outline-none border border-gray-300">
+                            <i class="fa-solid fa-microphone text-[#128C7E] text-lg cursor-pointer"></i>
+                        </div>
+                    </div>
+
+                    {{-- Badge flotante --}}
+                    <div class="absolute -bottom-4 -right-4 bg-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg border-4 border-[#09B451]">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-[#09B451]">+</div>
+                            <!-- <div class="text-xs font-semibold text-gray-700">Únete</div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Lado derecho: Contenido --}}
+            <div class="text-white flex flex-col items-center md:items-start text-center md:text-left">
+                {{-- Badge --}}
+                <div class="inline-block mb-6 px-4 py-2 bg-white/20 rounded-full border border-white/30 backdrop-blur-sm">
+                    <span class="text-sm font-semibold flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp"></i> Conecta con nosotros
+                    </span>
+                </div>
+
+                {{-- Título --}}
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-poppins font-bold mb-6 leading-tight">
+                    Únete a nuestro<br>
+                    <span class="relative font-colors text-silver">
+                        Canal Egresados
+                    </span>
+                </h2>
+
+                {{-- Imagen visible solo en responsive (Oculta en md en adelante) --}}
+                <div class="block md:hidden mb-8 w-full max-w-sm">
+                    <img src="{{ asset('imgs/canal-img.jpg') }}" alt="Estudiante en el canal" class="w-full h-auto rounded-2xl shadow-lg border-2 border-white/20">
+                </div>
+
+                {{-- Descripción --}}
+                <p class="text-lg text-white/90 mb-8 leading-relaxed max-w-lg">
+                    Mantente informado de todas las oportunidades, eventos, formaciones y noticias importantes de la comunidad FET.
+                    Entra y sé parte de nuestra red de egresados.
+                </p>
+
+                {{-- Beneficios --}}
+                <div class="space-y-4 mb-10 w-full md:w-auto">
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-white/95">Ofertas laborales exclusivas</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-white/95">Eventos y actividades de bienestar</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-white/95">Programas de formación continua</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-white/95">Conexión con la FET</span>
+                    </div>
+                </div>
+
+                {{-- CTA Botón --}}
+                <a href="https://whatsapp.com/channel/0029Vb6m945GZNCmGywXOd0o" target="_blank"
+                    class="inline-flex items-center gap-3 bg-white text-[#09B451] hover:bg-silver px-6 py-2 rounded-lg font-poppins font-bold text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 group">
+                    <i class="fa-brands fa-whatsapp text-2xl group-hover:animate-pulse"></i>
+                    <span>Unirme al Canal</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 
 

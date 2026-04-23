@@ -64,7 +64,7 @@ class TrackingController extends Controller
                 switch ($tipo) {
                     case 'mentoria':
                         $mensaje = "Buen día, soy {$nombre}, egresado de {$programa} en el año {$anio}, y me interesa la mentoría \"{$titulo}\".";
-                        $numero  = $numero_bienestar; // redirige al número de Bienestar
+                        $numero  = $numero_general; // redirige al número de oficina de egresados
                         break;
 
                     case 'atencion':
